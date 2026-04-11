@@ -10,7 +10,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-mont { font-family: 'Montserrat', sans-serif; }
-        .dropdown:hover .dropdown-menu { display: block; }
+        
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }

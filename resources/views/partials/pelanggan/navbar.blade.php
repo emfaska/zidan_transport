@@ -55,10 +55,10 @@
                     </button>
                     
                     <!-- Invisible Bridge (hover gap filler) -->
-                    <div class="nav-dropdown-bridge absolute w-full h-4 top-full left-0"></div>
+                    <div class="nav-dropdown-bridge absolute w-full top-full left-0" style="height: 20px;"></div>
 
                     <!-- Dropdown Menu -->
-                    <div class="nav-dropdown-menu absolute right-0 top-[calc(100%+8px)] w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[60] pointer-events-none opacity-0 translate-y-2 transition-all duration-200">
+                    <div class="nav-dropdown-menu absolute right-0 top-[calc(100%+12px)] w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-[60] pointer-events-none opacity-0 translate-y-2 transition-all duration-200">
                         <div class="px-4 py-3 border-b border-gray-100">
                             <p class="text-xs text-gray-500 font-semibold">Masuk sebagai</p>
                             <p class="text-sm font-bold text-[#1a237e] truncate">{{ Auth::user()->email }}</p>
@@ -194,23 +194,28 @@
 
             // Hover Bridge Dropdown Logic
             document.querySelectorAll('.nav-dropdown-wrapper').forEach(wrapper => {
+                const trigger = wrapper.querySelector('.nav-dropdown-trigger');
                 const menu = wrapper.querySelector('.nav-dropdown-menu');
+                const bridge = wrapper.querySelector('.nav-dropdown-bridge');
                 const chevron = wrapper.querySelector('.nav-chevron');
                 let hideTimer = null;
+                let isMenuOpen = false;
 
                 const showMenu = () => {
                     clearTimeout(hideTimer);
+                    isMenuOpen = true;
                     menu.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
-                    menu.classList.add('opacity-100', 'translate-y-0');
+                    menu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
                     if (chevron) chevron.style.transform = 'rotate(180deg)';
                 };
 
                 const hideMenu = () => {
                     hideTimer = setTimeout(() => {
+                        isMenuOpen = false;
                         menu.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
-                        menu.classList.remove('opacity-100', 'translate-y-0');
+                        menu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
                         if (chevron) chevron.style.transform = 'rotate(0deg)';
-                    }, 150);
+                    }, 300);
                 };
 
                 // Trigger on wrapper (includes button and bridge)
@@ -218,8 +223,37 @@
                 wrapper.addEventListener('mouseleave', hideMenu);
 
                 // Keep open when hovering over the menu itself
-                menu.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+                menu.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimer);
+                });
                 menu.addEventListener('mouseleave', hideMenu);
+
+                // Also support click toggle for better accessibility
+                if (trigger) {
+                    trigger.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (isMenuOpen) {
+                            clearTimeout(hideTimer);
+                            isMenuOpen = false;
+                            menu.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+                            menu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                            if (chevron) chevron.style.transform = 'rotate(0deg)';
+                        } else {
+                            showMenu();
+                        }
+                    });
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+                    menu.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+                    menu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                });
+                document.querySelectorAll('.nav-chevron').forEach(c => {
+                    c.style.transform = 'rotate(0deg)';
+                });
             });
         });
         window.navbarScriptInitialized = true;
