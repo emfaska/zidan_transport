@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <title>Login - Zidan Transport</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -48,7 +49,7 @@
                 <div class="md:hidden mb-6 flex justify-center">
                     <img src="{{ asset('images/logo.png') }}" alt="Zidan Transport" class="h-12 w-auto">
                 </div>
-                <h3 class="text-3xl font-black text-[#1a237e] mb-2">Login Akun</h3>
+                <h3 class="text-3xl font-black text-[#1a237e] mb-2">Login Akun Tempek</h3>
                 <p class="text-gray-500 font-medium">Selamat datang! Silakan masukkan email dan password.</p>
             </div>
 
