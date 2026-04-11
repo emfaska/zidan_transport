@@ -42,10 +42,11 @@
                 <div>
                 <div>
                     <label class="relative inline-flex items-center cursor-pointer group">
-                        <input type="checkbox" id="driver-status-toggle" class="sr-only peer" {{ Auth::user()->status_driver !== 'off' ? 'checked' : '' }} {{ $activeBooking ? 'disabled' : '' }}>
+                        <input type="checkbox" id="driver-status-toggle" class="sr-only peer" {{ (Auth::user()->driverProfile->status_driver ?? 'off') !== 'off' ? 'checked' : '' }} {{ $activeBooking ? 'disabled' : '' }}>
                         <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500 shadow-inner group-active:scale-95 transition-transform"></div>
-                        <span id="status-label" class="ms-3 text-[10px] font-black {{ Auth::user()->status_driver !== 'off' ? 'text-green-400' : 'text-gray-400' }} uppercase tracking-widest leading-none">
-                            {{ Auth::user()->status_driver === 'on_duty' ? 'ON DUTY' : (Auth::user()->status_driver === 'available' ? 'ONLINE' : 'OFFLINE') }}
+                        <span id="status-label" class="ms-3 text-[10px] font-black {{ (Auth::user()->driverProfile->status_driver ?? 'off') !== 'off' ? 'text-green-400' : 'text-gray-400' }} uppercase tracking-widest leading-none">
+                            @php $driverStatus = Auth::user()->driverProfile->status_driver ?? 'off'; @endphp
+                            {{ $driverStatus === 'on_duty' ? 'ON DUTY' : ($driverStatus === 'available' ? 'ONLINE' : 'OFFLINE') }}
                         </span>
                     </label>
                 </div>
@@ -62,7 +63,7 @@
         <div class="relative z-10 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="relative">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=fbc02d&color=1a237e&bold=true" class="w-14 h-14 rounded-2xl border-2 border-white/20 shadow-lg">
+                    <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=fbc02d&color=1a237e&bold=true' }}" class="w-14 h-14 rounded-2xl border-2 border-white/20 shadow-lg object-cover">
                     <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-[#1a237e] rounded-full"></div>
                 </div>
                 <div>
@@ -285,6 +286,55 @@
                 });
             }
         });
+
+        // Real-time Location Tracking Implementation
+        if (navigator.geolocation) {
+            function updateDriverLocation() {
+                const driverStatus = "{{ Auth::user()->driverProfile->status_driver ?? 'off' }}";
+                
+                // Only track if Online or On Duty
+                if (driverStatus === 'off') return;
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        fetch("{{ route('driver.location.update') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                latitude: lat,
+                                longitude: lng
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => console.log('Location updated:', data))
+                        .catch(error => console.error('Location update failed:', error));
+                    },
+                    function(error) {
+                        console.error('Geolocation error:', error.message);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                );
+            }
+
+            // Update immediately on load
+            updateDriverLocation();
+
+            // Then every 60 seconds
+            setInterval(updateDriverLocation, 60000);
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
     </script>
 </body>
 </html>

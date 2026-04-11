@@ -60,6 +60,10 @@
                     <a href="{{ route('admin.booking.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/booking*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-card-checklist text-lg"></i>
                         <span class="text-sm">Manajemen Booking</span>
+                        @php $pendingExt = \App\Models\BookingExtension::where('status','pending')->count(); @endphp
+                        @if($pendingExt > 0)
+                            <span class="ml-auto text-[10px] font-black bg-yellow-500 text-[#1a237e] px-1.5 py-0.5 rounded-full ring-2 ring-white/20">{{ $pendingExt }}</span>
+                        @endif
                     </a>
                     <a href="{{ route('admin.refund.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/refunds*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-arrow-counterclockwise text-lg"></i>
@@ -89,6 +93,12 @@
                     <a href="{{ route('admin.report.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/reports*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-bar-chart-line text-lg"></i>
                         <span class="text-sm">Laporan Bisnis</span>
+                    </a>
+
+                    <a href="{{ route('admin.management.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/management*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
+                        <i class="bi bi-shield-lock text-lg"></i>
+                        <span class="text-sm">Manajemen Admin</span>
+                    </a>
                 @elseif(Auth::user()->role === 'pelanggan')
                     <!-- Menu Pelanggan -->
                     <a href="{{ route('pelanggan.booking.create') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('booking/create') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
@@ -191,6 +201,46 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Global Currency Masking Logic
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID').format(number);
+        }
+
+        function cleanNumber(value) {
+            return value.replace(/\./g, '').replace(/,/g, '');
+        }
+
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('mask-currency')) {
+                let cursorPosition = e.target.selectionStart;
+                let originalLength = e.target.value.length;
+                
+                let value = e.target.value.replace(/\D/g, '');
+                if (value === '') {
+                    e.target.value = '';
+                    return;
+                }
+                
+                e.target.value = formatRupiah(value);
+                
+                // Maintain cursor position
+                let newLength = e.target.value.length;
+                e.target.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
+            }
+        });
+
+        // Ensure clean numbers are sent to the server
+        document.addEventListener('submit', function(e) {
+            const maskedInputs = e.target.querySelectorAll('.mask-currency');
+            maskedInputs.forEach(input => {
+                // We don't want to change the visual value right before submit if possible
+                // but Laravel validation will fail if it's sent as "1.000.000"
+                // So we'll append a hidden field with cleaned value or just clean the input
+                // Cleaning the input is safest for simple forms
+                input.value = cleanNumber(input.value);
+            });
+        });
+
         // Global Password Visibility Toggle
         document.addEventListener('click', function (e) {
             if (e.target.closest('.password-toggle')) {

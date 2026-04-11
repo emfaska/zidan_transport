@@ -14,6 +14,8 @@ class Booking extends Model
         'tipe_perjalanan',
         'tanggal_berangkat',
         'waktu_jemput',
+        'titik_jemput',
+        'titik_tujuan',
         'jumlah_penumpang',
         'include_tol',
         'harga_paket',
@@ -91,6 +93,17 @@ class Booking extends Model
     public function refundRequest()
     {
         return $this->hasOne(RefundRequest::class);
+    }
+
+    // Relationship: Booking has many Extensions
+    public function extensions()
+    {
+        return $this->hasMany(BookingExtension::class);
+    }
+
+    public function hasPendingExtension()
+    {
+        return $this->extensions()->where('status', 'pending')->exists();
     }
 
     // Auto-generate kode_booking on create

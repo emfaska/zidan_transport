@@ -15,10 +15,17 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
+        $request->validate([
+            'login' => 'required|string',
             'password' => 'required',
         ]);
+
+        $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'no_hp';
+
+        $credentials = [
+            $loginType => $request->login,
+            'password' => $request->password,
+        ];
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -30,19 +37,19 @@ class LoginController extends Controller
                 
                 if ($user->role === 'pengemudi') {
                     if ($user->rejection_note) {
-                        return back()->withErrors(['email' => 'Pendaftaran ditolak. Alasan: ' . $user->rejection_note . '. Silakan perbaiki data Anda.']);
+                        return back()->withErrors(['login' => 'Pendaftaran ditolak. Alasan: ' . $user->rejection_note . '. Silakan perbaiki data Anda.']);
                     }
-                    return back()->withErrors(['email' => 'Akun Anda sedang dalam tahap peninjauan oleh admin. Mohon tunggu konfirmasi selanjutnya.']);
+                    return back()->withErrors(['login' => 'Akun Anda sedang dalam tahap peninjauan oleh admin. Mohon tunggu konfirmasi selanjutnya.']);
                 }
                 
-                return back()->withErrors(['email' => 'Akun Anda nonaktif. Silakan hubungi admin.']);
+                return back()->withErrors(['login' => 'Akun Anda nonaktif. Silakan hubungi admin.']);
             }
 
             // Redirect berdasarkan role
             return $this->redirectByRole(Auth::user()->role);
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.']);
+        return back()->withErrors(['login' => 'Email/No HP atau password salah.']);
     }
 
     protected function redirectByRole($role)

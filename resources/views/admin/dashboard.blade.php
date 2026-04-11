@@ -56,6 +56,23 @@
         </div>
     </div>
 
+    <!-- Perpanjangan Aktif -->
+    <div class="relative group bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-2">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50/50 rounded-full -mr-16 -mt-16 transition-all group-hover:scale-110"></div>
+        <div class="relative flex justify-between items-start">
+            <div>
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Charter Extensions</p>
+                <h3 class="text-4xl font-black text-[#1a237e] tracking-tighter">{{ \App\Models\BookingExtension::where('status', 'pending')->count() }} <span class="text-lg font-bold text-gray-300 ml-1">Request</span></h3>
+            </div>
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
+                <i class="bi bi-calendar-plus text-2xl"></i>
+            </div>
+        </div>
+        <div class="mt-6 flex items-center gap-2">
+            <a href="{{ route('admin.booking.index') }}" class="px-2 py-1 bg-orange-100 text-orange-700 text-[9px] font-black rounded-lg border border-orange-200 uppercase tracking-widest hover:bg-orange-600 hover:text-white transition-all">Tinjau Sekarang</a>
+        </div>
+    </div>
+
     <!-- Aktivitas Section -->
     <div class="md:col-span-3 bg-white rounded-[2.5rem] shadow-sm p-10 border border-gray-100 min-h-[400px] relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#1a237e] via-[#fbc02d] to-[#1a237e]"></div>

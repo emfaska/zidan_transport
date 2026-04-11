@@ -90,17 +90,31 @@
                 </div>
 
                 <!-- Foto Profil -->
-                <div class="col-span-2">
+                <div class="col-span-1">
                     <label for="foto_profil" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Foto Profil Pengemudi</label>
                     <div class="relative group">
                         <input type="file" name="foto_profil" id="foto_profil" accept="image/*" 
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         <div class="p-8 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50 group-hover:border-blue-200 transition">
                             <i class="bi bi-person-bounding-box text-4xl text-gray-300 group-hover:text-blue-400 transition mb-2"></i>
-                            <p class="text-xs font-bold text-gray-400 group-hover:text-blue-500">Klik untuk upload foto driver</p>
+                            <p class="text-[10px] font-bold text-gray-400 group-hover:text-blue-500">Upload foto profil</p>
                         </div>
                     </div>
                     @error('foto_profil') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
+                </div>
+
+                <!-- Foto SIM -->
+                <div class="col-span-1">
+                    <label for="foto_sim" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Foto SIM Pengemudi <span class="text-red-500">*</span></label>
+                    <div class="relative group">
+                        <input type="file" name="foto_sim" id="foto_sim" accept="image/*" required 
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="p-8 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50 group-hover:border-blue-200 transition">
+                            <i class="bi bi-card-checklist text-4xl text-gray-300 group-hover:text-blue-400 transition mb-2"></i>
+                            <p class="text-[10px] font-bold text-gray-400 group-hover:text-blue-500">Upload foto SIM</p>
+                        </div>
+                    </div>
+                    @error('foto_sim') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                 </div>
             </div>
 

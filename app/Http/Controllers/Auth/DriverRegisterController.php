@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\DriverProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class DriverRegisterController extends Controller
@@ -24,7 +26,7 @@ class DriverRegisterController extends Controller
             'alamat_domisili' => ['required', 'string'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'nomor_sim' => ['required', 'string', 'max:50'],
-            'foto_ktp' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'foto_profil' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'foto_sim' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], [
             'name.required' => 'Nama lengkap wajib diisi.',
@@ -36,37 +38,42 @@ class DriverRegisterController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'nomor_sim.required' => 'Nomor SIM wajib diisi.',
-            'foto_ktp.required' => 'Foto KTP wajib diunggah.',
-            'foto_ktp.image' => 'File KTP harus berupa gambar.',
-            'foto_ktp.mimes' => 'Format foto KTP harus jpg, jpeg, atau png.',
-            'foto_ktp.max' => 'Ukuran foto KTP maksimal 2MB.',
+            'foto_profil.required' => 'Foto profil pengemudi wajib diunggah.',
+            'foto_profil.image' => 'File harus berupa gambar.',
+            'foto_profil.mimes' => 'Format foto profil harus jpg, jpeg, atau png.',
+            'foto_profil.max' => 'Ukuran foto profil maksimal 2MB.',
             'foto_sim.required' => 'Foto SIM wajib diunggah.',
             'foto_sim.image' => 'File SIM harus berupa gambar.',
             'foto_sim.mimes' => 'Format foto SIM harus jpg, jpeg, atau png.',
             'foto_sim.max' => 'Ukuran foto SIM maksimal 2MB.',
         ]);
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'alamat_domisili' => $request->alamat_domisili,
-            'nomor_sim' => $request->nomor_sim,
-            'password' => Hash::make($request->password),
-            'role' => 'pengemudi',
-            'is_active' => false, // Menunggu persetujuan admin
-            'status_driver' => 'off',
-        ];
+        DB::transaction(function () use ($request) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'no_hp' => $request->no_hp,
+                'password' => Hash::make($request->password),
+                'role' => 'pengemudi',
+                'is_active' => false,
+            ]);
 
-        if ($request->hasFile('foto_ktp')) {
-            $data['foto_ktp'] = $request->file('foto_ktp')->store('driver-documents/ktp', 'public');
-        }
+            $driverProfileData = [
+                'alamat_domisili' => $request->alamat_domisili,
+                'nomor_sim' => $request->nomor_sim,
+                'status_driver' => 'off',
+            ];
 
-        if ($request->hasFile('foto_sim')) {
-            $data['foto_sim'] = $request->file('foto_sim')->store('driver-documents/sim', 'public');
-        }
+            if ($request->hasFile('foto_profil')) {
+                $driverProfileData['foto_profil'] = $request->file('foto_profil')->store('profiles', 'public');
+            }
 
-        User::create($data);
+            if ($request->hasFile('foto_sim')) {
+                $driverProfileData['foto_sim'] = $request->file('foto_sim')->store('driver-documents/sim', 'public');
+            }
+
+            $user->driverProfile()->create($driverProfileData);
+        });
 
         return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Akun Anda sedang dalam tinjauan admin. Kami akan menghubungi Anda segera.');
     }

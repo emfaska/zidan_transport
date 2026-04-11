@@ -94,7 +94,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/pengemudi/{id}/reject', [\App\Http\Controllers\Admin\PengemudiController::class, 'reject'])->name('admin.pengemudi.reject');
         
         Route::resource('/admin/booking', \App\Http\Controllers\Admin\BookingController::class)->names('admin.booking');
+        Route::get('/admin/booking/{id}/invoice', [\App\Http\Controllers\Admin\BookingController::class, 'downloadInvoice'])->name('admin.booking.invoice');
         Route::post('/admin/booking/{booking}/notify-driver', [\App\Http\Controllers\Admin\BookingController::class, 'notifyDriver'])->name('admin.booking.notify-driver');
+        Route::post('/admin/booking/extension/{extension}/handle', [\App\Http\Controllers\Admin\BookingController::class, 'handleExtension'])->name('admin.booking.extension.handle');
 
         // Refund Management
         Route::get('/admin/refunds', [\App\Http\Controllers\Admin\RefundController::class, 'index'])->name('admin.refund.index');
@@ -116,6 +118,11 @@ Route::middleware('auth')->group(function () {
 
         // Business Reports
         Route::get('/admin/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report.index');
+
+        // Admin Profile Management
+        Route::get('/admin/management', [\App\Http\Controllers\Admin\AdminManagementController::class, 'index'])->name('admin.management.index');
+        Route::get('/admin/management/create', [\App\Http\Controllers\Admin\AdminManagementController::class, 'create'])->name('admin.management.create');
+        Route::post('/admin/management', [\App\Http\Controllers\Admin\AdminManagementController::class, 'store'])->name('admin.management.store');
     });
 
     // Wilayah KHUSUS PENGEMUDI
@@ -126,6 +133,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/driver/order/{id}/status', [\App\Http\Controllers\Driver\OrderController::class, 'updateStatus'])->name('driver.order.update-status');
         Route::get('/driver/wallet', [\App\Http\Controllers\Driver\WalletController::class, 'index'])->name('driver.wallet');
         Route::post('/driver/wallet/withdraw', [\App\Http\Controllers\Driver\WalletController::class, 'requestWithdraw'])->name('driver.wallet.withdraw');
+        
+        // Location Tracking
+        Route::post('/driver/location/update', [\App\Http\Controllers\Driver\LocationController::class, 'update'])->name('driver.location.update');
     });
 
     // Wilayah KHUSUS PELANGGAN
@@ -144,6 +154,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/booking', [\App\Http\Controllers\Pelanggan\BookingController::class, 'store'])->name('pelanggan.booking.store');
         Route::get('/booking/{id}', [\App\Http\Controllers\Pelanggan\BookingController::class, 'show'])->name('pelanggan.booking.show');
         Route::get('/booking/{id}/payment', [\App\Http\Controllers\Pelanggan\BookingController::class, 'payment'])->name('pelanggan.booking.payment');
+        Route::get('/booking/{id}/invoice', [\App\Http\Controllers\Pelanggan\BookingController::class, 'downloadInvoice'])->name('pelanggan.booking.invoice');
+        Route::post('/booking/{id}/extension', [\App\Http\Controllers\Pelanggan\BookingController::class, 'requestExtension'])->name('pelanggan.booking.extension');
         
         // Refund System Routes
         Route::get('/booking/{id}/refund', [\App\Http\Controllers\Pelanggan\RefundController::class, 'create'])->name('pelanggan.booking.refund');
@@ -157,6 +169,9 @@ Route::middleware('auth')->group(function () {
 
         // Review System
         Route::post('/booking/{id}/review', [\App\Http\Controllers\Pelanggan\ReviewController::class, 'store'])->name('pelanggan.booking.review');
+
+        // Location Tracking Fetch
+        Route::get('/booking/{id}/location', [\App\Http\Controllers\Driver\LocationController::class, 'fetch'])->name('pelanggan.booking.location');
     });
     // Profile Management (All Roles)
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');

@@ -22,8 +22,8 @@
                 <div class="absolute -bottom-10 left-1/2 -translate-x-1/2">
                     <div class="w-24 h-24 rounded-2xl bg-white p-1 shadow-xl">
                         <div class="w-full h-full rounded-xl bg-gray-100 overflow-hidden">
-                            @if($pengemudi->foto_profil)
-                                <img src="{{ asset('storage/'.$pengemudi->foto_profil) }}" class="w-full h-full object-cover">
+                            @if($pengemudi->driverProfile && $pengemudi->driverProfile->foto_profil)
+                                <img src="{{ asset('storage/'.$pengemudi->driverProfile->foto_profil) }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-300">
                                     <i class="bi bi-person-fill text-4xl"></i>
@@ -68,7 +68,7 @@
             <div>
                 <label class="text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 block mb-2">Alamat Domisili</label>
                 <div class="p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
-                    <p class="text-xs font-bold text-blue-900 leading-relaxed">{{ $pengemudi->alamat_domisili ?? '-' }}</p>
+                    <p class="text-xs font-bold text-blue-900 leading-relaxed">{{ $pengemudi->driverProfile->alamat_domisili ?? '-' }}</p>
                 </div>
             </div>
 
@@ -101,9 +101,9 @@
                         <p class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest pl-1">Foto KTP</p>
                         <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase">Kartu Tanda Penduduk</span>
                     </div>
-                    <div class="group relative rounded-3xl overflow-hidden border-4 border-gray-50 shadow-inner bg-gray-100 cursor-zoom-in aspect-[1.6/1]" onclick="openModal('{{ asset('storage/'.$pengemudi->foto_ktp) }}', 'Foto KTP : {{ $pengemudi->name }}')">
-                        @if($pengemudi->foto_ktp)
-                            <img src="{{ asset('storage/'.$pengemudi->foto_ktp) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="group relative rounded-3xl overflow-hidden border-4 border-gray-50 shadow-inner bg-gray-100 cursor-zoom-in aspect-[1.6/1]" onclick="openModal('{{ $pengemudi->driverProfile && $pengemudi->driverProfile->foto_ktp ? asset('storage/'.$pengemudi->driverProfile->foto_ktp) : '' }}', 'Foto KTP : {{ $pengemudi->name }}')">
+                        @if($pengemudi->driverProfile && $pengemudi->driverProfile->foto_ktp)
+                            <img src="{{ asset('storage/'.$pengemudi->driverProfile->foto_ktp) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-[#1a237e]/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                                 <i class="bi bi-zoom-in text-white text-3xl"></i>
                             </div>
@@ -120,11 +120,11 @@
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
                         <p class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest pl-1">Foto SIM</p>
-                        <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase">No: {{ $pengemudi->nomor_sim ?? 'N/A' }}</span>
+                        <span class="text-[9px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase">No: {{ $pengemudi->driverProfile->nomor_sim ?? 'N/A' }}</span>
                     </div>
-                    <div class="group relative rounded-3xl overflow-hidden border-4 border-gray-50 shadow-inner bg-gray-100 cursor-zoom-in aspect-[1.6/1]" onclick="openModal('{{ asset('storage/'.$pengemudi->foto_sim) }}', 'Foto SIM : {{ $pengemudi->name }}')">
-                        @if($pengemudi->foto_sim)
-                            <img src="{{ asset('storage/'.$pengemudi->foto_sim) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="group relative rounded-3xl overflow-hidden border-4 border-gray-50 shadow-inner bg-gray-100 cursor-zoom-in aspect-[1.6/1]" onclick="openModal('{{ $pengemudi->driverProfile && $pengemudi->driverProfile->foto_sim ? asset('storage/'.$pengemudi->driverProfile->foto_sim) : '' }}', 'Foto SIM : {{ $pengemudi->name }}')">
+                        @if($pengemudi->driverProfile && $pengemudi->driverProfile->foto_sim)
+                            <img src="{{ asset('storage/'.$pengemudi->driverProfile->foto_sim) }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-[#1a237e]/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                                 <i class="bi bi-zoom-in text-white text-3xl"></i>
                             </div>

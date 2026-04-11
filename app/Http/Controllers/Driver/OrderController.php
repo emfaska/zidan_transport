@@ -31,18 +31,18 @@ class OrderController extends Controller
         if ($request->status === 'on_trip') {
             $message = 'Hati-hati di jalan! Perjalanan dimulai.';
             
-            // Set status driver jadi ON DUTY
-            $driver->status_driver = 'on_duty';
-            $driver->save();
+            // Set status driver jadi ON DUTY via Profile
+            if ($driver->driverProfile) {
+                $driver->driverProfile->update(['status_driver' => 'on_duty']);
+            }
         }
 
         if ($request->status === 'completed') {
             $message = 'Alhamdulillah, tugas selesai dengan baik!';
 
-            // Kembalikan status driver jadi AVAILABLE (Hanya jika sebelumnya bukan Offline)
-            if ($driver->status_driver !== 'off') {
-                $driver->status_driver = 'available';
-                $driver->save();
+            // Kembalikan status driver jadi AVAILABLE via Profile (Hanya jika sebelumnya bukan Offline)
+            if ($driver->driverProfile && $driver->driverProfile->status_driver !== 'off') {
+                $driver->driverProfile->update(['status_driver' => 'available']);
             }
 
             // === Hitung & Catat Komisi Driver (Sesuai Setting) ===

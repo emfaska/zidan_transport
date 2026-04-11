@@ -79,14 +79,14 @@
             <form action="{{ route('login') }}" method="POST" class="space-y-6">
                 @csrf
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Email</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 ml-1">Email / No. WhatsApp</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="bi bi-envelope text-gray-400"></i>
+                            <i class="bi bi-person text-gray-400"></i>
                         </div>
-                        <input type="email" name="email" required
+                        <input type="text" name="login" required
                             class="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 focus:border-[#1a237e] focus:ring-2 focus:ring-blue-100 bg-gray-50 focus:bg-white outline-none transition-all font-medium text-gray-700 placeholder-gray-300"
-                            placeholder="nama@email.com">
+                            placeholder="nama@email.com atau 0812...">
                     </div>
                 </div>
 

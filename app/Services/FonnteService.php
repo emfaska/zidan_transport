@@ -13,7 +13,7 @@ class FonnteService
 
     public function __construct()
     {
-        $this->token = env('FONNTE_TOKEN');
+        $this->token = config('services.fonnte.token');
     }
 
     /**
@@ -153,5 +153,91 @@ class FonnteService
         $message .= "Silakan hubungi CS kami di wa.me/6282142951682 jika Anda membutuhkan bantuan lebih lanjut.";
 
         return $this->sendMessage($user->no_hp, $message);
+    }
+
+    public function sendExtensionRequestToAdmin(\App\Models\BookingExtension $extension)
+    {
+        $booking = $extension->booking;
+        $user = $booking->user;
+        $adminPhone = '6282142951682'; // Base Admin Phone
+        
+        $message = "🔔 *PESANAN PERPANJANGAN BARU*\n\n";
+        $message .= "Pelanggan *{$user->name}* mengajukan perpanjangan waktu untuk pesanan *{$booking->kode_booking}*.\n\n";
+        $message .= "📅 Tanggal Baru: *{$extension->new_return_date->format('d M Y')}*\n";
+        $message .= "📝 Alasan: _{$extension->reason}_\n\n";
+        $message .= "Silakan tinjau dan tentukan harga tambahan di Panel Admin.";
+
+        return $this->sendMessage($adminPhone, $message);
+    }
+
+    public function sendExtensionStatusToCustomer(\App\Models\BookingExtension $extension)
+    {
+        $booking = $extension->booking;
+        $user = $booking->user;
+        $status = strtoupper($extension->status);
+        
+        $message = "Halo *{$user->name}*!\n\n";
+        $message .= "Update untuk pengajuan perpanjangan waktu pesanan *{$booking->kode_booking}*:\n";
+        $message .= "Status: *{$status}*\n";
+        
+        if ($extension->status === 'approved') {
+            $message .= "💰 Harga Tambahan: *Rp " . number_format($extension->additional_price, 0, ',', '.') . "*\n";
+            $message .= "📅 Jadwal Baru: *{$extension->new_return_date->format('d M Y')}*\n\n";
+            $message .= "Terima kasih telah mempercayakan Zidan Transport!";
+        } elseif ($extension->status === 'rejected') {
+            $message .= "❌ Alasan Penolakan: _{$extension->admin_notes}_\n\n";
+            $message .= "Silakan hubungi admin jika ada pertanyaan.";
+        }
+
+        return $this->sendMessage($user->no_hp, $message);
+    }
+
+    public function sendH1Reminder(Booking $booking)
+    {
+        $user = $booking->user;
+        $driver = $booking->driver;
+        $tanggal = $booking->tanggal_berangkat->format('d M Y');
+        $jam = $booking->waktu_jemput->format('H:i');
+
+        // To Customer
+        $msgUser = "🔔 *PENGINGAT (H-1)*\n\n";
+        $msgUser .= "Halo *{$user->name}*, ini adalah pengingat untuk pesanan *{$booking->kode_booking}* Anda.\n\n";
+        $msgUser .= "📅 Jadwal: *Besok, {$tanggal}*\n";
+        $msgUser .= "⏰ Jam Jemput: *{$jam} WIB*\n";
+        $msgUser .= "👨🏻‍✈️ Driver: *{$driver->name}*\n\n";
+        $msgUser .= "Mohon bersiap di lokasi penjemputan. Sampai jumpa besok! 🚕✨";
+        $this->sendMessage($user->no_hp, $msgUser);
+
+        // To Driver
+        $msgDriver = "🔔 *LOGISTIK (H-1)*\n\n";
+        $msgDriver .= "Halo *{$driver->name}*, Anda memiliki jadwal keberangkatan BESOK.\n\n";
+        $msgDriver .= "🎫 Kode: *#{$booking->kode_booking}*\n";
+        $msgDriver .= "👤 Pelanggan: *{$user->name}*\n";
+        $msgDriver .= "⏰ Jam Jemput: *{$jam} WIB*\n\n";
+        $msgDriver .= "Pastikan armada dalam kondisi prima dan bahan bakar terisi. Selamat bertugas!";
+        return $this->sendMessage($driver->no_hp, $msgDriver);
+    }
+
+    public function sendH2HReminder(Booking $booking)
+    {
+        $user = $booking->user;
+        $driver = $booking->driver;
+        $jam = $booking->waktu_jemput->format('H:i');
+
+        // To Customer
+        $msgUser = "⚠️ *PENGINGAT TERAKHIR (SIAP-SIAP)*\n\n";
+        $msgUser .= "Halo *{$user->name}*, perjalanan Anda akan dimulai dalam *1-2 jam* lagi!\n\n";
+        $msgUser .= "⏰ Jam Jemput: *{$jam} WIB*\n";
+        $msgUser .= "👨🏻‍✈️ Driver: *{$driver->name}*\n\n";
+        $msgUser .= "Mohon pastikan Anda sudah bersiap di lokasi penjemputan. Drive safe with us! 🚗💨";
+        $this->sendMessage($user->no_hp, $msgUser);
+
+        // To Driver
+        $msgDriver = "⚠️ *PENGINGAT KEBERANGKATAN (2 JAM)*\n\n";
+        $msgDriver .= "Halo *{$driver->name}*, waktu keberangkatan untuk tugas *#{$booking->kode_booking}* sudah dekat!\n\n";
+        $msgDriver .= "⏰ Jam Jemput: *{$jam} WIB*\n";
+        $msgDriver .= "👤 Pelanggan: *{$user->name}*\n\n";
+        $msgDriver .= "Harap segera meluncur ke lokasi penjemputan. Jangan telat ya!";
+        return $this->sendMessage($driver->no_hp, $msgDriver);
     }
 }

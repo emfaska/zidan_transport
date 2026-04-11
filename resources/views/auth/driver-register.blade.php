@@ -137,15 +137,15 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label class="text-[10px] font-black uppercase tracking-widest text-[#1a237e] ml-1">Foto KTP (Asli)</label>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-[#1a237e] ml-1">Foto Profil Pengemudi</label>
                                 <div class="relative group h-40">
                                     <div class="absolute inset-0 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center bg-gray-50 group-hover:bg-blue-50 transition overflow-hidden">
-                                        <i class="bi bi-person-vcard text-3xl text-gray-300 mb-2"></i>
+                                        <i class="bi bi-person-bounding-box text-3xl text-gray-300 mb-2"></i>
                                         <p class="text-[10px] font-bold text-gray-400">Klik untuk upload</p>
-                                        <img id="ktp-preview" class="absolute inset-0 w-full h-full object-cover hidden">
+                                        <img id="profil-preview" class="absolute inset-0 w-full h-full object-cover hidden">
                                     </div>
-                                    <input type="file" name="foto_ktp" class="absolute inset-0 opacity-0 cursor-pointer" onchange="preview(this, 'ktp-preview')" required>
-                                    @error('foto_ktp') <p class="text-[10px] text-red-500 mt-1 font-bold italic ml-1">{{ $message }}</p> @enderror
+                                    <input type="file" name="foto_profil" class="absolute inset-0 opacity-0 cursor-pointer" onchange="preview(this, 'profil-preview')" required>
+                                    @error('foto_profil') <p class="text-[10px] text-red-500 mt-1 font-bold italic ml-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 

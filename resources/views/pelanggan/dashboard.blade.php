@@ -31,153 +31,7 @@
 </head>
 <body class="bg-gray-50">
 
-    <!-- Professional Navbar -->
-    <nav class="bg-white/95 backdrop-blur-md fixed w-full z-50 shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                
-                <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="flex items-center gap-3">
-                        <img class="h-12 w-auto" src="{{ asset('images/logo.png') }}" alt="Zidan Transport">
-                        <div class="flex flex-col">
-                            <span class="text-lg font-black text-[#1a237e] leading-none uppercase tracking-tighter">Zidan</span>
-                            <span class="text-[10px] font-bold text-[#fbc02d] uppercase tracking-[0.2em] leading-none mt-1">Transport</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="{{ route('home') }}" class="text-[#1a237e] hover:text-[#fbc02d] font-bold transition border-b-2 border-[#1a237e] pb-1">
-                        Beranda
-                    </a>
-                    <a href="{{ route('pelanggan.armada') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">
-                        Armada
-                    </a>
-                    <a href="{{ route('pelanggan.layanan') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">
-                        Layanan
-                    </a>
-                    <a href="{{ route('pelanggan.rute') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">
-                        Rute
-                    </a>
-                    <a href="{{ route('pelanggan.kontak') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">
-                        Lokasi & Kontak
-                    </a>
-                </div>
-
-                <!-- User Profile Dropdown (Desktop) -->
-                <div class="hidden md:flex items-center gap-4">
-                    <div class="relative dropdown group">
-                        <button class="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-gray-50 transition">
-                            <div class="text-right">
-                                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Welcome</p>
-                                <p class="text-sm font-black text-[#1a237e]">{{ Auth::user()->name }}</p>
-                            </div>
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a237e] to-blue-600 overflow-hidden shadow-lg">
-                                <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&bold=true' }}" 
-                                     class="w-full h-full object-cover">
-                            </div>
-                            <i class="bi bi-chevron-down text-gray-400 text-xs"></i>
-                        </button>
-                        
-                        <!-- Dropdown Menu -->
-                        <div class="dropdown-menu hidden absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2">
-                            <div class="px-4 py-3 border-b border-gray-100">
-                                <p class="text-xs text-gray-500 font-semibold">Signed in as</p>
-                                <p class="text-sm font-bold text-[#1a237e] truncate">{{ Auth::user()->email }}</p>
-                            </div>
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition">
-                                <i class="bi bi-person text-[#1a237e]"></i>
-                                <span class="text-sm font-semibold text-gray-700">Profil Saya</span>
-                            </a>
-                            <a href="{{ route('pelanggan.booking.index') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition">
-                                <i class="bi bi-clock-history text-[#1a237e]"></i>
-                                <span class="text-sm font-semibold text-gray-700">Riwayat Pesanan</span>
-                            </a>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition">
-                                <i class="bi bi-gear text-[#1a237e]"></i>
-                                <span class="text-sm font-semibold text-gray-700">Pengaturan</span>
-                            </a>
-                            <div class="border-t border-gray-100 mt-2 pt-2">
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition text-left">
-                                        <i class="bi bi-box-arrow-right text-red-500"></i>
-                                        <span class="text-sm font-bold text-red-500">Logout</span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center gap-3">
-                    <button id="mobile-menu-btn" class="text-[#1a237e] hover:text-[#fbc02d] transition">
-                        <i class="bi bi-list text-3xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-            <div class="px-4 py-4 space-y-3">
-                <a href="{{ route('home') }}" class="block px-4 py-3 rounded-xl bg-[#1a237e] text-white font-bold">
-                    <i class="bi bi-house-door mr-2"></i> Beranda
-                </a>
-                <a href="{{ route('pelanggan.armada') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-car-front mr-2"></i> Armada
-                </a>
-                <a href="{{ route('pelanggan.layanan') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-layers mr-2"></i> Layanan
-                </a>
-                <a href="{{ route('pelanggan.rute') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-map mr-2"></i> Rute Perjalanan
-                </a>
-                <a href="{{ route('pelanggan.kontak') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-geo-alt mr-2"></i> Lokasi & Kontak
-                </a>
-                
-                <!-- Mobile User Section -->
-                <div class="border-t border-gray-100 pt-3 mt-3">
-                    <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl mb-2">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#1a237e] to-blue-600 overflow-hidden shadow-lg border-2 border-white">
-                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&bold=true' }}" 
-                                 class="w-full h-full object-cover">
-                        </div>
-                        <div>
-                            <p class="text-sm font-black text-[#1a237e]">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                        </div>
-                    </div>
-                    <a href="{{ route('profile.edit') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                        <i class="bi bi-person mr-2"></i> Profil Saya
-                    </a>
-                    <a href="{{ route('pelanggan.booking.index') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                        <i class="bi bi-clock-history mr-2"></i> Riwayat Pesanan
-                    </a>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="w-full text-left px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 font-bold">
-                            <i class="bi bi-box-arrow-right mr-2"></i> Logout
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu Toggle Script -->
-    <script>
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-    </script>
+    @include('partials.pelanggan.navbar')
 
     <main class="max-w-7xl mx-auto p-4 md:p-8 pt-24 md:pt-28">
         
@@ -221,7 +75,7 @@
                 <!-- Right: Visual -->
                 <div class="hidden lg:block w-2/5 relative animate-fade-in-up delay-300">
                     <div class="relative">
-                        <img src="{{ asset('images/innova.png') }}" class="w-full h-auto drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] transform -rotate-3 hover:rotate-0 transition duration-700" alt="Innova Premium">
+                        <img src="{{ asset('images/fleet_premium.png') }}" class="w-full h-auto drop-shadow-[0_45px_35px_rgba(0,0,0,0.4)] transform -rotate-2 hover:rotate-0 hover:scale-105 transition duration-700" alt="Koleksi Armada Premium">
                         <!-- Floating Badge -->
                         <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 animate-bounce">
                             <div class="flex items-center gap-4">
@@ -625,5 +479,6 @@
             }
         });
     </script>
+    @include('partials.pelanggan.footer')
 </body>
 </html>

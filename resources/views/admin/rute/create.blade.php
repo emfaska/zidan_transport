@@ -78,8 +78,8 @@
                     <label for="harga_paket" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Harga Sekali Jalan <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">Rp</span>
-                        <input type="number" name="harga_paket" id="harga_paket" value="{{ old('harga_paket', $rute->harga_paket ?? '') }}" required min="0" placeholder="0" 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black text-[#1a237e]">
+                        <input type="text" name="harga_paket" id="harga_paket" value="{{ old('harga_paket') }}" required placeholder="0" 
+                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black text-[#1a237e] mask-currency">
                     </div>
                     @error('harga_paket') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                 </div>
@@ -89,8 +89,8 @@
                     <label for="harga_paket_pp" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Harga Pulang Pergi (PP)</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">Rp</span>
-                        <input type="number" name="harga_paket_pp" id="harga_paket_pp" value="{{ old('harga_paket_pp', $rute->harga_paket_pp ?? '') }}" min="0" placeholder="0" 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black text-orange-600">
+                        <input type="text" name="harga_paket_pp" id="harga_paket_pp" value="{{ old('harga_paket_pp') }}" placeholder="0" 
+                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black text-orange-600 mask-currency">
                     </div>
                     @error('harga_paket_pp') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                 </div>
@@ -100,8 +100,8 @@
                     <label for="harga_tol" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Harga Tambahan Tol (Optional)</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase">Rp</span>
-                        <input type="number" name="harga_tol" id="harga_tol" value="{{ old('harga_tol', $rute->harga_tol ?? '') }}" min="0" placeholder="0" 
-                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold text-blue-600">
+                        <input type="text" name="harga_tol" id="harga_tol" value="{{ old('harga_tol') }}" placeholder="0" 
+                            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold text-blue-600 mask-currency">
                     </div>
                     @error('harga_tol') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                 </div>

@@ -16,14 +16,8 @@ class User extends Authenticatable
         'password',
         'no_hp',
         'alamat',
-        'alamat_domisili',
         'role',
         'is_active',
-        'foto_profil',
-        'nomor_sim',
-        'foto_ktp',
-        'foto_sim',
-        'status_driver',
         'rejection_note',
     ];
 
@@ -83,6 +77,47 @@ class User extends Authenticatable
     public function averageRating()
     {
         return $this->reviewsReceived()->avg('rating') ?: 0;
+    }
+
+    public function driverProfile()
+    {
+        return $this->hasOne(DriverProfile::class, 'user_id');
+    }
+
+    public function adminProfile()
+    {
+        return $this->hasOne(AdminProfile::class, 'user_id');
+    }
+
+    public function pelangganProfile()
+    {
+        return $this->hasOne(PelangganProfile::class, 'user_id');
+    }
+
+    /**
+     * Virtual attribute to get the correct profile photo based on role.
+     */
+    public function getFotoProfilAttribute()
+    {
+        if ($this->role === 'pengemudi' && $this->driverProfile) {
+            return $this->driverProfile->foto_profil;
+        } elseif ($this->role === 'admin' && $this->adminProfile) {
+            return $this->adminProfile->foto_profil;
+        } elseif ($this->role === 'pelanggan' && $this->pelangganProfile) {
+            return $this->pelangganProfile->foto_profil;
+        }
+        return null;
+    }
+
+    /**
+     * Virtual attribute to get the driver status if applicable.
+     */
+    public function getStatusDriverAttribute()
+    {
+        if ($this->role === 'pengemudi' && $this->driverProfile) {
+            return $this->driverProfile->status_driver;
+        }
+        return null;
     }
 
     protected $hidden = [

@@ -45,18 +45,28 @@ class ProfileController extends Controller
         ]);
 
         $data = $request->only(['name', 'email', 'no_hp', 'alamat']);
+        $user->update($data);
 
         if ($request->hasFile('foto_profil')) {
-            // Hapus foto lama jika ada
-            if ($user->foto_profil) {
-                Storage::delete('public/' . $user->foto_profil);
-            }
-            
             $path = $request->file('foto_profil')->store('profile-photos', 'public');
-            $data['foto_profil'] = $path;
+            
+            if ($user->role === 'pengemudi') {
+                $profile = $user->driverProfile ?: new \App\Models\DriverProfile(['user_id' => $user->id]);
+                if ($profile->foto_profil) Storage::disk('public')->delete($profile->foto_profil);
+                $profile->foto_profil = $path;
+                $profile->save();
+            } elseif ($user->role === 'admin') {
+                $profile = $user->adminProfile ?: new \App\Models\AdminProfile(['user_id' => $user->id]);
+                if ($profile->foto_profil) Storage::disk('public')->delete($profile->foto_profil);
+                $profile->foto_profil = $path;
+                $profile->save();
+            } elseif ($user->role === 'pelanggan') {
+                $profile = $user->pelangganProfile ?: new \App\Models\PelangganProfile(['user_id' => $user->id]);
+                if ($profile->foto_profil) Storage::disk('public')->delete($profile->foto_profil);
+                $profile->foto_profil = $path;
+                $profile->save();
+            }
         }
-
-        $user->update($data);
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
     }

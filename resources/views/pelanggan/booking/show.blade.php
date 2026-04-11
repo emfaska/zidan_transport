@@ -10,7 +10,12 @@
     <style>
         body { font-family: 'Montserrat', sans-serif; }
         .dropdown:hover .dropdown-menu { display: block; }
+        .modal { transition: opacity 0.25s ease; }
+        body.modal-active { overflow-x: hidden; overflow-y: hidden !important; }
     </style>
+    <!-- Leaflet.js for Real-time Tracking -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body class="bg-[#f8faff]">
 
@@ -91,11 +96,42 @@
                         $status = $statusMeta[$booking->status] ?? ['label' => $booking->status, 'color' => 'bg-gray-100 text-gray-700 border-gray-200', 'icon' => 'bi-info-circle'];
                     @endphp
 
-                    <div class="px-6 py-3 rounded-2xl {{ $status['color'] }} border flex items-center gap-3 shadow-md">
-                        <i class="bi {{ $status['icon'] }} text-xl"></i>
-                        <span class="text-xs font-black uppercase tracking-widest">{{ $status['label'] }}</span>
+                    <div class="flex flex-col items-end gap-3">
+                        <div class="px-6 py-3 rounded-2xl {{ $status['color'] }} border flex items-center gap-3 shadow-md">
+                            <i class="bi {{ $status['icon'] }} text-xl"></i>
+                            <span class="text-xs font-black uppercase tracking-widest">{{ $status['label'] }}</span>
+                        </div>
+
+                        @if(in_array($booking->status, ['confirmed', 'on_trip', 'completed']))
+                        <a href="{{ route('pelanggan.booking.invoice', $booking->id) }}" class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all border border-red-100 shadow-sm">
+                            <i class="bi bi-file-earmark-pdf-fill"></i> Cetak Bukti PDF
+                        </a>
+                        @endif
                     </div>
                 </div>
+
+                @if($booking->status === 'on_trip')
+                <!-- Real-time Driver Tracking Map -->
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-4 px-2">
+                        <h4 class="text-[11px] font-black text-[#1a237e] uppercase tracking-[0.2em] flex items-center gap-2">
+                            <i class="bi bi-geo-alt-fill text-blue-500 animate-bounce"></i> Pelacakan Driver (Real-time)
+                        </h4>
+                        <span class="text-[9px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-100 uppercase tracking-widest animate-pulse">
+                            Live Update
+                        </span>
+                    </div>
+                    <div id="trackingMap" class="w-full h-[400px] rounded-[35px] shadow-inner border border-gray-100 overflow-hidden z-10">
+                        <!-- Map will be initialized here -->
+                        <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 italic text-sm">
+                            <i class="bi bi-arrow-repeat animate-spin mr-2"></i> Menginisialisasi Peta...
+                        </div>
+                    </div>
+                    <p class="mt-4 px-2 text-[10px] text-gray-500 font-medium italic">
+                        *Posisi driver diperbarui secara otomatis setiap 30 detik. Akurasi bergantung pada GPS Driver.
+                    </p>
+                </div>
+                @endif
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
                     <!-- Itinerary Secton -->
@@ -222,6 +258,57 @@
                 </div>
                 @endif
 
+                <!-- Extension Requests Section -->
+                @if($booking->extensions->count() > 0)
+                <div class="mt-12 space-y-6">
+                    <h5 class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest flex items-center gap-2">
+                        <i class="bi bi-calendar-plus-fill"></i> Riwayat Perpanjangan:
+                    </h5>
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($booking->extensions as $ext)
+                        <div class="p-6 bg-white border border-gray-100 rounded-3xl shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Pengajuan ke Tanggal Baru</p>
+                                <p class="text-sm font-black text-[#1a237e]">{{ $ext->new_return_date->format('d M Y') }}</p>
+                                <p class="text-[10px] text-gray-500 mt-1 italic">"{{ $ext->reason }}"</p>
+                            </div>
+                            
+                            <div class="flex items-center gap-6">
+                                <div class="text-right">
+                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                                    @php
+                                        $extStatus = [
+                                            'pending' => ['label' => 'PENDING', 'color' => 'text-yellow-600 bg-yellow-50'],
+                                            'approved' => ['label' => 'DISETUJUI', 'color' => 'text-green-600 bg-green-50'],
+                                            'rejected' => ['label' => 'DITOLAK', 'color' => 'text-red-600 bg-red-50'],
+                                            'paid' => ['label' => 'DIBAYAR', 'color' => 'text-blue-600 bg-blue-50'],
+                                        ];
+                                        $s = $extStatus[$ext->status] ?? ['label' => $ext->status, 'color' => 'text-gray-600 bg-gray-50'];
+                                    @endphp
+                                    <span class="px-3 py-1 rounded-full text-[9px] font-black {{ $s['color'] }}">{{ $s['label'] }}</span>
+                                </div>
+                                
+                                @if($ext->status === 'approved')
+                                <div class="flex flex-col md:flex-row items-end md:items-center gap-4">
+                                    <div class="text-right">
+                                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Biaya Tambahan</p>
+                                        <p class="text-xs font-black text-[#fbc02d]">Rp {{ number_format($ext->additional_price, 0, ',', '.') }}</p>
+                                    </div>
+                                    <div class="px-4 py-2 bg-blue-50 border border-blue-100 rounded-xl flex items-center gap-2 shadow-sm animate-pulse-short">
+                                        <i class="bi bi-info-circle-fill text-blue-500 text-xs shadow-inner"></i>
+                                        <p class="text-[9px] font-bold text-blue-700 leading-tight">
+                                            Silakan bayar tunai ke <span class="uppercase">Driver</span> atau <span class="uppercase">Admin</span> secara langsung.
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 <!-- Review Section -->
                 @if($booking->status === 'completed')
                     <div class="mt-12 pt-12 border-t border-gray-100">
@@ -289,37 +376,61 @@
                     </div>
                 @endif
 
-                <!-- Final Actions -->
-                <div class="flex flex-col md:flex-row gap-4 mt-12 pt-12 border-t border-gray-50">
-                    @if($booking->status === 'confirmed' && $booking->status_pembayaran !== 'lunas')
-                        <a href="{{ route('pelanggan.booking.payment', $booking->id) }}" class="flex-1 py-5 bg-[#1a237e] text-white rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 hover:bg-blue-900 transition-all hover:-translate-y-1">
-                            <i class="bi bi-wallet2 text-xl"></i> BAYAR SEKARANG
-                        </a>
-                    @else
-                        <a href="https://wa.me/6282142951682?text={{ urlencode('Halo Admin Zidan Transport, saya ingin bertanya tentang pesanan ' . $booking->kode_booking) }}" target="_blank" class="flex-1 py-5 bg-green-500 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 hover:bg-green-600 transition-all hover:-translate-y-1">
-                            <i class="bi bi-whatsapp text-xl"></i> HUBUNGI ADMIN
-                        </a>
-                    @endif
-
-                    @if(in_array($booking->status, ['pending', 'confirmed']))
-                        @if($booking->jumlah_bayar > 0)
-                            @if(!$booking->refundRequest)
-                                <a href="{{ route('pelanggan.booking.refund', $booking->id) }}" class="flex-none px-10 py-5 bg-red-50 text-red-500 border border-red-100 rounded-2xl font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                    <i class="bi bi-arrow-counterclockwise mr-2"></i> BATALKAN & REFUND
-                                </a>
-                            @endif
+                <!-- Final Actions Bar -->
+                <div class="mt-12 pt-12 border-t border-gray-100">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Primary Action (Payment/WA) -->
+                        @if($booking->status === 'confirmed' && $booking->status_pembayaran !== 'lunas')
+                            <a href="{{ route('pelanggan.booking.payment', $booking->id) }}" class="group flex flex-col items-center justify-center p-5 bg-[#1a237e] text-white rounded-[30px] shadow-xl hover:bg-blue-900 transition-all hover:-translate-y-1">
+                                <i class="bi bi-wallet2 text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Bayar Sekarang</span>
+                            </a>
                         @else
-                            @if($booking->status === 'pending')
-                            <form action="{{ route('pelanggan.booking.destroy', $booking->id) }}" method="POST" class="flex-none" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="w-full md:w-auto px-10 py-5 bg-red-50 text-red-500 border border-red-100 rounded-2xl font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                    <i class="bi bi-trash mr-2"></i> HAPUS PESANAN
-                                </button>
-                            </form>
+                            <a href="https://wa.me/6282142951682?text={{ urlencode('Halo Admin Zidan Transport, saya ingin bertanya tentang pesanan ' . $booking->kode_booking) }}" target="_blank" class="group flex flex-col items-center justify-center p-5 bg-green-500 text-white rounded-[30px] shadow-xl hover:bg-green-600 transition-all hover:-translate-y-1">
+                                <i class="bi bi-whatsapp text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Hubungi Admin</span>
+                            </a>
+                        @endif
+
+                        <!-- PDF Invoice -->
+                        @if(in_array($booking->status, ['confirmed', 'on_trip', 'completed']))
+                            <a href="{{ route('pelanggan.booking.invoice', $booking->id) }}" class="group flex flex-col items-center justify-center p-5 bg-blue-50 text-[#1a237e] border border-blue-100 rounded-[30px] shadow-sm hover:bg-[#1a237e] hover:text-white transition-all hover:-translate-y-1">
+                                <i class="bi bi-file-earmark-pdf-fill text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-center">Cetak Bukti PDF</span>
+                            </a>
+                        @endif
+
+                        <!-- Extension -->
+                        @if(in_array($booking->status, ['confirmed', 'on_trip']))
+                            <button type="button" onclick="document.getElementById('extensionModal').classList.remove('hidden')" class="group flex flex-col items-center justify-center p-5 bg-[#fbc02d] text-[#1a237e] rounded-[30px] shadow-xl hover:bg-yellow-500 transition-all hover:-translate-y-1">
+                                <i class="bi bi-calendar-plus-fill text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em]">Perpanjang</span>
+                            </button>
+                        @endif
+
+                        <!-- Refund/Delete -->
+                        @if(in_array($booking->status, ['pending', 'confirmed']))
+                            @if($booking->jumlah_bayar > 0)
+                                @if(!$booking->refundRequest)
+                                    <a href="{{ route('pelanggan.booking.refund', $booking->id) }}" class="group flex flex-col items-center justify-center p-5 bg-red-50 text-red-500 border border-red-100 rounded-[30px] hover:bg-red-500 hover:text-white transition-all hover:-translate-y-1">
+                                        <i class="bi bi-arrow-counterclockwise text-2xl mb-2 group-hover:rotate-[-45deg] transition-transform"></i>
+                                        <span class="text-[10px] font-black uppercase tracking-[0.2em]">Batalkan</span>
+                                    </a>
+                                @endif
+                            @else
+                                @if($booking->status === 'pending')
+                                <form action="{{ route('pelanggan.booking.destroy', $booking->id) }}" method="POST" class="contents" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="group flex flex-col items-center justify-center p-5 bg-gray-50 text-gray-400 border border-gray-200 rounded-[30px] hover:bg-red-500 hover:text-white transition-all hover:-translate-y-1">
+                                        <i class="bi bi-trash3-fill text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-[10px] font-black uppercase tracking-[0.2em]">Hapus</span>
+                                    </button>
+                                </form>
+                                @endif
                             @endif
                         @endif
-                    @endif
+                    </div>
                 </div>
             </div>
             
@@ -402,6 +513,107 @@
     <footer class="bg-[#1a237e] py-10 text-center text-white/30 text-[10px] uppercase font-black tracking-[0.4em]">
         &copy; {{ date('Y') }} Zidan Transport &bull; Solusi Perjalanan Premium Kediri
     </footer>
+
+    <!-- Extension Modal -->
+    <div id="extensionModal" class="hidden fixed inset-0 z-[60] overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true" onclick="document.getElementById('extensionModal').classList.add('hidden')">
+                <div class="absolute inset-0 bg-gray-900 opacity-75 backdrop-blur-sm"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-[40px] text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100">
+                <div class="p-8 md:p-12">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <p class="text-[10px] text-[#fbc02d] font-black uppercase tracking-widest mb-1">Charter Extension</p>
+                            <h3 class="text-2xl font-black text-[#1a237e] tracking-tighter uppercase">Perpanjang Waktu</h3>
+                        </div>
+                        <button onclick="document.getElementById('extensionModal').classList.add('hidden')" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('pelanggan.booking.extension', $booking->id) }}" method="POST" class="space-y-6">
+                        @csrf
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Hingga Tanggal Berapa?</label>
+                            <input type="date" name="new_return_date" required min="{{ $booking->tanggal_berangkat->addDay()->format('Y-m-d') }}" class="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 px-6 text-sm font-bold text-[#1a237e] focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] transition-all outline-none">
+                            <p class="text-[9px] text-gray-400 mt-2 font-medium italic">*Tanggal harus setelah jadwal keberangkatan saat ini.</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Alasan Perpanjangan</label>
+                            <textarea name="reason" rows="3" required class="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 px-6 text-sm font-medium text-gray-700 focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] transition-all outline-none resize-none" placeholder="Contoh: Menambah jadwal kunjungan di lokasi..."></textarea>
+                        </div>
+
+                        <div class="bg-blue-50/50 p-6 rounded-3xl border border-blue-100 flex gap-4">
+                            <i class="bi bi-info-circle-fill text-blue-500 text-lg"></i>
+                            <p class="text-[10px] text-blue-800 font-bold leading-relaxed uppercase tracking-widest">Admin akan meninjau ketersediaan armada dan menentukan biaya tambahan untuk perpanjangan ini.</p>
+                        </div>
+
+                        <button type="submit" class="w-full py-5 bg-[#1a237e] text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-blue-900 transition-all hover:-translate-y-1">
+                            KIRIM PENGAJUAN SEKARANG
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if($booking->status === 'on_trip')
+    <script>
+        let map;
+        let driverMarker;
+        const bookingId = "{{ $booking->id }}";
+        
+        function initMap() {
+            // Default center if no coordinates yet (Indonesia/Kediri center approx)
+            const kediriCenter = [-7.8228, 112.0119];
+            
+            map = L.map('trackingMap').setView(kediriCenter, 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Custom Icon for Driver
+            const driverIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/3202/3202926.png', // Taxi/Car icon
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20]
+            });
+
+            driverMarker = L.marker(kediriCenter, {icon: driverIcon}).addTo(map)
+                .bindPopup("<b>Driver Zidan Transport</b><br>Sedang dalam perjalanan.")
+                .openPopup();
+            
+            // Start polling
+            updateMapPosition();
+            setInterval(updateMapPosition, 30000); // Every 30 seconds
+        }
+
+        function updateMapPosition() {
+            fetch(`/booking/${bookingId}/location`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.latitude && data.longitude) {
+                        const newPos = [data.latitude, data.longitude];
+                        driverMarker.setLatLng(newPos);
+                        map.panTo(newPos);
+                        
+                        if (data.driver_name) {
+                            driverMarker.getPopup().setContent(`<b>Driver: ${data.driver_name}</b><br>Lokasi Terkini.`);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching location:', error));
+        }
+
+        // Initialize map when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+    @endif
 
 </body>
 </html>

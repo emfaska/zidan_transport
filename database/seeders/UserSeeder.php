@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // 1. Akun Admin
-        User::updateOrCreate(
+        $admin = User::firstOrCreate(
             ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Administrator Zidan',
@@ -22,9 +22,10 @@ class UserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+        $admin->adminProfile()->firstOrCreate([], ['jabatan' => 'Super Admin']);
 
         // 2. Akun Pengemudi (Driver)
-        User::updateOrCreate(
+        $driver = User::firstOrCreate(
             ['email' => 'driver@gmail.com'],
             [
                 'name' => 'Budi Santoso',
@@ -35,6 +36,11 @@ class UserSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+        $driver->driverProfile()->firstOrCreate([], [
+            'alamat_domisili' => 'Kec. Pesantren, Kediri',
+            'nomor_sim' => '1234567890',
+            'status_driver' => 'available',
+        ]);
 
         // 3. Akun Pelanggan (Customer)
         User::updateOrCreate(

@@ -7,13 +7,14 @@ use App\Models\Booking;
 use App\Models\Rute;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingController extends Controller
 {
     public function index()
     {
         $bookings = Booking::where('user_id', Auth::id())
-            ->with('rute')
+            ->with(['rute', 'extensions'])
             ->latest()
             ->paginate(10);
             
@@ -48,6 +49,8 @@ class BookingController extends Controller
             'tipe_perjalanan' => 'required|in:one_way,round_trip',
             'tanggal_berangkat' => 'required|date|after_or_equal:today',
             'waktu_jemput' => 'required',
+            'titik_jemput' => 'required|string|max:255',
+            'titik_tujuan' => 'required|string|max:255',
             'jumlah_penumpang' => 'required|integer|min:1',
             'catatan_customer' => 'nullable|string',
             'include_tol' => 'nullable|boolean',
@@ -99,6 +102,8 @@ class BookingController extends Controller
             'armada_id' => $request->armada_id,
             'tanggal_berangkat' => $request->tanggal_berangkat,
             'waktu_jemput' => $request->waktu_jemput,
+            'titik_jemput' => $request->titik_jemput,
+            'titik_tujuan' => $request->titik_tujuan,
             'jumlah_penumpang' => $request->jumlah_penumpang,
             'include_tol' => $request->has('include_tol'),
             'harga_paket' => $hargaPaket, 
@@ -205,10 +210,40 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::where('user_id', Auth::id())
-            ->with(['rute', 'armada'])
+            ->with(['rute', 'armada', 'extensions' => function($q) {
+                $q->latest();
+            }])
             ->findOrFail($id);
             
         return view('pelanggan.booking.show', compact('booking'));
+    }
+
+    public function requestExtension(Request $request, $id)
+    {
+        $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
+
+        $request->validate([
+            'new_return_date' => 'required|date|after:' . $booking->tanggal_berangkat->format('Y-m-d'),
+            'reason' => 'required|string|max:500',
+        ]);
+
+        if ($booking->hasPendingExtension()) {
+            return back()->with('error', 'Anda masih memiliki pengajuan perpanjangan yang belum diproses.');
+        }
+
+        $extension = $booking->extensions()->create([
+            'new_return_date' => $request->new_return_date,
+            'reason' => $request->reason,
+            'status' => 'pending'
+        ]);
+
+        try {
+            (new \App\Services\FonnteService())->sendExtensionRequestToAdmin($extension);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Fonnte Send WA Error (Extension Req): ' . $e->getMessage());
+        }
+
+        return back()->with('success', 'Pengajuan perpanjangan berhasil dikirim! Tunggu konfirmasi admin.');
     }
 
     public function destroy($id)
@@ -231,5 +266,34 @@ class BookingController extends Controller
         
         return redirect()->route('pelanggan.booking.index')
             ->with('success', 'Pesanan Anda berhasil dihapus.');
+    }
+
+    public function downloadInvoice($id)
+    {
+        $booking = Booking::where('user_id', Auth::id())
+            ->with(['rute.layanan', 'armada', 'extensions' => function($q) {
+                $q->where('status', 'approved');
+            }])
+            ->findOrFail($id);
+
+        // Hanya boleh download jika status sudah dikonfirmasi, on_trip, atau selesai
+        if (!in_array($booking->status, ['confirmed', 'on_trip', 'completed'])) {
+            return back()->with('error', 'Invoice belum tersedia. Pesanan harus dikonfirmasi terlebih dahulu.');
+        }
+
+        try {
+            $pdf = Pdf::loadView('pelanggan.booking.invoice', compact('booking'))
+                      ->setPaper('a4', 'portrait')
+                      ->setOptions([
+                          'isHtml5ParserEnabled' => true,
+                          'isRemoteEnabled' => true,
+                          'defaultFont' => 'sans-serif'
+                      ]);
+
+            return $pdf->stream('invoice-' . $booking->kode_booking . '.pdf');
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation Error: ' . $e->getMessage());
+            return back()->with('error', 'Gagal membuat file PDF. Silakan coba sesaat lagi.');
+        }
     }
 }

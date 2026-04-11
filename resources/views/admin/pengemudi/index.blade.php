@@ -33,8 +33,8 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-gray-100 overflow-hidden border border-gray-100 flex-shrink-0">
-                                @if($pengemudi->foto_profil)
-                                    <img src="{{ asset('storage/'.$pengemudi->foto_profil) }}" alt="{{ $pengemudi->name }}" class="w-full h-full object-cover">
+                                @if($pengemudi->driverProfile && $pengemudi->driverProfile->foto_profil)
+                                    <img src="{{ asset('storage/'.$pengemudi->driverProfile->foto_profil) }}" alt="{{ $pengemudi->name }}" class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-gray-300">
                                         <i class="bi bi-person-fill text-xl"></i>
@@ -50,9 +50,10 @@
                     <td class="px-6 py-4">
                         <div class="flex flex-col gap-1">
                             @if($pengemudi->is_active)
-                                @if($pengemudi->status_driver == 'available')
+                                @php $status_driver = $pengemudi->driverProfile->status_driver ?? 'off'; @endphp
+                                @if($status_driver == 'available')
                                     <span class="w-fit px-3 py-1 bg-green-100 text-green-700 text-[9px] font-black rounded-full border border-green-200 uppercase tracking-widest shadow-sm">Ready</span>
-                                @elseif($pengemudi->status_driver == 'on_duty')
+                                @elseif($status_driver == 'on_duty')
                                     <span class="w-fit px-3 py-1 bg-blue-100 text-blue-700 text-[9px] font-black rounded-full border border-blue-200 uppercase tracking-widest shadow-sm">On Duty</span>
                                 @else
                                     <span class="w-fit px-3 py-1 bg-gray-100 text-gray-400 text-[9px] font-black rounded-full border border-gray-200 uppercase tracking-widest shadow-sm">Off</span>
@@ -64,7 +65,7 @@
                                     <span class="w-fit px-3 py-1 bg-yellow-100 text-yellow-700 text-[9px] font-black rounded-full border border-yellow-200 uppercase tracking-widest shadow-sm">Pending</span>
                                 @endif
                             @endif
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">SIM: {{ $pengemudi->nomor_sim ?? '-' }}</span>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">SIM: {{ $pengemudi->driverProfile->nomor_sim ?? '-' }}</span>
                         </div>
                     </td>
                     <td class="px-6 py-4">

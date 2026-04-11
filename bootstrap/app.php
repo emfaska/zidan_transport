@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         'midtrans/callback',
     ]);
 
+    $middleware->trustProxies(at: '*');
+
     $middleware->alias([
         'role' => \App\Http\Middleware\RoleMiddleware::class,
     ]);

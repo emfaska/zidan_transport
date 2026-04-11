@@ -42,6 +42,16 @@ class RuteController extends Controller
      */
     public function store(Request $request)
     {
+        // Clean currency inputs before validation
+        $input = $request->all();
+        $currencyFields = ['harga_paket', 'harga_paket_pp', 'harga_tol'];
+        foreach ($currencyFields as $field) {
+            if (isset($input[$field])) {
+                $input[$field] = str_replace(['.', ','], '', $input[$field]);
+            }
+        }
+        $request->merge($input);
+
         $request->validate([
             'layanan_id' => 'required|exists:layanans,id',
             'nama_rute' => 'required|string|max:255',
@@ -49,6 +59,7 @@ class RuteController extends Controller
             'tujuan' => 'required|string|max:255',
             'armada_id' => 'required|exists:armadas,id',
             'harga_paket' => 'required|numeric|min:0',
+            'harga_paket_pp' => 'nullable|numeric|min:0',
             'harga_tol' => 'nullable|numeric|min:0',
             'durasi_estimasi' => 'nullable|string|max:100',
             'jarak_km' => 'nullable|integer|min:0',
@@ -83,6 +94,16 @@ class RuteController extends Controller
      */
     public function update(Request $request, Rute $rute)
     {
+        // Clean currency inputs before validation
+        $input = $request->all();
+        $currencyFields = ['harga_paket', 'harga_paket_pp', 'harga_tol'];
+        foreach ($currencyFields as $field) {
+            if (isset($input[$field])) {
+                $input[$field] = str_replace(['.', ','], '', $input[$field]);
+            }
+        }
+        $request->merge($input);
+
         $request->validate([
             'layanan_id' => 'required|exists:layanans,id',
             'nama_rute' => 'required|string|max:255',
@@ -90,6 +111,7 @@ class RuteController extends Controller
             'tujuan' => 'required|string|max:255',
             'armada_id' => 'required|exists:armadas,id',
             'harga_paket' => 'required|numeric|min:0',
+            'harga_paket_pp' => 'nullable|numeric|min:0',
             'harga_tol' => 'nullable|numeric|min:0',
             'durasi_estimasi' => 'nullable|string|max:100',
             'jarak_km' => 'nullable|integer|min:0',

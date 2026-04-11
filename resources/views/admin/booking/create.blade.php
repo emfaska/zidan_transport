@@ -119,7 +119,7 @@
                     <label for="total_harga" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Total Harga Final (Fiks)</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">Rp</span>
-                        <input type="number" name="total_harga" id="total_harga" class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black" placeholder="Biarkan kosong untuk menggunakan harga standar rute">
+                        <input type="text" name="total_harga" id="total_harga" class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black mask-currency" placeholder="Biarkan kosong untuk menggunakan harga standar rute">
                     </div>
                     @error('total_harga') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                     <p class="text-[9px] text-blue-400 mt-2 italic font-bold">Kosongkan jika ingin menggunakan harga otomatis dari rute yang dipilih.</p>

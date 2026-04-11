@@ -88,30 +88,49 @@
                             <label for="total_harga" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Total Harga Final (Fiks) <span class="text-red-500">*</span></label>
                             <div class="relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">Rp</span>
-                                <input type="number" name="total_harga" id="total_harga" value="{{ old('total_harga', $booking->total_harga) }}" 
-                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black" 
+                                <input type="text" name="total_harga" id="total_harga" value="{{ old('total_harga', number_format($booking->total_harga, 0, ',', '.')) }}" 
+                                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-black mask-currency" 
                                     placeholder="Masukkan harga fiks hasil nego">
                             </div>
                             @error('total_harga') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                             <p class="text-[9px] text-blue-400 mt-2 italic font-bold">Inputkan harga yang sudah disepakati via WhatsApp.</p>
                         </div>
 
-                        <!-- Assign Driver -->
-                        <div>
-                            <label for="driver_id" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Tugaskan Pengemudi</label>
-                            <div class="relative">
-                                <i class="bi bi-steering-wheel absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                <select name="driver_id" id="driver_id" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold appearance-none cursor-pointer">
-                                    <option value="">-- Pilih Driver --</option>
-                                    @foreach($drivers as $driver)
-                                        <option value="{{ $driver->id }}" {{ $booking->driver_id == $driver->id ? 'selected' : '' }}>
-                                            {{ $driver->name }} ({{ $driver->status_driver ?? 'off' }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                        <!-- Assign Driver & Armada -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="driver_id" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Tugaskan Pengemudi</label>
+                                <div class="relative">
+                                    <i class="bi bi-steering-wheel absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <select name="driver_id" id="driver_id" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold appearance-none cursor-pointer">
+                                        <option value="">-- Pilih Driver --</option>
+                                        @foreach($drivers as $driver)
+                                            <option value="{{ $driver->id }}" {{ $booking->driver_id == $driver->id ? 'selected' : '' }}>
+                                                {{ $driver->name }} ({{ $driver->status_driver ?? 'off' }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                                </div>
+                                @error('driver_id') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
                             </div>
-                            @error('driver_id') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
+
+                            <div>
+                                <label for="armada_id" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Pilih Armada (Unit)</label>
+                                <div class="relative">
+                                    <i class="bi bi-car-front-fill absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    <select name="armada_id" id="armada_id" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold appearance-none cursor-pointer">
+                                        <option value="">-- Pilih Armada --</option>
+                                        @foreach($armadas as $armada)
+                                            <option value="{{ $armada->id }}" {{ $booking->armada_id == $armada->id ? 'selected' : '' }}>
+                                                {{ $armada->nama }} ({{ $armada->jenis }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                                </div>
+                                @error('armada_id') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
+                            </div>
                         </div>
 
                         <hr class="border-gray-100 my-2">
@@ -158,6 +177,80 @@
                                 
                             </div>
                         </div>
+                        <!-- Extension Management -->
+                        @if($booking->extensions->count() > 0)
+                        <div class="p-6 bg-yellow-50/50 rounded-[32px] border border-yellow-100 space-y-6">
+                            <h4 class="text-xs font-black text-[#1a237e] uppercase tracking-[0.2em] flex items-center gap-2">
+                                <i class="bi bi-calendar-plus text-lg"></i> Permintaan Perpanjangan
+                            </h4>
+
+                            <div class="space-y-4">
+                                @foreach($booking->extensions as $ext)
+                                <div class="p-5 bg-white border border-gray-100 rounded-2xl shadow-sm">
+                                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                                        <div>
+                                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Target Tanggal Baru</p>
+                                            <p class="text-sm font-black text-[#1a237e]">{{ $ext->new_return_date->format('d M Y') }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none mb-2">Status</p>
+                                            @php
+                                                $sMeta = [
+                                                    'pending' => ['label' => 'PENDING', 'color' => 'yellow'],
+                                                    'approved' => ['label' => 'DISETUJUI', 'color' => 'green'],
+                                                    'rejected' => ['label' => 'DITOLAK', 'color' => 'red'],
+                                                    'paid' => ['label' => 'DIBAYAR', 'color' => 'blue'],
+                                                ];
+                                                $sm = $sMeta[$ext->status] ?? ['label' => $ext->status, 'color' => 'gray'];
+                                            @endphp
+                                            <span class="px-3 py-1 bg-{{ $sm['color'] }}-100 text-{{ $sm['color'] }}-700 text-[9px] font-black rounded-full">{{ $sm['label'] }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <p class="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">Alasan Pelanggan</p>
+                                        <p class="text-xs font-medium text-gray-600 italic">"{{ $ext->reason }}"</p>
+                                    </div>
+
+                                    @if($ext->status === 'pending')
+                                    <form action="{{ route('admin.booking.extension.handle', $ext->id) }}" method="POST" class="mt-6 pt-4 border-t border-gray-100 space-y-4">
+                                        @csrf
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-[9px] font-black uppercase text-gray-400 mb-2">Biaya Tambahan (Rp) <span class="text-red-500">*</span></label>
+                                                <input type="text" name="additional_price" value="{{ old('additional_price', 0) }}" required class="w-full px-4 py-2 bg-gray-50 border @error('additional_price') border-red-500 @else border-gray-200 @enderror rounded-xl text-xs font-bold focus:ring-[#fbc02d] outline-none mask-currency" placeholder="0">
+                                                @error('additional_price') <p class="text-red-500 text-[8px] mt-1 font-bold italic">{{ $message }}</p> @enderror
+                                            </div>
+                                            <div>
+                                                <label class="block text-[9px] font-black uppercase text-gray-400 mb-2">Catatan/Alasan (Opsional)</label>
+                                                <input type="text" name="admin_notes" value="{{ old('admin_notes') }}" class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:ring-[#fbc02d] outline-none" placeholder="Tulis catatan penolakan jika ditolak...">
+                                            </div>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button type="submit" name="action" value="approve" class="flex-1 bg-green-500 hover:bg-green-600 text-white text-[9px] font-black py-3 rounded-xl uppercase tracking-widest transition shadow-md shadow-green-500/20">Setujui</button>
+                                            <button type="submit" name="action" value="reject" onclick="return confirm('Tolak pengajuan perpanjangan ini?')" class="flex-1 bg-red-50 hover:bg-red-500 hover:text-white text-red-500 text-[9px] font-black py-3 rounded-xl uppercase tracking-widest transition">Tolak</button>
+                                        </div>
+                                    </form>
+                                    @else
+                                    <div class="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-[9px] font-black text-gray-300 uppercase">Biaya Tambahan</p>
+                                            <p class="text-xs font-black text-[#fbc02d]">Rp {{ number_format($ext->additional_price, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            @if($ext->admin_notes)
+                                                <p class="text-[9px] font-black text-gray-300 uppercase">Catatan Admin</p>
+                                                <p class="text-[10px] font-medium text-gray-500 italic">{{ $ext->admin_notes }}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+
                         <!-- Catatan Admin -->
                         <div>
                             <label for="catatan_admin" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Catatan Internal Admin</label>

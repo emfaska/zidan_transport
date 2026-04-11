@@ -48,8 +48,11 @@ class DashboardController extends Controller
             ], 422);
         }
 
-        $driver->status_driver = $request->status;
-        $driver->save();
+        $profile = $driver->driverProfile;
+        if($profile) {
+            $profile->status_driver = $request->status;
+            $profile->save();
+        }
 
         return response()->json([
             'success' => true,

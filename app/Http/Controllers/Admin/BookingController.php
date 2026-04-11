@@ -21,7 +21,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::with(['user', 'rute', 'driver'])->latest()->get();
+        $bookings = Booking::with(['user', 'rute', 'driver', 'armada', 'extensions'])->latest()->get();
         return view('admin.booking.index', compact('bookings'));
     }
 
@@ -51,6 +51,13 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        // Clean currency inputs before validation
+        $input = $request->all();
+        if (isset($input['total_harga'])) {
+            $input['total_harga'] = str_replace(['.', ','], '', $input['total_harga']);
+        }
+        $request->merge($input);
+
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'rute_id' => 'required|exists:rutes,id',
@@ -58,7 +65,6 @@ class BookingController extends Controller
             'waktu_jemput' => 'required',
             'jumlah_penumpang' => 'required|integer|min:1',
             'alamat_jemput' => 'required|string',
-            'jumlah_penumpang' => 'required|integer|min:1', // Assuming this field exists based on model/migration
             'driver_id' => 'nullable|exists:users,id',
         ]);
 
@@ -121,7 +127,8 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         $drivers = User::where('role', 'pengemudi')->get();
-        return view('admin.booking.edit', compact('booking', 'drivers'));
+        $armadas = \App\Models\Armada::all();
+        return view('admin.booking.edit', compact('booking', 'drivers', 'armadas'));
     }
 
     /**
@@ -129,9 +136,17 @@ class BookingController extends Controller
      */
     public function update(Request $request, Booking $booking)
     {
+        // Clean currency inputs before validation
+        $input = $request->all();
+        if (isset($input['total_harga'])) {
+            $input['total_harga'] = str_replace(['.', ','], '', $input['total_harga']);
+        }
+        $request->merge($input);
+
         $request->validate([
             'status' => 'required|in:pending,confirmed,on_trip,completed,cancelled',
             'driver_id' => 'nullable|exists:users,id',
+            'armada_id' => 'nullable|exists:armadas,id',
             'total_harga' => 'required|numeric|min:0',
             'status_pembayaran' => 'required|in:belum_bayar,dp_dibayar,lunas',
             'catatan_admin' => 'nullable|string',
@@ -153,6 +168,7 @@ class BookingController extends Controller
         $booking->update([
             'status' => $request->status,
             'driver_id' => $request->driver_id,
+            'armada_id' => $request->armada_id,
             'total_harga' => $request->total_harga,
             'total_akhir' => $request->total_harga, // Admin sets the FINAL price
             'status_pembayaran' => $request->status_pembayaran,
@@ -222,5 +238,66 @@ class BookingController extends Controller
         $message .= "Semoga perjalanan lancar dan berkah! 🚗✨";
 
         return $message;
+    }
+
+    public function handleExtension(Request $request, \App\Models\BookingExtension $extension)
+    {
+        // Clean currency inputs
+        $input = $request->all();
+        if (isset($input['additional_price'])) {
+            $input['additional_price'] = str_replace(['.', ','], '', $input['additional_price']);
+        }
+        $request->merge($input);
+
+        $request->validate([
+            'action' => 'required|in:approve,reject',
+            'additional_price' => 'required_if:action,approve|numeric|min:0',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        if ($request->action === 'approve') {
+            $extension->update([
+                'status' => 'approved',
+                'additional_price' => $request->additional_price,
+                'admin_notes' => $request->admin_notes
+            ]);
+            $msg = 'Pengajuan perpanjangan telah DISETUJUI.';
+        } else {
+            $extension->update([
+                'status' => 'rejected',
+                'admin_notes' => $request->admin_notes
+            ]);
+            $msg = 'Pengajuan perpanjangan telah DITOLAK.';
+        }
+
+        try {
+            (new \App\Services\FonnteService())->sendExtensionStatusToCustomer($extension);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Fonnte Send WA Error (Handle Extension): ' . $e->getMessage());
+        }
+
+        return back()->with('success', $msg);
+    }
+
+    public function downloadInvoice($id)
+    {
+        $booking = Booking::with(['user', 'rute.layanan', 'armada', 'extensions' => function($q) {
+            $q->where('status', 'approved');
+        }])->findOrFail($id);
+
+        try {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pelanggan.booking.invoice', compact('booking'))
+                      ->setPaper('a4', 'portrait')
+                      ->setOptions([
+                          'isHtml5ParserEnabled' => true,
+                          'isRemoteEnabled' => true,
+                          'defaultFont' => 'sans-serif'
+                      ]);
+
+            return $pdf->stream('invoice-' . $booking->kode_booking . '.pdf');
+        } catch (\Exception $e) {
+            \Log::error('Admin PDF Generation Error: ' . $e->getMessage());
+            return back()->with('error', 'Gagal membuat file PDF: ' . $e->getMessage());
+        }
     }
 }

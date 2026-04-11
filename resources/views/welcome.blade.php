@@ -528,7 +528,7 @@
                         </div>
                         <div>
                             <h4 class="font-black text-[#1a237e] uppercase tracking-tight mb-2">Alamat Kantor</h4>
-                            <p class="text-gray-500 text-sm font-bold leading-relaxed">Jl. Bokbrobos Rt.04/Rw.04 Ds. Ngadiluwih Kec. Ngadiluwih Kab. Kediri Jawa Timur 64171</p>
+                            <p class="text-gray-500 text-sm font-bold leading-relaxed">{{ \App\Models\Setting::get('contact_address', 'Kediri, Jawa Timur') }}</p>
                         </div>
                     </div>
 
@@ -538,7 +538,7 @@
                         </div>
                         <div>
                             <h4 class="font-black text-[#1a237e] uppercase tracking-tight mb-2">Layanan WhatsApp</h4>
-                            <p class="text-gray-500 text-sm font-bold mb-3">+62 821 4295 1682</p>
+                            <p class="text-gray-500 text-sm font-bold mb-3">{{ \App\Models\Setting::get('contact_whatsapp_display', '+62 821 4295 1682') }}</p>
                             <a href="https://wa.me/{{ \App\Models\Setting::get('contact_whatsapp', '6282142951682') }}" target="_blank" class="inline-flex items-center gap-2 text-green-600 font-black text-xs uppercase tracking-widest hover:gap-3 transition-all">
                                 Chat Sekarang
                                 <i class="bi bi-arrow-right"></i>
@@ -552,7 +552,7 @@
                         </div>
                         <div>
                             <h4 class="font-black text-[#1a237e] uppercase tracking-tight mb-2">Email Resmi</h4>
-                            <p class="text-gray-500 text-sm font-bold">zidantransport@gmail.com</p>
+                            <p class="text-gray-500 text-sm font-bold">{{ \App\Models\Setting::get('contact_email', 'zidantransport@gmail.com') }}</p>
                             <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Balasan dalam 24 Jam</p>
                         </div>
                     </div>
@@ -614,48 +614,7 @@
     </div>
 
 
-    <!-- Footer -->
-    <footer class="bg-white text-[#1a237e] py-12 border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <img class="h-10 mb-6" src="{{ asset('images/logo.png') }}" alt="Zidan Transport">
-                    <p class="text-gray-500 max-w-sm font-medium">
-                        Menyediakan layanan transportasi terbaik dengan mengutamakan keselamatan, kenyamanan, dan kepuasan pelanggan.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-4 text-[#1a237e]">Tautan</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="{{ route('landing') }}" class="hover:text-[#fbc02d] transition">Beranda</a></li>
-                        <li><a href="{{ route('pelanggan.armada') }}" class="hover:text-[#fbc02d] transition">Armada</a></li>
-                        <li><a href="{{ route('pelanggan.layanan') }}" class="hover:text-[#fbc02d] transition">Layanan</a></li>
-                        <li><a href="{{ route('pelanggan.kontak') }}" class="hover:text-[#fbc02d] transition">Lokasi & Kontak</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-4 text-[#1a237e]">Hubungi Kami</h4>
-                    <ul class="space-y-4 text-gray-500">
-                        <li class="flex items-start gap-3">
-                            <i class="bi bi-geo-alt mt-1 text-[#fbc02d]"></i>
-                            <span class="text-sm">Jl. Bokbrobos Rt.04/Rw.04 Ds. Ngadiluwih Kec. Ngadiluwih Kab. Kediri Jawa Timur 64171</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="bi bi-telephone"></i>
-                            <span>+62 8214 2951 682</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="bi bi-envelope"></i>
-                            <span>zidantransport@gmail.com</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-100 mt-12 pt-8 text-center text-gray-400 text-sm font-semibold">
-                <p>&copy; {{ date('Y') }} Zidan Transport. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    @include('partials.pelanggan.footer')
 
 </body>
 </html>
