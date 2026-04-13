@@ -14,26 +14,30 @@
         <p class="text-gray-500 font-medium tracking-tight">Cek tarif transparan ke berbagai tujuan favorit Anda.</p>
     </div>
 
-    <!-- Search Tool -->
-    <div class="mb-10">
-        <div class="relative max-w-2xl">
+    <!-- Search Tool (Server-Side) -->
+    <div class="mb-10 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <form action="{{ route('pelanggan.rute') }}" method="GET" class="relative w-full md:w-96">
             <i class="bi bi-geo-alt-fill absolute left-5 top-1/2 -translate-y-1/2 text-[#fbc02d]"></i>
-            <input type="text" id="rute-search" placeholder="Cari kota asal atau tujuan (Contoh: Surabaya, Juanda, Kediri...)" class="w-full pl-12 pr-6 py-5 bg-white border border-gray-100 rounded-[28px] shadow-sm focus:ring-2 focus:ring-[#1a237e] transition-all outline-none font-bold text-sm">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kota asal atau tujuan..." class="w-full pl-12 pr-6 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-[#1a237e] transition-all outline-none font-bold text-sm">
+        </form>
+        <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            <i class="bi bi-info-circle"></i>
+            Menampilkan {{ $rutes->count() }} dari {{ $rutes->total() }} Rute
         </div>
     </div>
 
     <!-- Routes Grid -->
-    <section class="mb-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="rute-grid">
+    <section class="mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($rutes as $rute)
-            <div class="rute-card bg-white rounded-[40px] p-6 shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group flex flex-col">
+            <div class="bg-white rounded-[40px] p-6 shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 group flex flex-col">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#1a237e] transition duration-500 shrink-0">
                         <i class="bi bi-map-fill text-[#1a237e] group-hover:text-[#fbc02d] text-xl"></i>
                     </div>
                     <div class="min-w-0">
                         <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 truncate">{{ $rute->nama_rute }}</p>
-                        <p class="font-black text-[#1a237e] text-base leading-none uppercase tracking-tighter rute-location truncate">
+                        <p class="font-black text-[#1a237e] text-base leading-none uppercase tracking-tighter truncate">
                             {{ $rute->lokasi_awal }} <span class="text-[#fbc02d] mx-1">/</span> {{ $rute->tujuan }}
                         </p>
                     </div>
@@ -59,19 +63,17 @@
             @empty
              <div class="col-span-full text-center py-20 bg-white rounded-[40px] border border-dashed border-gray-200">
                 <i class="bi bi-send-x text-6xl text-gray-200 mb-6 block"></i>
-                <h3 class="text-xl font-black text-[#1a237e] uppercase tracking-widest">Belum Ada Rute</h3>
+                <h3 class="text-xl font-black text-[#1a237e] uppercase tracking-widest">Rute Tidak Ditemukan</h3>
                 <p class="text-gray-400 mt-2 font-medium">Silakan hubungi admin untuk rute kustom Anda.</p>
             </div>
             @endforelse
         </div>
-
-        <!-- No Results Message -->
-        <div id="no-results" class="hidden text-center py-20 bg-gray-50 rounded-[40px] border-2 border-dashed border-gray-200 mt-6">
-            <i class="bi bi-search text-5xl text-gray-300 mb-4 block"></i>
-            <h4 class="text-lg font-black text-[#1a237e] uppercase">Rute Tidak Ditemukan</h4>
-            <p class="text-gray-400 text-sm font-medium">Coba gunakan kata kunci kota lain atau hubungi admin.</p>
-        </div>
     </section>
+
+    <!-- Pagination Support -->
+    <div class="pagination-container mb-16">
+        {{ $rutes->links() }}
+    </div>
 
     <!-- Info Guide -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -95,39 +97,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('turbo:load', () => {
-        const searchInput = document.getElementById('rute-search');
-        if (!searchInput) return;
-
-        searchInput.addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const cards = document.querySelectorAll('.rute-card');
-            const noResults = document.getElementById('no-results');
-            let found = 0;
-            
-            cards.forEach(card => {
-                const locationText = card.querySelector('.rute-location').innerText.toLowerCase();
-                const routeName = card.querySelector('p.text-gray-400').innerText.toLowerCase();
-                
-                if (locationText.includes(query) || routeName.includes(query)) {
-                    card.classList.remove('hidden');
-                    card.classList.add('flex');
-                    found++;
-                } else {
-                    card.classList.add('hidden');
-                    card.classList.remove('flex');
-                }
-            });
-
-            if (found === 0 && query !== "") {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-            }
-        });
-    });
-</script>
-@endpush

@@ -27,8 +27,18 @@ Route::get('/', function () {
 })->name('landing');
 
 // Halaman Master Data (Publik - Bisa Akses Tanpa Login)
-Route::get('/armada', function() { 
-    $armadas = \App\Models\Armada::where('status', 'tersedia')->paginate(6);
+Route::get('/armada', function(Illuminate\Http\Request $request) { 
+    $query = \App\Models\Armada::where('status', 'tersedia');
+    
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('merk', 'like', '%' . $request->search . '%')
+              ->orWhere('jenis', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $armadas = $query->paginate(6)->withQueryString();
     $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
     return view('pelanggan.armada', compact('armadas', 'promo')); 
 })->name('pelanggan.armada');
@@ -38,8 +48,18 @@ Route::get('/layanan', function() {
     return view('pelanggan.layanan', compact('layanans')); 
 })->name('pelanggan.layanan');
 
-Route::get('/rute', function() { 
-    $rutes = \App\Models\Rute::where('is_active', true)->get();
+Route::get('/rute', function(Illuminate\Http\Request $request) { 
+    $query = \App\Models\Rute::where('is_active', true);
+
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('nama_rute', 'like', '%' . $request->search . '%')
+              ->orWhere('lokasi_awal', 'like', '%' . $request->search . '%')
+              ->orWhere('tujuan', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $rutes = $query->paginate(6)->withQueryString();
     return view('pelanggan.rute', compact('rutes')); 
 })->name('pelanggan.rute');
 
