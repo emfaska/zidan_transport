@@ -1,39 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Ajukan Pengembalian Dana (Refund) - Zidan Transport</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>body { font-family: 'Montserrat', sans-serif; }</style>
-</head>
-<body class="bg-[#f8faff] min-h-screen flex flex-col">
+@extends('layouts.pelanggan')
 
-    <nav class="bg-white/95 backdrop-blur-md w-full shadow-sm border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('pelanggan.booking.index') }}" class="flex items-center gap-3">
-                        <img class="h-12 w-auto" src="{{ asset('images/logo.png') }}" alt="Zidan Transport">
-                        <div class="flex flex-col">
-                            <span class="text-lg font-black text-[#1a237e] leading-none uppercase tracking-tighter">Zidan</span>
-                            <span class="text-[10px] font-bold text-[#fbc02d] uppercase tracking-[0.2em] leading-none mt-1">Transport</span>
-                        </div>
-                    </a>
-                </div>
-                <a href="{{ route('pelanggan.booking.index') }}" class="text-gray-500 hover:text-[#1a237e] font-bold flex items-center gap-2 transition text-sm uppercase tracking-widest">
-                    <i class="bi bi-arrow-left"></i> Kembali
-                </a>
-            </div>
-        </div>
-    </nav>
+@section('title', 'Ajukan Pengembalian Dana (Refund) - Zidan Transport')
 
-    <main class="flex-grow flex items-center justify-center p-4 py-12">
+@push('styles')
+<style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mont { font-family: 'Montserrat', sans-serif; }
+</style>
+@endpush
+
+@section('content')
+    <div class="flex items-center justify-center pt-8">
         <div class="w-full max-w-2xl bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden">
             <div class="p-8 md:p-12">
                 <div class="text-center mb-10">
@@ -93,7 +70,5 @@
                 </form>
             </div>
         </div>
-    </main>
-
-</body>
-</html>
+    </div>
+@endsection

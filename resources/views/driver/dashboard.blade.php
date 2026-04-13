@@ -1,36 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Driver Dashboard - Zidan Transport</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        @keyframes pulse-soft {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-        .animate-pulse-soft {
-            animation: pulse-soft 2s infinite;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 pb-24">
+@extends('layouts.driver')
 
+@section('title', 'Dashboard Driver')
+
+@section('content')
     <!-- Header / Navbar Overlay -->
     <div class="bg-gradient-to-r from-[#1a237e] to-[#0d1440] pt-8 pb-20 px-6 rounded-b-[40px] shadow-2xl relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
@@ -43,7 +15,6 @@
                     <img src="{{ asset('images/logo.png') }}" class="h-8 w-auto" alt="Logo">
                 </div>
                 <div>
-                <div>
                     <label class="relative inline-flex items-center cursor-pointer group">
                         <input type="checkbox" id="driver-status-toggle" class="sr-only peer" {{ (Auth::user()->driverProfile->status_driver ?? 'off') !== 'off' ? 'checked' : '' }} {{ $activeBooking ? 'disabled' : '' }}>
                         <div class="w-14 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-500 shadow-inner group-active:scale-95 transition-transform"></div>
@@ -52,7 +23,6 @@
                             {{ $driverStatus === 'on_duty' ? 'ON DUTY' : ($driverStatus === 'available' ? 'ONLINE' : 'OFFLINE') }}
                         </span>
                     </label>
-                </div>
                 </div>
             </div>
             <form action="{{ route('logout') }}" method="POST">
@@ -98,335 +68,175 @@
                 <div class="w-10 h-10 bg-yellow-50 text-[#fbc02d] rounded-xl flex items-center justify-center mb-3">
                     <i class="bi bi-calendar-event text-xl"></i>
                 </div>
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Hari Ini</p>
-                <p class="text-2xl font-black text-[#1a237e]">{{ $stats['today_jobs'] }}</p>
+                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Trip</p>
+                <p class="text-2xl font-black text-[#1a237e]">{{ $stats['total_trips'] }}</p>
             </div>
         </div>
     </div>
 
-    <!-- Active Task Section -->
-    <main class="px-6 space-y-6">
+    <!-- Main Content Sections -->
+    <div class="px-6 space-y-8 animate-up">
+        
+        <!-- Pesanan Aktif Section -->
         <div>
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-black text-[#1a237e] uppercase tracking-[0.2em]">Tugas Utama</h3>
-                <span class="text-[10px] font-bold text-gray-400 px-3 py-1 bg-gray-100 rounded-full italic">Real-time update</span>
+                <h3 class="text-xs font-black text-[#1a237e] uppercase tracking-widest">Tugas Saat Ini</h3>
+                @if($activeBooking)
+                    <span class="px-3 py-1 bg-indigo-100 text-[#1a237e] text-[8px] font-black rounded-full uppercase tracking-widest animate-pulse">Sedang Berjalan</span>
+                @endif
             </div>
 
             @if($activeBooking)
-                <div class="bg-white rounded-[32px] p-6 shadow-xl border border-blue-50 relative overflow-hidden group">
-                    <!-- Status Badge Floating -->
-                    <div class="absolute top-4 right-4">
-                        @if($activeBooking->status === 'on_trip')
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-[10px] font-black uppercase tracking-widest animate-pulse-soft">DI JALAN</span>
-                        @else
-                            <span class="px-3 py-1 bg-yellow-100 text-[#f9a825] rounded-lg text-[10px] font-black uppercase tracking-widest">DIKONFIRMASI</span>
-                        @endif
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Route Detail -->
-                        <div class="flex items-start gap-4">
-                            <div class="flex flex-col items-center pt-1">
-                                <div class="w-4 h-4 rounded-full border-4 border-[#1a237e] bg-white"></div>
-                                <div class="w-0.5 h-12 border-l-2 border-dashed border-gray-200 my-1"></div>
-                                <div class="w-4 h-4 rounded-full bg-[#fbc02d] shadow-lg shadow-yellow-200"></div>
-                            </div>
-                            <div class="flex-1 space-y-6">
-                                <div>
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Titik Awal (Admin Base)</p>
-                                    <h4 class="text-sm font-bold text-[#1a237e]">Zidan Transport Kediri</h4>
-                                </div>
-                                <div class="pt-2">
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Tujuan Perjalanan</p>
-                                    <p class="text-[9px] font-black text-blue-300 uppercase tracking-widest mb-0.5">{{ $activeBooking->rute->layanan->nama_layanan ?? '-' }}</p>
-                                    <h4 class="text-sm font-black text-[#1a237e] uppercase tracking-tight">{{ $activeBooking->rute->nama_rute }}</h4>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Info Grid -->
-                        <div class="grid grid-cols-2 gap-4 py-6 border-y border-gray-50">
-                            <div>
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Pelanggan</p>
-                                <p class="text-sm font-bold text-[#1a237e] truncate">{{ $activeBooking->user->name }}</p>
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $activeBooking->user->no_hp) }}" class="inline-flex items-center gap-1 text-[10px] font-bold text-green-600 mt-1 hover:underline">
-                                    <i class="bi bi-whatsapp"></i> Hubungi WA
-                                </a>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Waktu Jemput</p>
-                                <p class="text-sm font-black text-[#1a237e] leading-none">{{ $activeBooking->tanggal_berangkat->format('d M') }}</p>
-                                <p class="text-[10px] font-bold text-[#fbc02d] mt-1">{{ \Carbon\Carbon::parse($activeBooking->waktu_jemput)->format('H:i') }} WIB</p>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="space-y-3">
-                            @if($activeBooking->status === 'confirmed')
-                                <form action="{{ route('driver.order.update-status', $activeBooking->id) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="status" value="on_trip">
-                                    <button type="submit" class="w-full bg-[#1a237e] text-white font-black py-4 rounded-2xl shadow-lg hover:bg-[#0d1440] transition uppercase tracking-widest text-[10px]">
-                                        MULAI PERJALANAN SEKARANG
-                                    </button>
-                                </form>
-                            @elseif($activeBooking->status === 'on_trip')
-                                <form action="{{ route('driver.order.update-status', $activeBooking->id) }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="status" value="completed">
-                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-green-900/20 transition flex items-center justify-center gap-2">
-                                        <span>SELESAIKAN TUGAS</span>
-                                        <i class="bi bi-check-all text-xl"></i>
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-
-                        <!-- Report Issue Button -->
-                        <div class="pt-4 mt-6 border-t border-red-100 flex justify-center">
-                            <button onclick="document.getElementById('reportModal').classList.remove('hidden')" class="text-red-500 hover:text-red-700 text-[10px] font-black tracking-widest flex items-center gap-1 transition">
-                                <i class="bi bi-exclamation-triangle-fill"></i> LAPORKAN MASALAH / KENDARAAN RUSAK
-                            </button>
-                        </div>
+            <div class="bg-white rounded-[32px] p-6 shadow-xl border border-blue-50 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4">
+                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                        <i class="bi bi-geo-alt-fill text-xl"></i>
                     </div>
                 </div>
+                
+                <div class="mb-6">
+                    <p class="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1">Kode Booking</p>
+                    <h4 class="text-xl font-black text-[#1a237e] uppercase tracking-tighter">#{{ $activeBooking->kode_booking }}</h4>
+                </div>
+
+                <div class="relative pl-6 border-l-2 border-dashed border-gray-100 space-y-6 mb-8">
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-3 h-3 rounded-full bg-blue-500 border-2 border-white"></div>
+                        <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Penjemputan</p>
+                        <p class="text-xs font-bold text-gray-700 uppercase">{{ $activeBooking->titik_jemput }}</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -left-[31px] top-0 w-3 h-3 rounded-full bg-[#fbc02d] border-2 border-white"></div>
+                        <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Tujuan</p>
+                        <p class="text-xs font-bold text-gray-700 uppercase">{{ $activeBooking->titik_tujuan }}</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                    <div class="flex items-center gap-3">
+                        <i class="bi bi-clock text-blue-500"></i>
+                        <span class="text-xs font-black text-[#1a237e]">{{ $activeBooking->waktu_jemput->format('H:i') }} WIB</span>
+                    </div>
+                    <a href="{{ route('driver.order.show', $activeBooking->id) }}" class="px-6 py-3 bg-[#1a237e] text-white text-[10px] font-black rounded-2xl uppercase tracking-widest hover:bg-blue-900 transition shadow-lg shadow-blue-900/10">
+                        Detail Tugas
+                    </a>
+                </div>
+            </div>
             @else
-                <div class="bg-white rounded-[32px] p-10 text-center shadow-lg border-2 border-dashed border-gray-100">
-                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="bi bi-clock-history text-3xl text-gray-300"></i>
-                    </div>
-                    <h4 class="text-sm font-bold text-gray-700 mb-1">Belum Ada Tugas Aktif</h4>
-                    <p class="text-xs text-gray-400">Hubungi admin jika Anda merasa ada penugasan baru yang belum muncul.</p>
+            <div class="bg-white rounded-[32px] p-10 border-2 border-dashed border-gray-200 text-center">
+                <div class="w-16 h-16 bg-gray-50 rounded-3xl flex items-center justify-center mx-auto mb-4 text-gray-300">
+                    <i class="bi bi-inbox text-3xl"></i>
                 </div>
+                <h4 class="text-sm font-black text-gray-400 uppercase tracking-widest">Tidak Ada Tugas Aktif</h4>
+                <p class="text-[10px] text-gray-300 mt-1 uppercase font-bold">Aktifkan status untuk menerima order</p>
+            </div>
             @endif
         </div>
 
-        <!-- Notification Banner -->
-        @if(session('success'))
-            <div class="bg-green-500 text-white p-4 rounded-2xl shadow-lg border border-green-400 flex items-center gap-3 animate-bounce shadow-green-200">
-                <i class="bi bi-check-circle-fill text-xl"></i>
-                <p class="text-[11px] font-bold">{{ session('success') }}</p>
+        <!-- Wallet / Earning Snapshot -->
+        <div class="bg-gradient-to-br from-[#1a237e] to-blue-900 rounded-[40px] p-8 text-white shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition duration-700">
+                <i class="bi bi-wallet2 text-8xl"></i>
             </div>
-        @endif
-    </main>
-
-    <!-- Bottom Navigation (Android Pixel Style) -->
-    <div class="fixed bottom-6 left-6 right-6 z-50">
-        <div class="bg-[#1a237e]/90 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl border border-white/10 flex justify-between items-center">
-            <a href="{{ route('driver.dashboard') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/dashboard') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-grid-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Beranda</span>
-            </a>
-            <a href="{{ route('driver.history') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/history') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-journal-check text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Riwayat</span>
-            </a>
-            <a href="{{ route('driver.wallet') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/wallet') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-wallet2 text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Dompet</span>
-            </a>
-            <a href="{{ route('profile.edit') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('profile*') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-person-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Akun</span>
-            </a>
+            <div class="relative z-10">
+                <p class="text-[10px] font-black text-blue-300 uppercase tracking-[0.3em] mb-4">Saldo Dompet Driver</p>
+                <h3 class="text-4xl font-black tracking-tighter mb-8">Rp {{ number_format(Auth::user()->driverWallet->balance ?? 0, 0, ',', '.') }}</h3>
+                <div class="flex gap-3">
+                    <a href="{{ route('driver.wallet.index') }}" class="flex-1 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center backdrop-blur-md transition">Riwayat Transaksi</a>
+                    <a href="{{ route('driver.wallet.withdrawal') }}" class="flex-1 py-4 bg-[#fbc02d] hover:bg-yellow-500 rounded-2xl text-[9px] font-black uppercase tracking-widest text-[#1a237e] text-center transition shadow-lg shadow-yellow-500/20">Tarik Saldo</a>
+                </div>
+            </div>
         </div>
     </div>
+@endsection
 
-    @if($activeBooking)
-    <!-- Report Modal -->
-    <div id="reportModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onclick="document.getElementById('reportModal').classList.add('hidden')"></div>
-        <div class="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl relative z-10 animate-fade-in-up">
-            <div class="p-6 bg-red-50 text-red-900 flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm">
-                        <i class="bi bi-exclamation-triangle-fill text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-black text-lg leading-tight tracking-tight">Laporan Kedaruratan</h3>
-                        <p class="text-[10px] font-bold uppercase tracking-widest opacity-80">Laporkan kendala armada</p>
-                    </div>
-                </div>
-                <button onclick="document.getElementById('reportModal').classList.add('hidden')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/50 hover:bg-white text-red-900 transition">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            
-            <form action="{{ route('driver.laporan.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
-                @csrf
-                <input type="hidden" name="booking_id" value="{{ $activeBooking->id }}">
-                
-                <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 pb-1 border-b border-gray-100">Tipe Masalah</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe_laporan" value="kerusakan" class="peer sr-only" required>
-                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
-                                Kerusakan
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe_laporan" value="kecelakaan" class="peer sr-only">
-                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
-                                Kecelakaan
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe_laporan" value="kebersihan" class="peer sr-only">
-                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
-                                Kebersihan
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="tipe_laporan" value="lainnya" class="peer sr-only">
-                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
-                                Lainnya
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Deskripsi Detail</label>
-                    <textarea name="deskripsi" rows="3" required placeholder="Jelaskan secara singkat masalah yang dialami..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-[#1a237e] focus:ring-2 focus:ring-red-200 focus:border-red-500 outline-none transition-all placeholder:text-gray-400"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Foto Bukti (Opsional)</label>
-                    <input type="file" name="foto_bukti" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
-                </div>
-
-                <div class="mt-4 p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
-                    <label class="flex items-start gap-3 cursor-pointer">
-                        <input type="checkbox" name="request_penggantian" value="1" class="mt-1 w-5 h-5 rounded text-yellow-600 focus:ring-yellow-500 border-gray-300">
-                        <div>
-                            <span class="block text-sm font-bold text-yellow-800">Minta Ganti Armada</span>
-                            <span class="block text-[10px] font-semibold text-yellow-600 mt-0.5">Centang bila kendaraan tidak memungkinkan untuk melanjutkan perjalanan.</span>
-                        </div>
-                    </label>
-                </div>
-
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-widest text-xs py-4 rounded-xl shadow-lg shadow-red-200 mt-2 transition-all">
-                    Kirim Laporan Ke Admin
-                </button>
-            </form>
-        </div>
-    </div>
-    @endif
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@push('scripts')
     <script>
-        const statusToggle = document.getElementById('driver-status-toggle');
-        const statusLabel = document.getElementById('status-label');
+        document.addEventListener('turbo:load', function() {
+            const statusToggle = document.getElementById('driver-status-toggle');
+            const statusLabel = document.getElementById('status-label');
 
-        statusToggle.addEventListener('change', async function() {
-            const isOnline = this.checked;
-            const newStatus = isOnline ? 'available' : 'off';
-            
-            try {
-                const response = await fetch("{{ route('driver.status.update') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ status: newStatus })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    statusLabel.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
-                    statusLabel.className = `ms-3 text-[10px] font-black ${isOnline ? 'text-green-400' : 'text-gray-400'} uppercase tracking-widest leading-none`;
+            if (statusToggle) {
+                statusToggle.onchange = function() {
+                    const status = this.checked ? 'available' : 'off';
                     
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true
+                    // Show Loading
+                    Swal.fire({
+                        title: 'Mengupdate Status...',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
                     });
 
-                    Toast.fire({
-                        icon: 'success',
-                        title: result.message
-                    });
-                } else {
-                    this.checked = !isOnline;
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: result.message,
-                        customClass: {
-                            popup: 'rounded-3xl',
-                            confirmButton: 'rounded-xl bg-[#1a237e] px-8'
+                    fetch('{{ route("driver.status.update") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({ status: status })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.close();
+                        if (data.success) {
+                            statusLabel.innerText = status === 'available' ? 'ONLINE' : 'OFFLINE';
+                            statusLabel.className = `ms-3 text-[10px] font-black ${status === 'available' ? 'text-green-400' : 'text-gray-400'} uppercase tracking-widest leading-none`;
+                            
+                            if (status === 'available') {
+                                startLocationTracking();
+                                Swal.fire({ icon: 'success', text: 'Anda sekarang Online', timer: 1500, showConfirmButton: false });
+                            } else {
+                                Swal.fire({ icon: 'info', text: 'Anda sekarang Offline', timer: 1500, showConfirmButton: false });
+                            }
                         }
+                    })
+                    .catch(error => {
+                        Swal.fire({ icon: 'error', text: 'Gagal mengupdate status' });
+                        this.checked = !this.checked;
                     });
-                }
-            } catch (error) {
-                this.checked = !isOnline;
-                console.error('Error updating status:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan Jaringan',
-                    text: 'Gagal menghubungi server. Pastikan koneksi internet Anda stabil.',
-                    customClass: {
-                        popup: 'rounded-3xl',
-                        confirmButton: 'rounded-xl bg-[#1a237e] px-8'
+                };
+
+                // Tracking Logic
+                let trackingInterval;
+                function startLocationTracking() {
+                    if ("geolocation" in navigator) {
+                        trackingInterval = setInterval(() => {
+                            if (!statusToggle.checked) {
+                                clearInterval(trackingInterval);
+                                return;
+                            }
+                            navigator.geolocation.getCurrentPosition(position => {
+                                fetch('{{ route("driver.location.update") }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                    },
+                                    body: JSON.stringify({
+                                        latitude: position.coords.latitude,
+                                        longitude: position.coords.longitude
+                                    })
+                                });
+                            });
+                        }, 30000); // 30 seconds
                     }
-                });
+                }
+
+                if (statusToggle.checked) startLocationTracking();
+
+                // Stop tracking on page leave / turbo cache
+                document.addEventListener('turbo:before-cache', () => {
+                    if (trackingInterval) clearInterval(trackingInterval);
+                }, { once: true });
             }
         });
-
-        // Real-time Location Tracking Implementation
-        if (navigator.geolocation) {
-            function updateDriverLocation() {
-                const driverStatus = "{{ Auth::user()->driverProfile->status_driver ?? 'off' }}";
-                
-                // Only track if Online or On Duty
-                if (driverStatus === 'off') return;
-
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-
-                        fetch("{{ route('driver.location.update') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                latitude: lat,
-                                longitude: lng
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => console.log('Location updated:', data))
-                        .catch(error => console.error('Location update failed:', error));
-                    },
-                    function(error) {
-                        console.error('Geolocation error:', error.message);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                    }
-                );
-            }
-
-            // Update immediately on load
-            updateDriverLocation();
-
-            // Then every 60 seconds
-            setInterval(updateDriverLocation, 60000);
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
     </script>
-</body>
-</html>
+    
+    @if(session('success'))
+        <script>
+            document.addEventListener('turbo:load', () => {
+                Swal.fire({ icon: 'success', text: '{{ session("success") }}', timer: 3000, background: '#fff' });
+            }, { once: true });
+        </script>
+    @endif
+@endpush

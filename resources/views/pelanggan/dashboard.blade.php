@@ -1,450 +1,225 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Dashboard Pelanggan - Zidan Transport</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
+@extends('layouts.pelanggan')
+
+@section('title', 'Dashboard Pelanggan - Zidan Transport')
+
+@push('styles')
+<style>
+    .search-result-enter {
+        animation: slideDown 0.5s ease-out forwards;
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+</style>
+@endpush
+
+@section('content')
+    <!-- Professional Hero Section -->
+    <div class="relative bg-gradient-to-br from-[#1a237e] to-blue-900 rounded-[40px] p-8 md:p-16 text-white mb-12 overflow-hidden shadow-2xl border-b-4 border-[#fbc02d]/30">
+        <!-- Background Decorative Elements -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 skew-x-12 transform translate-x-20"></div>
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-400/20 rounded-full blur-[100px]"></div>
         
-        .search-result-enter {
-            animation: slideDown 0.5s ease-out forwards;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-    </style>
-</head>
-<body class="bg-gray-50">
-
-    @include('partials.pelanggan.navbar')
-
-    <main class="max-w-7xl mx-auto p-4 md:p-8 pt-24 md:pt-28">
-        
-        <!-- Professional Hero Section -->
-        <div class="relative bg-gradient-to-br from-[#1a237e] to-blue-900 rounded-[40px] p-8 md:p-16 text-white mb-12 overflow-hidden shadow-2xl border-b-4 border-[#fbc02d]/30">
-            <!-- Background Decorative Elements -->
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-white/5 skew-x-12 transform translate-x-20"></div>
-            <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-400/20 rounded-full blur-[100px]"></div>
-            
-            <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12">
-                <!-- Left: Content -->
-                <div class="w-full lg:w-3/5 space-y-6">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[#fbc02d] text-[10px] font-black uppercase tracking-widest animate-fade-in-up">
-                        <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#fbc02d]"></span>
-                        </span>
-                        Halo, {{ Auth::user()->name }} 👋
-                    </div>
-
-                    <h1 class="text-4xl md:text-6xl font-[900] leading-[1.1] animate-fade-in-up delay-100 uppercase tracking-tighter">
-                        Siap Untuk <br/>
-                        <span class="text-[#fbc02d]">Perjalanan Baru?</span>
-                    </h1>
-
-                    <p class="text-blue-100 text-sm md:text-lg leading-relaxed font-medium animate-fade-in-up delay-200 max-w-xl">
-                        Kami menyediakan layanan transportasi premium dengan standar keamanan tinggi. Nikmati pengalaman perjalanan terbaik di Kediri bersama Zidan Transport.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in-up delay-300">
-                        <a href="{{ route('pelanggan.booking.create') }}" class="group bg-[#fbc02d] text-[#1a237e] px-10 py-5 rounded-2xl font-black text-xs shadow-xl hover:bg-white transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 uppercase tracking-widest">
-                            PESAN SEKARANG
-                            <i class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                        <a href="{{ route('pelanggan.armada') }}" class="bg-white/10 backdrop-blur-md border-2 border-white/20 text-white px-10 py-5 rounded-2xl font-black text-xs flex items-center justify-center gap-3 hover:bg-white/20 transition uppercase tracking-widest">
-                            LIHAT ARMADA
-                        </a>
-                    </div>
+        <div class="relative z-10 flex flex-col lg:flex-row items-center gap-12">
+            <!-- Left: Content -->
+            <div class="w-full lg:w-3/5 space-y-6">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[#fbc02d] text-[10px] font-black uppercase tracking-widest animate-fade-in-up">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-[#fbc02d]"></span>
+                    </span>
+                    Halo, {{ Auth::user()->name }} 👋
                 </div>
 
-                <!-- Right: Visual -->
-                <div class="hidden lg:block w-2/5 relative animate-fade-in-up delay-300">
-                    <div class="relative">
-                        <img src="{{ asset('images/fleet_premium.png') }}" class="w-full h-auto drop-shadow-[0_45px_35px_rgba(0,0,0,0.4)] transform -rotate-2 hover:rotate-0 hover:scale-105 transition duration-700" alt="Koleksi Armada Premium">
-                        <!-- Floating Badge -->
-                        <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 animate-bounce">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] shadow-lg">
-                                    <i class="bi bi-shield-check text-2xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] font-black text-gray-400 uppercase leading-none mb-1">Terverifikasi</p>
-                                    <p class="text-sm font-black text-[#1a237e] uppercase">Sangat Aman</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <h1 class="text-4xl md:text-6xl font-[900] leading-[1.1] animate-fade-in-up delay-100 uppercase tracking-tighter">
+                    Siap Untuk <br/>
+                    <span class="text-[#fbc02d]">Perjalanan Baru?</span>
+                </h1>
 
-        <!-- Promo Banner (Conditional) -->
-        @if($promo)
-        <div class="mb-12">
-            <div class="bg-gradient-to-r from-[#1a237e] to-blue-800 rounded-[40px] overflow-hidden shadow-2xl relative group">
-                <!-- Background Accents -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-all duration-700"></div>
-                <div class="absolute bottom-0 left-0 w-48 h-48 bg-[#fbc02d] rounded-full -ml-20 -mb-20 opacity-10 blur-2xl"></div>
+                <p class="text-blue-100 text-sm md:text-lg leading-relaxed font-medium animate-fade-in-up delay-200 max-w-xl">
+                    Kami menyediakan layanan transportasi premium dengan standar keamanan tinggi. Nikmati pengalaman perjalanan terbaik di Kediri bersama Zidan Transport.
+                </p>
 
-                <div class="relative z-10 flex flex-col lg:flex-row items-center">
-                    <!-- Image Area -->
-                    <div class="w-full lg:w-1/3 h-48 lg:h-64 overflow-hidden">
-                        @if($promo->gambar)
-                            <img src="{{ asset('storage/' . $promo->gambar) }}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" alt="Special Promo">
-                        @else
-                            <div class="w-full h-full bg-blue-900/50 flex items-center justify-center text-white/20 italic p-8 text-center text-2xl font-black uppercase tracking-tighter">
-                                PROMO <br> KHUSUS
-                            </div>
-                        @endif
-                    </div>
-
-                    <!-- Content Area -->
-                    <div class="w-full lg:w-2/3 p-8 lg:p-10 text-white text-center lg:text-left flex flex-col lg:flex-row justify-between items-center gap-6">
-                        <div class="flex-grow">
-                            <div class="inline-flex items-center gap-3 px-4 py-1.5 bg-[#fbc02d] text-[#1a237e] rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-4 shadow-lg shadow-yellow-500/20">
-                                <i class="bi bi-megaphone-fill"></i>
-                                Promo Terbatas
-                            </div>
-                            <h2 class="text-2xl md:text-3xl font-[900] leading-tight tracking-tighter uppercase mb-2">
-                                {{ $promo->judul }}
-                            </h2>
-                            <p class="text-blue-200 text-xs md:text-sm font-medium leading-relaxed opacity-90 max-w-xl">
-                                {{ $promo->deskripsi }}
-                            </p>
-                        </div>
-
-                        <div class="flex items-center gap-6 flex-shrink-0">
-                            <div class="flex flex-col items-center lg:items-end">
-                                <span class="text-4xl md:text-5xl font-black text-[#fbc02d] tracking-tighter leading-none">
-                                    {{ $promo->potongan_persen }}%
-                                </span>
-                                <span class="text-[8px] font-black text-blue-300 uppercase tracking-[0.3em] mt-1 italic">Diskon</span>
-                            </div>
-                            <a href="{{ route('pelanggan.booking.create') }}" class="px-8 py-4 bg-white text-[#1a237e] rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#fbc02d] transition shadow-xl transform hover:-translate-y-1">
-                                Ambil Promo <i class="bi bi-arrow-right ml-1"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <!-- Fleet Showcase Section -->
-        <section id="armada" class="mb-12">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-black text-[#1a237e] mb-3">Armada Kami</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Pilih kendaraan sesuai kebutuhan perjalanan Anda dengan armada modern dan terawat</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                @forelse($armadas as $armada)
-                <!-- Fleet Card: {{ $armada->nama }} -->
-                <div class="bg-white rounded-[40px] overflow-hidden shadow-sm hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 flex flex-col h-full group">
-                    <div class="bg-gray-50 flex items-center justify-center h-52 relative overflow-hidden">
-                        @if($armada->foto)
-                            <img src="{{ asset('storage/' . $armada->foto) }}" alt="{{ $armada->nama }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                        @else
-                            <div class="w-full h-full flex flex-col items-center justify-center text-gray-200">
-                                <i class="bi bi-car-front-fill text-6xl"></i>
-                                <span class="text-[10px] uppercase font-black tracking-widest mt-2">No Photo</span>
-                            </div>
-                        @endif
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
-                             <span class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest">{{ $armada->tahun }}</span>
-                        </div>
-                    </div>
-                    <div class="p-8 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-black text-[#1a237e] uppercase leading-none">{{ $armada->nama }}</h3>
-                                <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2 px-2 py-0.5 bg-gray-50 rounded-full inline-block">{{ $armada->plat_nomor }}</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[#fbc02d] text-sm font-black italic uppercase tracking-tighter">{{ $armada->status }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4 mb-8">
-                            <div class="flex items-center gap-2 text-gray-500">
-                                <i class="bi bi-people-fill text-[#16a34a]"></i>
-                                <span class="text-xs font-bold">{{ $armada->kapasitas }} Orang</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-gray-500">
-                                <i class="bi bi-calendar-check text-[#dc2626]"></i>
-                                <span class="text-xs font-bold">{{ $armada->tahun }}</span>
-                            </div>
-                        </div>
-                        
-                        <a href="{{ route('pelanggan.booking.create', ['armada_id' => $armada->id]) }}" class="inline-flex items-center justify-center w-full bg-[#1a237e] hover:bg-[#0d1440] text-white font-black py-4 rounded-2xl transition shadow-lg uppercase tracking-[0.2em] text-[10px] gap-3 transform active:scale-95">
-                            Pilih Armada <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            @empty
-                <div class="col-span-full text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                    <i class="bi bi-exclamation-circle text-4xl text-gray-400 mb-2"></i>
-                    <p class="text-gray-500 font-semibold">Belum ada armada yang tersedia saat ini.</p>
-                </div>
-            @endforelse
-            </div>
-
-            <div class="text-center">
-                <a href="{{ route('pelanggan.armada') }}" class="inline-flex items-center gap-2 text-[#1a237e] font-bold hover:text-[#fbc02d] transition">
-                    Lihat Semua Armada
-                    <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
-        </section>
-
-        <!-- Dynamic Services Section -->
-        <section id="layanan" class="mb-12">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-black text-[#1a237e] mb-3">Layanan Unggulan</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Solusi transportasi terbaik untuk kebutuhan perjalanan Anda</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
-                @foreach($layanans as $layanan)
-                <div class="p-8 bg-white rounded-[40px] border border-gray-100 hover:shadow-2xl transition group flex flex-col h-full shadow-sm">
-                    <div class="w-16 h-16 bg-[#1a237e] rounded-2xl flex items-center justify-center text-white text-3xl mb-6 shadow-lg rotate-3 group-hover:rotate-0 transition">
-                        <i class="bi {{ $layanan->icon ?? 'bi-star-fill' }}"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-[#1a237e] mb-3 uppercase tracking-tight">{{ $layanan->nama_layanan }}</h3>
-                    <p class="text-gray-500 font-medium leading-relaxed mb-8 flex-grow text-sm">{{ $layanan->deskripsi }}</p>
-                    <a href="{{ route('pelanggan.booking.create') }}" class="inline-flex items-center text-[#1a237e] font-black uppercase tracking-widest text-[10px] hover:gap-3 transition-all gap-2">
-                        Pesan Layanan Ini
-                        <i class="bi bi-arrow-right"></i>
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in-up delay-300">
+                    <a href="{{ route('pelanggan.booking.create') }}" class="group bg-[#fbc02d] text-[#1a237e] px-10 py-5 rounded-2xl font-black text-xs shadow-xl hover:bg-white transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 uppercase tracking-widest">
+                        PESAN SEKARANG
+                        <i class="bi bi-arrow-right-short text-2xl group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="{{ route('pelanggan.armada') }}" class="bg-white/10 backdrop-blur-md border-2 border-white/20 text-white px-10 py-5 rounded-2xl font-black text-xs flex items-center justify-center gap-3 hover:bg-white/20 transition uppercase tracking-widest">
+                        LIHAT ARMADA
                     </a>
                 </div>
-                @endforeach
             </div>
 
-            <div class="text-center">
-                <a href="{{ route('pelanggan.layanan') }}" class="inline-flex items-center gap-2 text-[#1a237e] font-bold hover:text-[#fbc02d] transition">
-                    Lihat Semua Layanan
-                    <i class="bi bi-arrow-right"></i>
-                </a>
-            </div>
-        </section>
-
-        <!-- Why Choose Us Section -->
-        <section id="layanan" class="mb-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 md:p-12">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-black text-[#1a237e] mb-3">Kenapa Pilih Kami?</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Komitmen kami memberikan layanan transportasi terbaik untuk Anda</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Benefit 1 -->
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-[#1a237e] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform transition hover:scale-110">
-                        <i class="bi bi-shield-check text-[#fbc02d] text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-[#1a237e] mb-3">Armada Terawat</h3>
-                    <p class="text-gray-600">Semua kendaraan rutin diservis dan dalam kondisi prima untuk kenyamanan perjalanan Anda</p>
-                </div>
-
-                <!-- Benefit 2 -->
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-[#fbc02d] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform transition hover:scale-110">
-                        <i class="bi bi-person-badge text-[#1a237e] text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-[#1a237e] mb-3">Driver Profesional</h3>
-                    <p class="text-gray-600">Pengemudi berpengalaman, ramah, dan terlatih dengan pengetahuan rute terbaik</p>
-                </div>
-
-                <!-- Benefit 3 -->
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-[#1a237e] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform transition hover:scale-110">
-                        <i class="bi bi-currency-dollar text-[#fbc02d] text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-black text-[#1a237e] mb-3">Harga Transparan</h3>
-                    <p class="text-gray-600">Tidak ada biaya tersembunyi, harga yang Anda lihat adalah harga yang Anda bayar</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Location Preview & Recent Bookings -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="md:col-span-2 bg-white rounded-[40px] p-10 shadow-sm border border-gray-100 group">
-                <h3 class="text-2xl font-black text-[#1a237e] mb-8 flex items-center gap-4">
-                    <div class="w-14 h-14 bg-[#1a237e] rounded-2xl flex items-center justify-center shadow-lg rotate-3 group-hover:rotate-0 transition">
-                        <i class="bi bi-pin-map-fill text-[#fbc02d] text-2xl"></i>
-                    </div>
-                    Cek Estimasi Perjalanan
-                </h3>
-                <form id="estimation-form" class="space-y-6">
-                    @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">📍 Lokasi Penjemputan</label>
-                            <input type="text" name="lokasi_awal" id="lokasi_awal" class="w-full bg-gray-50 border border-gray-100 rounded-[20px] py-5 px-6 focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition font-semibold text-gray-700 shadow-inner" placeholder="Contoh: Stasiun Kediri" required>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">🎯 Tujuan</label>
-                            <input type="text" name="tujuan" id="tujuan" class="w-full bg-gray-50 border border-gray-100 rounded-[20px] py-5 px-6 focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition font-semibold text-gray-700 shadow-inner" placeholder="Contoh: Bandara Juanda Surabaya" required>
-                        </div>
-                    </div>
-                    <div class="pt-4">
-                        <button type="submit" id="btn-cek-tarif" class="group w-full bg-[#1a237e] hover:bg-[#0d1440] text-white py-5 rounded-[20px] font-black text-xs shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center gap-4 uppercase tracking-[0.2em]">
-                            <i class="bi bi-search group-hover:scale-125 transition"></i>
-                            <span id="btn-text">Cek Tarif & Armada</span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Search Results Area -->
-                <div id="search-results" class="mt-8 hidden">
-                    <!-- Results will be injected here -->
-                </div>
-            </div>
-
-            <div class="bg-white rounded-[40px] p-8 shadow-sm border border-gray-100 flex flex-col">
-                <h3 class="text-xl font-black text-[#1a237e] mb-8 flex items-center gap-3">
-                    <i class="bi bi-clock-history text-[#fbc02d]"></i>
-                    Pesanan Terakhir
-                </h3>
-                <div class="space-y-4 flex-grow">
-                    @forelse($recent_bookings as $booking)
-                        <div class="flex items-start gap-4 p-5 rounded-[24px] bg-gray-50 hover:bg-white border border-gray-100 transition-all hover:shadow-lg group cursor-pointer" onclick="window.location.href='{{ route('pelanggan.booking.show', $booking->id) }}'">
-                            <div class="bg-white p-3 rounded-2xl text-[#1a237e] shadow-sm group-hover:scale-110 transition-transform flex items-center justify-center">
-                                <i class="bi bi-car-front-fill text-xl"></i>
+            <!-- Right: Visual -->
+            <div class="hidden lg:block w-2/5 relative animate-fade-in-up delay-300">
+                <div class="relative">
+                    <img src="{{ asset('images/fleet_premium.png') }}" class="w-full h-auto drop-shadow-[0_45px_35px_rgba(0,0,0,0.4)] transform -rotate-2 hover:rotate-0 hover:scale-105 transition duration-700" alt="Koleksi Armada Premium">
+                    <!-- Floating Badge -->
+                    <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-3xl shadow-2xl border border-gray-100 animate-bounce">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] shadow-lg">
+                                <i class="bi bi-shield-check text-2xl"></i>
                             </div>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-center mb-1">
-                                    <p class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest truncate max-w-[100px]">{{ $booking->rute->nama_rute ?? 'Perjalanan' }}</p>
-                                    @php
-                                        $badges = [
-                                            'pending' => 'bg-yellow-100 text-yellow-700',
-                                            'confirmed' => 'bg-blue-100 text-blue-700',
-                                            'on_trip' => 'bg-indigo-100 text-indigo-700 animate-pulse',
-                                            'completed' => 'bg-green-100 text-green-700',
-                                            'cancelled' => 'bg-red-100 text-red-700'
-                                        ];
-                                        $badgeColor = $badges[$booking->status] ?? 'bg-gray-100 text-gray-700';
-                                    @endphp
-                                    <span class="px-2 py-0.5 rounded-lg {{ $badgeColor }} text-[8px] font-black uppercase">{{ $booking->status }}</span>
-                                </div>
-                                <p class="text-[10px] text-gray-400 font-bold"><i class="bi bi-calendar-event"></i> {{ $booking->tanggal_berangkat->format('d M Y') }}</p>
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase leading-none mb-1">Terverifikasi</p>
+                                <p class="text-sm font-black text-[#1a237e] uppercase">Sangat Aman</p>
                             </div>
                         </div>
-                    @empty
-                    <div class="flex items-start gap-4 p-6 rounded-[30px] bg-gray-50 border border-gray-100 border-dashed">
-                        <div class="bg-white px-4 py-3 rounded-2xl text-[#fbc02d] shadow-sm">
-                            <i class="bi bi-inbox text-2xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-[10px] font-black text-[#1a237e] mb-1 uppercase tracking-widest">Kosong</p>
-                            <p class="text-[11px] text-gray-400 font-bold leading-relaxed">Belum ada aktivitas perjalanan.</p>
-                        </div>
                     </div>
-                    @endforelse
                 </div>
-                <a href="{{ route('pelanggan.booking.index') }}" class="mt-8 group w-full bg-gray-50 hover:bg-[#1a237e] hover:text-white px-4 py-4 rounded-2xl text-center transition-all duration-300">
-                    <span class="text-[10px] font-black uppercase tracking-widest">Semua Riwayat Pesanan</span>
-                </a>
             </div>
         </div>
+    </div>
 
-        <!-- Contact Section -->
-        <section id="kontak" class="bg-[#1a237e] rounded-[50px] p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-[#fbc02d] rounded-full opacity-5 -mr-20 -mt-20"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
-                <div>
-                    <h2 class="text-3xl md:text-5xl font-[900] mb-6 uppercase tracking-tighter">Bantuan <br><span class="text-[#fbc02d]">24/7 Center</span></h2>
-                    <p class="text-blue-200 text-base md:text-lg mb-10 font-medium">Tim kami selalu siap mendampingi perjalanan Anda kapanpun dan dimanapun.</p>
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-5 group">
-                            <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#fbc02d] transition-all duration-300 shadow-lg">
-                                <i class="bi bi-whatsapp text-[#fbc02d] group-hover:text-[#1a237e] text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-blue-300 uppercase tracking-widest leading-none mb-1">WhatsApp Fast Response</p>
-                                <p class="font-black text-xl">{{ \App\Models\Setting::get('contact_whatsapp_display', '+62 821 4295 1682') }}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-5 group">
-                            <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#fbc02d] transition-all duration-300 shadow-lg">
-                                <i class="bi bi-envelope-fill text-[#fbc02d] group-hover:text-[#1a237e] text-2xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black text-blue-300 uppercase tracking-widest leading-none mb-1">Email Resmi</p>
-                                <p class="font-black text-xl">zidantransport@gmail.com</p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Promo Banner (Conditional) -->
+    @if($promo)
+    <div class="bg-[#fbc02d] rounded-3xl p-6 mb-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl shadow-yellow-500/20 animate-fade-in-up">
+        <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3 group-hover:rotate-0 transition duration-300">
+                <i class="bi bi-megaphone-fill text-[#1a237e] text-3xl"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-black text-[#1a237e] uppercase tracking-tighter">{{ $promo->nama_promo }}</h3>
+                <p class="text-[#1a237e]/70 font-bold uppercase tracking-widest text-[10px]">Gunakan Kode: <span class="bg-white px-2 py-0.5 rounded ml-1">{{ $promo->kode_promo }}</span></p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="text-right">
+                <p class="text-[10px] font-black text-[#1a237e]/50 uppercase tracking-widest">Diskon Hingga</p>
+                <p class="text-3xl font-black text-[#1a237e]">
+                    {{ $promo->tipe_diskon === 'persen' ? $promo->nilai_diskon . '%' : 'Rp ' . number_format($promo->nilai_diskon, 0, ',', '.') }}
+                </p>
+            </div>
+            <a href="{{ route('pelanggan.booking.create') }}" class="bg-[#1a237e] text-white px-8 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#0d1440] transition shadow-lg">
+                Klaim Sekarang
+            </a>
+        </div>
+    </div>
+    @endif
+
+    <!-- Search Tool Card -->
+    <div class="bg-white rounded-[40px] p-8 md:p-12 shadow-2xl shadow-blue-900/5 mb-12 border border-blue-50 relative overflow-hidden group">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition duration-700"></div>
+        
+        <div class="relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10">
+                <div class="space-y-2">
+                    <h2 class="text-3xl font-black text-[#1a237e] uppercase tracking-tighter">Cek Tarif Perjalanan</h2>
+                    <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Dapatkan estimasi harga instan untuk rencana perjalanan Anda</p>
                 </div>
-                <div class="flex justify-center md:justify-end">
-                    <div class="relative p-3 bg-white/10 backdrop-blur-md rounded-[45px] border border-white/20 shadow-2xl group">
-                        <div class="w-64 h-80 rounded-[35px] overflow-hidden relative shadow-inner border shadow-blue-900/40">
-                            <img src="{{ asset('images/cs.png') }}" alt="CS Zidan Transport" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#1a237e] via-transparent to-transparent opacity-90"></div>
-                            <div class="absolute bottom-6 left-0 right-0 text-center px-4">
-                                <div class="flex items-center justify-center gap-2 mb-2">
-                                    <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(34,197,94,1)]"></span>
-                                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-white">Online</p>
-                                </div>
-                                <h3 class="text-2xl font-[900] text-white tracking-widest leading-none uppercase">Support</h3>
-                                <p class="text-[9px] font-bold text-[#fbc02d] uppercase tracking-[0.2em] mt-2 italic flex justify-center items-center gap-2">
-                                   <span class="h-px w-4 bg-[#fbc02d]/30"></span> 24 JAM STANDBY <span class="h-px w-4 bg-[#fbc02d]/30"></span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <span class="flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Update Otomatis</span>
                 </div>
             </div>
-        </section>
 
-    </main>
+            <form id="express-search-form" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Lokasi Awal -->
+                <div class="space-y-3">
+                    <label class="text-[10px] font-black uppercase tracking-[0.2em] text-[#1a237e]/50 ml-1">Masukan Lokasi Awal</label>
+                    <div class="relative group">
+                        <i class="bi bi-geo-alt-fill absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#1a237e] transition-colors"></i>
+                        <input type="text" name="lokasi_awal" required placeholder="Contoh: Ngadiluwih, Kediri" class="w-full pl-14 pr-6 py-5 bg-gray-50 border-2 border-transparent rounded-[24px] focus:bg-white focus:border-[#1a237e] focus:ring-4 focus:ring-blue-900/5 transition-all outline-none font-bold text-[#1a237e] placeholder:text-gray-300">
+                    </div>
+                </div>
 
-    <script>
-        document.getElementById('estimation-form').addEventListener('submit', async function(e) {
+                <!-- Lokasi Tujuan -->
+                <div class="space-y-3">
+                    <label class="text-[10px] font-black uppercase tracking-[0.2em] text-[#1a237e]/50 ml-1">Ketik Lokasi Tujuan</label>
+                    <div class="relative group">
+                        <i class="bi bi-send-fill absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#fbc02d] transition-colors"></i>
+                        <input type="text" name="tujuan" required placeholder="Contoh: Juanda, Surabaya" class="w-full pl-14 pr-6 py-5 bg-gray-50 border-2 border-transparent rounded-[24px] focus:bg-white focus:border-[#fbc02d] focus:ring-4 focus:ring-yellow-500/5 transition-all outline-none font-bold text-[#1a237e] placeholder:text-gray-300">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex items-end">
+                    <button type="submit" id="search-btn" class="w-full bg-[#1a237e] text-white py-5 rounded-[24px] font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-blue-900/20 hover:bg-[#0d1440] hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-4 min-h-[68px]">
+                        <span id="btn-text">Cek Tarif & Armada</span>
+                        <i class="bi bi-search text-lg"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Results Placeholder -->
+            <div id="search-results" class="mt-10 hidden border-t border-gray-50 pt-10">
+                <!-- Dynamic results will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <!-- Service 1 -->
+        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 hover:shadow-2xl hover:border-[#1a237e]/20 transition-all duration-500 group">
+            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#1a237e] transition duration-500">
+                <i class="bi bi-clock-fill text-[#1a237e] group-hover:text-white text-2xl transition"></i>
+            </div>
+            <h3 class="text-sm font-black text-[#1a237e] mb-2 uppercase tracking-tight">Siap 24 Jam</h3>
+            <p class="text-xs text-gray-400 font-bold leading-relaxed">Layanan penjemputan kapanpun Anda butuhkan.</p>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 hover:shadow-2xl hover:border-[#1a237e]/20 transition-all duration-500 group">
+            <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#fbc02d] transition duration-500">
+                <i class="bi bi-person-fill-check text-[#fbc02d] group-hover:text-[#1a237e] text-2xl transition"></i>
+            </div>
+            <h3 class="text-sm font-black text-[#1a237e] mb-2 uppercase tracking-tight">Driver Handal</h3>
+            <p class="text-xs text-gray-400 font-bold leading-relaxed">Pilot perjalanan yang ramah & berpengalaman.</p>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 hover:shadow-2xl hover:border-[#1a237e]/20 transition-all duration-500 group">
+            <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-green-500 transition duration-500">
+                <i class="bi bi-shield-lock-fill text-green-500 group-hover:text-white text-2xl transition"></i>
+            </div>
+            <h3 class="text-sm font-black text-[#1a237e] mb-2 uppercase tracking-tight">Aman & Terpercaya</h3>
+            <p class="text-xs text-gray-400 font-bold leading-relaxed">Proteksi maksimal untuk setiap rute perjalanan.</p>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="bg-[#1a237e] p-8 rounded-[40px] shadow-2xl shadow-blue-900/40 hover:-translate-y-2 transition-all duration-500 text-center flex flex-col items-center justify-center">
+            <h3 class="text-sm font-black text-[#fbc02d] mb-4 uppercase tracking-[0.2em]">Butuh Bantuan?</h3>
+            <a href="{{ route('pelanggan.kontak') }}" class="w-full bg-white/10 border border-white/20 text-white py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-[#1a237e] transition">HUBUNGI CS</a>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('turbo:load', () => {
+        const form = document.getElementById('express-search-form');
+        if (!form) return;
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const btn = document.getElementById('btn-cek-tarif');
+            const btn = document.getElementById('search-btn');
             const btnText = document.getElementById('btn-text');
             const resultsDiv = document.getElementById('search-results');
-            const formData = new FormData(this);
             
-            // Loading State
             btn.disabled = true;
-            btnText.innerText = 'Mencari...';
-            resultsDiv.classList.add('hidden');
+            btnText.innerText = 'Mencari Penawaran...';
+            
+            const formData = new FormData(form);
             
             try {
-                const response = await fetch('{{ route("pelanggan.rute.search") }}', {
+                const response = await fetch("{{ route('pelanggan.express.search') }}", {
                     method: 'POST',
+                    body: formData,
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json'
-                    },
-                    body: formData
+                    }
                 });
                 
-                if (!response.ok) {
-                    const text = await response.text();
-                    throw new Error(`HTTP error! status: ${response.status}, body: ${text.substring(0, 100)}`);
-                }
-
                 const result = await response.json();
                 
                 if (result.success) {
@@ -506,19 +281,6 @@
                 btnText.innerText = 'Cek Tarif & Armada';
             }
         });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        @if(session('success'))
-            Swal.fire({ icon: 'success', text: '{{ session("success") }}', background: '#fff', color: '#111', showConfirmButton: false, timer: 3000 });
-        @endif
-        @if(session('error'))
-            Swal.fire({ icon: 'error', title: 'Oops...', text: '{{ session("error") }}', background: '#fff', color: '#111' });
-        @endif
-        @if($errors->any())
-            Swal.fire({ icon: 'warning', title: 'Perhatian', html: '{!! implode("<br>", $errors->all()) !!}', background: '#fff', color: '#111' });
-        @endif
-    </script>
-    @include('partials.pelanggan.footer')
-</body>
-</html>
+    });
+</script>
+@endpush

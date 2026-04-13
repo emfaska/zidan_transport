@@ -1,36 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Dompet Saya - Zidan Driver</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .glass-card {
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        @keyframes fadeUp {
-            from { opacity:0; transform:translateY(20px); }
-            to   { opacity:1; transform:translateY(0); }
-        }
-        .fade-up { animation: fadeUp 0.5s ease forwards; }
-        .fade-up-2 { animation: fadeUp 0.5s 0.1s ease forwards; opacity:0; }
-        .fade-up-3 { animation: fadeUp 0.5s 0.2s ease forwards; opacity:0; }
+@extends('layouts.driver')
 
-        /* Modal */
-        #modal-withdraw { transition: opacity 0.2s ease; }
-    </style>
-</head>
-<body class="bg-gray-50 pb-32">
+@section('title', 'Dompet Saya - Zidan Driver')
 
+@push('styles')
+<style>
+    .fade-up { animation: fadeUp 0.5s ease forwards; }
+    .fade-up-2 { animation: fadeUp 0.5s 0.1s ease forwards; opacity:0; }
+    .fade-up-3 { animation: fadeUp 0.5s 0.2s ease forwards; opacity:0; }
+</style>
+@endpush
+
+@section('content')
     {{-- ==================== HEADER ==================== --}}
     <div class="bg-gradient-to-br from-[#1a237e] via-[#283593] to-[#0d1440] pt-10 pb-28 px-6 rounded-b-[48px] shadow-2xl relative overflow-hidden">
         {{-- Decorative circles --}}
@@ -75,8 +55,7 @@
         </div>
     </div>
 
-    <main class="px-5 space-y-6 fade-up-3">
-
+    <main class="px-5 space-y-6 fade-up-3 pb-32">
         {{-- ==================== NOTIFIKASI ==================== --}}
         @if(session('success'))
             <div class="bg-green-500 text-white p-4 rounded-2xl shadow-lg flex items-center gap-3">
@@ -110,15 +89,12 @@
                 </div>
                 <p class="text-sm font-black text-[#1a237e]">Rp {{ number_format($lastWithdrawal->amount, 0, ',', '.') }}</p>
                 <p class="text-[10px] text-gray-500 font-semibold">{{ $lastWithdrawal->nama_bank }} — {{ $lastWithdrawal->no_rekening }}</p>
-                @if($lastWithdrawal->status === 'rejected' && $lastWithdrawal->catatan_admin)
-                    <p class="text-[10px] text-red-600 font-bold mt-1"><i class="bi bi-info-circle"></i> {{ $lastWithdrawal->catatan_admin }}</p>
-                @endif
             </div>
         @endif
 
         {{-- ==================== TOMBOL PENCAIRAN ==================== --}}
         @if($wallet->balance >= 10000 && !$hasPendingWithdrawal)
-            <button onclick="document.getElementById('modal-withdraw').classList.remove('hidden')"
+            <button id="withdraw-btn"
                 class="w-full bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-black py-4 rounded-2xl shadow-lg shadow-yellow-200 flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] hover:shadow-xl hover:scale-[1.01] transition-all active:scale-95">
                 <i class="bi bi-bank2 text-lg"></i>
                 Ajukan Pencairan Dana
@@ -156,16 +132,11 @@
                         <p class="text-sm font-black {{ $trx->type === 'credit' ? 'text-green-600' : 'text-red-500' }}">
                             {{ $trx->type === 'credit' ? '+' : '-' }}Rp {{ number_format($trx->amount, 0, ',', '.') }}
                         </p>
-                        @if($trx->status === 'withdrawn')
-                            <span class="text-[9px] font-bold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">Dicairkan</span>
-                        @endif
                     </div>
                 </div>
             @empty
                 <div class="bg-white rounded-2xl p-10 text-center shadow-sm border-2 border-dashed border-gray-100">
-                    <i class="bi bi-receipt text-4xl text-gray-200 block mb-3"></i>
                     <p class="text-sm font-bold text-gray-400">Belum ada riwayat transaksi</p>
-                    <p class="text-[11px] text-gray-300 mt-1">Selesaikan trip pertama Anda untuk mendapat komisi</p>
                 </div>
             @endforelse
 
@@ -176,28 +147,6 @@
         </div>
     </main>
 
-    {{-- ==================== BOTTOM NAVIGATION ==================== --}}
-    <div class="fixed bottom-6 left-6 right-6 z-50">
-        <div class="bg-[#1a237e]/90 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl border border-white/10 flex justify-between items-center">
-            <a href="{{ route('driver.dashboard') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/dashboard') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-grid-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Beranda</span>
-            </a>
-            <a href="{{ route('driver.history') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/history') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-journal-check text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Riwayat</span>
-            </a>
-            <a href="{{ route('driver.wallet') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/wallet') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-wallet2 text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Dompet</span>
-            </a>
-            <a href="{{ route('profile.edit') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('profile*') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-person-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Akun</span>
-            </a>
-        </div>
-    </div>
-
     {{-- ==================== MODAL PENCAIRAN ==================== --}}
     <div id="modal-withdraw" class="hidden fixed inset-0 z-[100] flex items-end justify-center bg-black/60 backdrop-blur-sm px-4 pb-6">
         <div class="bg-white w-full max-w-md rounded-[32px] p-6 shadow-2xl">
@@ -206,7 +155,7 @@
                     <h3 class="text-base font-black text-[#1a237e]">Ajukan Pencairan</h3>
                     <p class="text-[10px] text-gray-400 font-semibold">Saldo: Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
                 </div>
-                <button onclick="document.getElementById('modal-withdraw').classList.add('hidden')"
+                <button type="button" id="close-modal"
                     class="w-9 h-9 flex items-center justify-center bg-gray-100 rounded-xl hover:bg-gray-200 transition">
                     <i class="bi bi-x-lg text-gray-600"></i>
                 </button>
@@ -230,40 +179,47 @@
                     <select name="nama_bank" required
                         class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold text-[#1a237e] focus:outline-none focus:border-[#1a237e] appearance-none">
                         <option value="" disabled selected>Pilih bank...</option>
-                        <option>BCA</option>
-                        <option>BRI</option>
-                        <option>BNI</option>
-                        <option>Mandiri</option>
-                        <option>BSI</option>
-                        <option>DANA</option>
-                        <option>GoPay</option>
-                        <option>OVO</option>
-                        <option>ShopeePay</option>
+                        <option>BCA</option><option>BRI</option><option>BNI</option><option>Mandiri</option>
+                        <option>DANA</option><option>GoPay</option><option>OVO</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Nomor Rekening / Dompet</label>
-                    <input type="text" name="no_rekening" placeholder="Contoh: 089512345678"
-                        class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold text-[#1a237e] focus:outline-none focus:border-[#1a237e] focus:ring-2 focus:ring-[#1a237e]/10"
+                    <input type="text" name="no_rekening" placeholder="Contoh: 0895..."
+                        class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold text-[#1a237e]"
                         required>
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1.5">Nama Pemilik Rekening</label>
-                    <input type="text" name="nama_rekening" placeholder="Sesuai nama di rekening"
-                        value="{{ Auth::user()->name }}"
-                        class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold text-[#1a237e] focus:outline-none focus:border-[#1a237e] focus:ring-2 focus:ring-[#1a237e]/10"
+                    <input type="text" name="nama_rekening" value="{{ Auth::user()->name }}"
+                        class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-bold text-[#1a237e]"
                         required>
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-gradient-to-r from-[#1a237e] to-[#283593] text-white font-black py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-95 uppercase tracking-widest text-[11px]">
+                    class="w-full bg-[#1a237e] text-white font-black py-4 rounded-2xl shadow-lg uppercase tracking-widest text-[11px]">
                     <i class="bi bi-send-fill mr-2"></i>Kirim Permintaan
                 </button>
             </form>
         </div>
     </div>
+@endsection
 
-</body>
-</html>
+@push('scripts')
+<script>
+    document.addEventListener('turbo:load', () => {
+        const withdrawBtn = document.getElementById('withdraw-btn');
+        const closeModal = document.getElementById('close-modal');
+        const modal = document.getElementById('modal-withdraw');
+
+        if (withdrawBtn && modal) {
+            withdrawBtn.onclick = () => modal.classList.remove('hidden');
+        }
+        if (closeModal && modal) {
+            closeModal.onclick = () => modal.classList.add('hidden');
+        }
+    });
+</script>
+@endpush

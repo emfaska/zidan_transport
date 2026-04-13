@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Profil - Zidan Transport</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; -webkit-tap-highlight-color: transparent; }
-    </style>
-</head>
-<body class="bg-gray-50 pb-24">
+@extends('layouts.driver')
 
+@section('title', 'Profil Driver - Zidan Transport')
+
+@section('content')
     <!-- Header -->
     <div class="bg-[#1a237e] pt-12 pb-8 px-6 rounded-b-[32px] shadow-lg sticky top-0 z-50">
         <div class="flex items-center justify-between mb-4">
@@ -27,9 +14,9 @@
         </div>
     </div>
 
-    <main class="px-6 -mt-6 relative z-10 space-y-6">
+    <main class="px-6 -mt-6 relative z-10 space-y-6 animate-up">
         @if(session('success'))
-            <div class="bg-green-500 text-white p-4 rounded-2xl shadow-lg border border-green-400 flex items-center gap-3 animate-bounce">
+            <div class="bg-green-500 text-white p-4 rounded-2xl shadow-lg border border-green-400 flex items-center gap-3">
                 <i class="bi bi-check-circle-fill text-xl"></i>
                 <p class="text-[11px] font-bold">{{ session('success') }}</p>
             </div>
@@ -44,14 +31,14 @@
                 <div class="flex flex-col items-center pb-6 border-b border-gray-50">
                     <div class="relative group">
                         <div class="w-24 h-24 rounded-3xl overflow-hidden border-4 border-blue-50 shadow-inner">
-                            <img src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode($user->name).'&background=1a237e&color=fff&size=128&bold=true' }}" 
+                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&size=128&bold=true' }}" 
                                  id="preview-img"
                                  class="w-full h-full object-cover">
                         </div>
                         <label for="foto_profil" class="absolute -bottom-1 -right-1 w-8 h-8 bg-[#fbc02d] text-[#1a237e] rounded-xl flex items-center justify-center cursor-pointer shadow-lg active:scale-95 transition">
                             <i class="bi bi-camera-fill"></i>
                         </label>
-                        <input type="file" name="foto_profil" id="foto_profil" class="hidden" onchange="previewFile()">
+                        <input type="file" name="foto_profil" id="foto_profil" class="hidden">
                     </div>
                 </div>
 
@@ -60,25 +47,22 @@
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nama Driver</label>
                         <div class="relative">
                             <i class="bi bi-person absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]" required>
+                            <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]" required>
                         </div>
-                        @error('name') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Email</label>
                         <div class="relative">
                             <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]" required>
+                            <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]" required>
                         </div>
-                        @error('email') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-1">
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">WhatsApp</label>
                         <div class="relative">
                             <i class="bi bi-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                            <input type="text" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]">
+                            <input type="text" name="no_hp" value="{{ old('no_hp', Auth::user()->no_hp) }}" class="w-full bg-gray-50 border-none rounded-2xl pl-11 pr-5 py-4 focus:ring-2 focus:ring-[#1a237e] transition font-bold text-[#1a237e]">
                         </div>
-                        @error('no_hp') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -108,7 +92,6 @@
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
-                    @error('current_password') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="space-y-1 text-left">
@@ -118,7 +101,6 @@
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
-                    @error('password') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="space-y-1 text-left">
@@ -136,36 +118,17 @@
             </form>
         </div>
     </main>
+@endsection
 
-    <div class="fixed bottom-6 left-6 right-6 z-50">
-        <div class="bg-[#1a237e]/90 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl border border-white/10 flex justify-between items-center">
-            <a href="{{ route('driver.dashboard') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/dashboard') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-grid-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Beranda</span>
-            </a>
-            <a href="{{ route('driver.history') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/history') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-journal-check text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Riwayat</span>
-            </a>
-            <a href="{{ route('driver.wallet') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('driver/wallet') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-wallet2 text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Dompet</span>
-            </a>
-            <a href="{{ route('profile.edit') }}" class="flex-1 flex flex-col items-center justify-center py-2 transition {{ Request::is('profile*') ? 'bg-white/10 rounded-2xl text-[#fbc02d]' : 'text-gray-400' }}">
-                <i class="bi bi-person-fill text-xl"></i>
-                <span class="text-[9px] font-black mt-1 uppercase tracking-tighter">Akun</span>
-            </a>
-        </div>
-    </div>
-
-    <script>
+@push('scripts')
+<script>
+    document.addEventListener('turbo:load', () => {
         // Password Visibility Toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.closest('.password-toggle')) {
-                const button = e.target.closest('.password-toggle');
-                const container = button.closest('.relative');
+        document.querySelectorAll('.password-toggle').forEach(btn => {
+            btn.onclick = function() {
+                const container = this.closest('.relative');
                 const input = container.querySelector('input');
-                const icon = button.querySelector('i');
+                const icon = this.querySelector('i');
 
                 if (input.type === 'password') {
                     input.type = 'text';
@@ -176,16 +139,20 @@
                     icon.classList.remove('bi-eye-slash');
                     icon.classList.add('bi-eye');
                 }
-            }
+            };
         });
 
-        function previewFile() {
-            const preview = document.querySelector('#preview-img');
-            const file = document.querySelector('#foto_profil').files[0];
-            const reader = new FileReader();
-            reader.addEventListener("load", function () { preview.src = reader.result; }, false);
-            if (file) { reader.readAsDataURL(file); }
+        // Photo Preview
+        const photoInput = document.getElementById('foto_profil');
+        if (photoInput) {
+            photoInput.onchange = function() {
+                const preview = document.querySelector('#preview-img');
+                const file = this.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => preview.src = e.target.result;
+                if (file) reader.readAsDataURL(file);
+            };
         }
-    </script>
-</body>
-</html>
+    });
+</script>
+@endpush

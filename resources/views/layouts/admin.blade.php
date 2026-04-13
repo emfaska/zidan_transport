@@ -10,9 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body { font-family: 'Montserrat', sans-serif; }
-    </style>
+    <!-- Hotwire Turbo -->
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.min.js"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -221,6 +220,10 @@
         function cleanNumber(value) {
             return value.replace(/\./g, '').replace(/,/g, '');
         }
+
+        document.addEventListener('turbo:load', function() {
+            // Re-bind listeners if necessary or initialize one-time components
+        });
 
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('mask-currency')) {

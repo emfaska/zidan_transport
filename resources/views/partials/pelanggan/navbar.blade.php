@@ -63,10 +63,6 @@
                             <p class="text-xs text-gray-500 font-semibold">Masuk sebagai</p>
                             <p class="text-sm font-bold text-[#1a237e] truncate">{{ Auth::user()->email }}</p>
                         </div>
-                        <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
-                            <i class="bi bi-house-door text-[#1a237e]"></i>
-                            <span class="text-sm">Beranda</span>
-                        </a>
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
                             <i class="bi bi-person text-[#1a237e]"></i>
                             <span class="text-sm">Profil Saya</span>
@@ -181,7 +177,7 @@
 <!-- Mobile Menu Toggle Script -->
 <script>
     if (!window.navbarScriptInitialized) {
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('turbo:load', () => {
             // Mobile menu toggle
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
