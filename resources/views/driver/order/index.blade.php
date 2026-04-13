@@ -81,7 +81,7 @@
 
         <!-- Pagination -->
         <div class="pt-6">
-            {{ $bookings->links('vendor.pagination.simple-tailwind') }}
+            {{ $bookings->links() }}
         </div>
     </main>
 @endsection
