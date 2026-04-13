@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('/admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.setting.update');
 
         // Business Reports
+        Route::get('/admin/reports/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportCsv'])->name('admin.report.export');
         Route::get('/admin/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report.index');
 
         // Admin Profile Management

@@ -6,20 +6,28 @@
 @section('content')
 <div class="space-y-8">
     <!-- Filter -->
-    <div class="flex justify-between items-center">
-        <form action="{{ route('admin.report.index') }}" method="GET" class="flex items-center gap-4">
-            <select name="year" class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-bold text-[#1a237e] focus:outline-none shadow-sm">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <form action="{{ route('admin.report.index') }}" method="GET" class="flex flex-wrap items-center gap-2">
+            <select name="year" class="px-4 py-2.5 bg-white border border-gray-100 rounded-xl text-xs font-bold text-[#1a237e] focus:outline-none shadow-sm">
                 @for($y = date('Y'); $y >= 2024; $y--)
                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>Tahun {{ $y }}</option>
                 @endfor
             </select>
-            <button type="submit" class="p-3 bg-[#1a237e] text-white rounded-2xl hover:bg-blue-800 transition shadow-lg">
-                <i class="bi bi-filter"></i>
+            <input type="date" name="start_date" value="{{ $startDate }}" class="px-4 py-2.5 bg-white border border-gray-100 rounded-xl text-xs font-bold text-[#1a237e] focus:outline-none shadow-sm" title="Mulai Tanggal">
+            <span class="text-xs font-bold text-gray-400">s/d</span>
+            <input type="date" name="end_date" value="{{ $endDate }}" class="px-4 py-2.5 bg-white border border-gray-100 rounded-xl text-xs font-bold text-[#1a237e] focus:outline-none shadow-sm" title="Sampai Tanggal">
+            <button type="submit" class="p-2.5 bg-[#1a237e] text-white rounded-xl hover:bg-blue-800 transition shadow-lg text-xs font-bold">
+                <i class="bi bi-filter"></i> Filter
             </button>
         </form>
-        <button onclick="window.print()" class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-black text-gray-500 hover:text-[#1a237e] transition shadow-sm flex items-center gap-2">
-            <i class="bi bi-printer"></i> Cetak Laporan
-        </button>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.report.export', ['start_date' => $startDate, 'end_date' => $endDate]) }}" class="px-4 py-2.5 bg-green-500 text-white rounded-xl text-xs font-black hover:bg-green-600 transition shadow-sm flex items-center gap-2">
+                <i class="bi bi-file-earmark-excel"></i> Export CSV
+            </a>
+            <button onclick="window.print()" class="px-4 py-2.5 bg-white border border-gray-100 rounded-xl text-xs font-black text-gray-500 hover:text-[#1a237e] transition shadow-sm flex items-center gap-2">
+                <i class="bi bi-printer"></i> Cetak PDF
+            </button>
+        </div>
     </div>
 
     <!-- Quick Stats -->
@@ -139,6 +147,60 @@
                     @endforelse
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Tabel Transaksi Harian -->
+    <div class="bg-white rounded-[3rem] shadow-sm border border-gray-100 overflow-hidden mt-8">
+        <div class="p-8 border-b border-gray-50 flex justify-between items-center">
+            <div>
+                <h3 class="font-black text-[#1a237e] uppercase tracking-widest text-sm">Data Transaksi Spesifik</h3>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mt-1">Periode: {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</p>
+            </div>
+            <i class="bi bi-table text-gray-300 text-xl"></i>
+        </div>
+        <div class="p-8 overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                        <th class="pb-4">No</th>
+                        <th class="pb-4">Tgl. Berangkat</th>
+                        <th class="pb-4">Pelanggan</th>
+                        <th class="pb-4">Driver</th>
+                        <th class="pb-4">Total (Rp)</th>
+                        <th class="pb-4">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    @forelse($dailyBookings as $booking)
+                    <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                        <td class="py-4 font-bold text-[#1a237e]">{{ $loop->iteration }}</td>
+                        <td class="py-4">
+                            <p class="font-bold text-[#1a237e]">{{ $booking->tanggal_berangkat->format('d M Y') }}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase">{{ \Carbon\Carbon::parse($booking->waktu_jemput)->format('H:i') }} WIB</p>
+                        </td>
+                        <td class="py-4 font-bold text-[#1a237e]">{{ $booking->user->name ?? '-' }}</td>
+                        <td class="py-4 font-bold text-[#1a237e]">{{ $booking->driver->name ?? '-' }}</td>
+                        <td class="py-4 font-black text-green-600">{{ number_format($booking->total_akhir, 0, ',', '.') }}</td>
+                        <td class="py-4">
+                            @if($booking->status === 'completed')
+                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-[9px] font-black uppercase">Selesai</span>
+                            @elseif($booking->status === 'confirmed')
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-[9px] font-black uppercase">Dikonfirmasi</span>
+                            @elseif($booking->status === 'cancelled')
+                                <span class="px-2 py-1 bg-red-100 text-red-700 rounded-lg text-[9px] font-black uppercase">Batal</span>
+                            @else
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-lg text-[9px] font-black uppercase">{{ $booking->status }}</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-8 text-center text-gray-400 text-sm font-bold">Tidak ada transaksi pada periode ini.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
