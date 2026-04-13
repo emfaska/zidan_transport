@@ -571,5 +571,16 @@
 
         function closeConfirmation() { document.getElementById('confirmationModal').classList.add('hidden'); }
     </script>
+    <script>
+        @if(session('success'))
+            Swal.fire({ icon: 'success', text: '{{ session("success") }}', background: '#fff', color: '#111', showConfirmButton: false, timer: 3000 });
+        @endif
+        @if(session('error'))
+            Swal.fire({ icon: 'error', title: 'Oops...', text: '{{ session("error") }}', background: '#fff', color: '#111' });
+        @endif
+        @if($errors->any())
+            Swal.fire({ icon: 'warning', title: 'Periksa Kembali', html: '{!! implode("<br>", $errors->all()) !!}', background: '#fff', color: '#111' });
+        @endif
+    </script>
 </body>
 </html>

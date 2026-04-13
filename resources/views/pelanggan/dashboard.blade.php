@@ -321,9 +321,33 @@
             <div class="bg-white rounded-[40px] p-8 shadow-sm border border-gray-100 flex flex-col">
                 <h3 class="text-xl font-black text-[#1a237e] mb-8 flex items-center gap-3">
                     <i class="bi bi-clock-history text-[#fbc02d]"></i>
-                    Pesanan Terkhir
+                    Pesanan Terakhir
                 </h3>
                 <div class="space-y-4 flex-grow">
+                    @forelse($recent_bookings as $booking)
+                        <div class="flex items-start gap-4 p-5 rounded-[24px] bg-gray-50 hover:bg-white border border-gray-100 transition-all hover:shadow-lg group cursor-pointer" onclick="window.location.href='{{ route('pelanggan.booking.show', $booking->id) }}'">
+                            <div class="bg-white p-3 rounded-2xl text-[#1a237e] shadow-sm group-hover:scale-110 transition-transform flex items-center justify-center">
+                                <i class="bi bi-car-front-fill text-xl"></i>
+                            </div>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-center mb-1">
+                                    <p class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest truncate max-w-[100px]">{{ $booking->rute->nama_rute ?? 'Perjalanan' }}</p>
+                                    @php
+                                        $badges = [
+                                            'pending' => 'bg-yellow-100 text-yellow-700',
+                                            'confirmed' => 'bg-blue-100 text-blue-700',
+                                            'on_trip' => 'bg-indigo-100 text-indigo-700 animate-pulse',
+                                            'completed' => 'bg-green-100 text-green-700',
+                                            'cancelled' => 'bg-red-100 text-red-700'
+                                        ];
+                                        $badgeColor = $badges[$booking->status] ?? 'bg-gray-100 text-gray-700';
+                                    @endphp
+                                    <span class="px-2 py-0.5 rounded-lg {{ $badgeColor }} text-[8px] font-black uppercase">{{ $booking->status }}</span>
+                                </div>
+                                <p class="text-[10px] text-gray-400 font-bold"><i class="bi bi-calendar-event"></i> {{ $booking->tanggal_berangkat->format('d M Y') }}</p>
+                            </div>
+                        </div>
+                    @empty
                     <div class="flex items-start gap-4 p-6 rounded-[30px] bg-gray-50 border border-gray-100 border-dashed">
                         <div class="bg-white px-4 py-3 rounded-2xl text-[#fbc02d] shadow-sm">
                             <i class="bi bi-inbox text-2xl"></i>
@@ -333,9 +357,10 @@
                             <p class="text-[11px] text-gray-400 font-bold leading-relaxed">Belum ada aktivitas perjalanan.</p>
                         </div>
                     </div>
+                    @endforelse
                 </div>
-                <a href="{{ route('pelanggan.booking.create') }}" class="mt-8 group w-full bg-gray-50 hover:bg-[#1a237e] hover:text-white px-4 py-4 rounded-2xl text-center transition-all duration-300">
-                    <span class="text-[10px] font-black uppercase tracking-widest">Buat Pesanan Pertama</span>
+                <a href="{{ route('pelanggan.booking.index') }}" class="mt-8 group w-full bg-gray-50 hover:bg-[#1a237e] hover:text-white px-4 py-4 rounded-2xl text-center transition-all duration-300">
+                    <span class="text-[10px] font-black uppercase tracking-widest">Semua Riwayat Pesanan</span>
                 </a>
             </div>
         </div>
@@ -481,6 +506,18 @@
                 btnText.innerText = 'Cek Tarif & Armada';
             }
         });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if(session('success'))
+            Swal.fire({ icon: 'success', text: '{{ session("success") }}', background: '#fff', color: '#111', showConfirmButton: false, timer: 3000 });
+        @endif
+        @if(session('error'))
+            Swal.fire({ icon: 'error', title: 'Oops...', text: '{{ session("error") }}', background: '#fff', color: '#111' });
+        @endif
+        @if($errors->any())
+            Swal.fire({ icon: 'warning', title: 'Perhatian', html: '{!! implode("<br>", $errors->all()) !!}', background: '#fff', color: '#111' });
+        @endif
     </script>
     @include('partials.pelanggan.footer')
 </body>

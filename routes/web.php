@@ -146,7 +146,8 @@ Route::middleware('auth')->group(function () {
             $armadas = \App\Models\Armada::where('status', 'tersedia')->latest()->take(3)->get();
             $layanans = \App\Models\Layanan::where('is_active', true)->take(3)->get();
             $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
-            return view('pelanggan.dashboard', compact('armadas', 'layanans', 'promo')); 
+            $recent_bookings = \App\Models\Booking::where('user_id', \Illuminate\Support\Facades\Auth::id())->with('rute')->latest()->take(2)->get();
+            return view('pelanggan.dashboard', compact('armadas', 'layanans', 'promo', 'recent_bookings')); 
         })->name('home');
         
         // Booking System
@@ -179,4 +180,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
+});
+
+// 4. Webhook Trigger Khusus untuk Cron-Job.org (External Cron)
+Route::get('/cron/run-schedule', function () {
+    // Mengeksekusi secara terprogram layaknya `php artisan schedule:run` di terminal
+    \Illuminate\Support\Facades\Artisan::call('schedule:run');
+    
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Laravel Scheduler telah berhasil dieksekusi via Webhook',
+        'output' => \Illuminate\Support\Facades\Artisan::output()
+    ]);
 });
