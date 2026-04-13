@@ -23,4 +23,14 @@ class Armada extends Model
     {
         return $this->hasMany(Rute::class);
     }
+
+    public function reports()
+    {
+        return $this->hasMany(VehicleReport::class);
+    }
+
+    public function replacementRequests()
+    {
+        return $this->hasMany(ReplacementRequest::class, 'old_armada_id');
+    }
 }

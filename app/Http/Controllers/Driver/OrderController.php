@@ -7,6 +7,8 @@ use App\Models\Booking;
 use App\Models\DriverWallet;
 use App\Models\WalletTransaction;
 use App\Models\Setting;
+use App\Models\VehicleReport;
+use App\Models\ReplacementRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -83,5 +85,63 @@ class OrderController extends Controller
         }
 
         return redirect()->back()->with('success', $message);
+    }
+
+    public function report($id, $type)
+    {
+        $booking = Booking::where('driver_id', Auth::id())
+            ->with(['armada'])
+            ->findOrFail($id);
+            
+        return view('driver.order.report', compact('booking', 'type'));
+    }
+
+    public function submitReport(Request $request, $id)
+    {
+        $booking = Booking::where('driver_id', Auth::id())->findOrFail($id);
+        $type = $request->input('type');
+
+        if ($type === 'issue') {
+            $request->validate([
+                'category' => 'required|string',
+                'description' => 'required|string|max:1000',
+                'photo' => 'nullable|image|max:2048'
+            ]);
+
+            $path = null;
+            if ($request->hasFile('photo')) {
+                $path = $request->file('photo')->store('vehicle_reports', 'public');
+            }
+
+            VehicleReport::create([
+                'user_id' => Auth::id(),
+                'armada_id' => $booking->armada_id,
+                'booking_id' => $booking->id,
+                'category' => $request->category,
+                'description' => $request->description,
+                'photo' => $path,
+                'status' => 'pending'
+            ]);
+
+            return redirect()->route('driver.order.show', $id)->with('success', 'Laporan kerusakan berhasil dikirim. Terima kasih atas informasinya.');
+        } 
+        
+        if ($type === 'replacement') {
+            $request->validate([
+                'reason' => 'required|string|max:1000'
+            ]);
+
+            ReplacementRequest::create([
+                'user_id' => Auth::id(),
+                'booking_id' => $booking->id,
+                'old_armada_id' => $booking->armada_id,
+                'reason' => $request->reason,
+                'status' => 'pending'
+            ]);
+
+            return redirect()->route('driver.order.show', $id)->with('success', 'Permintaan ganti armada telah dikirim ke Admin. Mohon tunggu instruksi selanjutnya.');
+        }
+
+        return redirect()->back()->with('error', 'Tipe laporan tidak valid.');
     }
 }

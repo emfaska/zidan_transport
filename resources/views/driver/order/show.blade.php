@@ -87,6 +87,30 @@
 
         </div>
 
+        <!-- Vehicle Issue Section -->
+        @if($booking->status === 'confirmed' || $booking->status === 'on_trip')
+        <div class="bg-orange-50 rounded-[32px] p-8 border border-orange-100 shadow-sm">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h4 class="text-sm font-black text-[#1a237e] uppercase tracking-tighter">Kendala Kendaraan?</h4>
+                    <p class="text-[9px] font-bold text-orange-400 uppercase tracking-widest mt-1">Lapor kerusakan atau minta ganti unit</p>
+                </div>
+                <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-orange-500 shadow-sm">
+                    <i class="bi bi-tools"></i>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-3">
+                <a href="{{ route('driver.order.report', ['id' => $booking->id, 'type' => 'issue']) }}" class="flex items-center justify-center gap-3 py-4 bg-white text-[#1a237e] rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-orange-100 transition shadow-sm border border-orange-100">
+                    <i class="bi bi-exclamation-triangle-fill text-orange-500"></i> Lapor Rusak
+                </a>
+                <a href="{{ route('driver.order.report', ['id' => $booking->id, 'type' => 'replacement']) }}" class="flex items-center justify-center gap-3 py-4 bg-[#1a237e] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-800 transition shadow-lg shadow-blue-900/20">
+                    <i class="bi bi-arrow-repeat"></i> Minta Ganti Armada
+                </a>
+            </div>
+        </div>
+        @endif
+
         <!-- Action Buttons -->
         <div class="pt-4">
             @if($booking->status === 'confirmed')

@@ -101,6 +101,16 @@ class Booking extends Model
         return $this->hasMany(BookingExtension::class);
     }
 
+    public function replacementRequests()
+    {
+        return $this->hasMany(ReplacementRequest::class);
+    }
+
+    public function hasPendingReplacement()
+    {
+        return $this->replacementRequests()->where('status', 'pending')->exists();
+    }
+
     public function hasPendingExtension()
     {
         return $this->extensions()->where('status', 'pending')->exists();
