@@ -34,38 +34,38 @@
     </div>
 
     <!-- History List -->
-    <main class="px-6 space-y-4 pb-32 animate-up">
+    <main class="px-6 space-y-3 pb-32 animate-up">
         @forelse($bookings as $booking)
-            <a href="{{ route('driver.order.show', $booking->id) }}" class="block bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 group active:scale-[0.98] transition-all relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition">
-                    <i class="bi bi-check-circle-fill text-6xl text-[#1a237e]"></i>
+            <a href="{{ route('driver.order.show', $booking->id) }}" class="block bg-white rounded-[24px] p-4 shadow-sm border border-gray-100 group active:scale-[0.98] transition-all relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+                    <i class="bi bi-check-circle-fill text-4xl text-[#1a237e]"></i>
                 </div>
                 
-                <div class="flex justify-between items-start mb-4">
-                    <div class="space-y-1">
-                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[8px] font-black rounded-full uppercase tracking-widest italic border border-green-100">SELESAI</span>
-                        <h4 class="text-base font-black text-[#1a237e] uppercase tracking-tighter mt-2">#{{ $booking->kode_booking }}</h4>
+                <div class="flex justify-between items-start mb-2">
+                    <div class="space-y-0.5">
+                        <span class="px-2 py-0.5 bg-green-50 text-green-600 text-[7px] font-black rounded-full uppercase tracking-widest italic border border-green-100">SELESAI</span>
+                        <h4 class="text-sm font-black text-[#1a237e] uppercase tracking-tighter mt-1">#{{ $booking->kode_booking }}</h4>
                     </div>
-                    <p class="text-[10px] font-black text-gray-300 uppercase italic">{{ \Carbon\Carbon::parse($booking->tanggal_berangkat)->translatedFormat('d M Y') }}</p>
+                    <p class="text-[9px] font-black text-gray-300 uppercase italic">{{ \Carbon\Carbon::parse($booking->tanggal_berangkat)->translatedFormat('d M Y') }}</p>
                 </div>
 
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100">
-                        <i class="bi bi-geo-alt"></i>
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100">
+                        <i class="bi bi-geo-alt text-[10px]"></i>
                     </div>
-                    <p class="text-xs font-bold text-gray-500 uppercase truncate pr-10">{{ $booking->titik_jemput }} — {{ $booking->titik_tujuan }}</p>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase truncate pr-8">{{ $booking->titik_jemput }} — {{ $booking->titik_tujuan }}</p>
                 </div>
 
-                <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                <div class="flex items-center justify-between pt-3 border-t border-gray-50">
                     <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center">
-                            <i class="bi bi-person-fill text-[#1a237e] text-[10px]"></i>
+                        <div class="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center">
+                            <i class="bi bi-person-fill text-[#1a237e] text-[8px]"></i>
                         </div>
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ $booking->user->name ?? 'User' }}</span>
+                        <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">{{ $booking->user->name ?? 'User' }}</span>
                     </div>
-                    <div class="flex items-center gap-2 text-[#1a237e]">
-                        <span class="text-[10px] font-[900] uppercase tracking-widest">Detail</span>
-                        <i class="bi bi-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                    <div class="flex items-center gap-1.5 text-[#1a237e]">
+                        <span class="text-[9px] font-[900] uppercase tracking-widest">Detail</span>
+                        <i class="bi bi-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
             </a>

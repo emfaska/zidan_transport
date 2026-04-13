@@ -136,23 +136,6 @@
             @endif
         </div>
 
-        <!-- Wallet / Earning Section (Fix Reference) -->
-        <div class="bg-[#1a237e] rounded-[40px] p-8 text-white shadow-2xl relative overflow-hidden group">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
-            <div class="relative z-10">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                        <i class="bi bi-wallet2 text-lg"></i>
-                    </div>
-                    <p class="text-[9px] font-black text-blue-200 uppercase tracking-[0.2em]">Saldo Pendapatan</p>
-                </div>
-                <h3 class="text-4xl font-black tracking-tighter mb-8 italic">Rp {{ number_format(Auth::user()->wallet->balance ?? 0, 0, ',', '.') }}</h3>
-                <div class="flex gap-3">
-                    <a href="{{ route('driver.wallet.index') }}" class="flex-1 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center transition">Riwayat</a>
-                    <a href="{{ route('driver.wallet.index') }}" class="flex-1 py-4 bg-[#fbc02d] text-[#1a237e] rounded-2xl text-[9px] font-black uppercase tracking-widest text-center shadow-lg transition active:scale-95">Tarik Dana</a>
-                </div>
-            </div>
-        </div>
     </div>
 @endsection
 
