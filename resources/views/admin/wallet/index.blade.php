@@ -137,7 +137,11 @@
                                         <div class="flex items-center justify-center gap-2">
                                             {{-- Approve --}}
                                             <form action="{{ route('admin.wallet.approve', $wd->id) }}" method="POST"
-                                                onsubmit="return confirm('Setujui pencairan Rp {{ number_format($wd->amount, 0, ',', '.') }} untuk {{ $wd->driver->name }}?')">
+                                                data-confirm="Setujui pencairan Rp {{ number_format($wd->amount, 0, ',', '.') }} untuk {{ $wd->driver->name }}?"
+                                                data-title="Persetujuan Pencairan"
+                                                data-type="question"
+                                                data-btn-text="Ya, Setujui"
+                                                data-btn-color="#1a237e">
                                                 @csrf
                                                 <button type="submit"
                                                     class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-xl transition">

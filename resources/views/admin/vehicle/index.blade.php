@@ -246,11 +246,29 @@
     }
 
     function rejectReplacement() {
-        if(confirm('Yakin ingin menolak permintaan ganti armada ini?')) {
-            const form = document.getElementById('replaceForm');
-            form.querySelector('input[name="action"]').value = 'reject';
-            form.submit();
-        }
+        Swal.fire({
+            title: 'Tolak Permintaan?',
+            text: 'Apakah Anda yakin ingin menolak permintaan ganti armada ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Tolak',
+            cancelButtonText: 'Batal',
+            customClass: {
+                title: 'text-xl font-black text-[#1a237e]',
+                htmlContainer: 'text-sm font-medium text-gray-500',
+                popup: 'rounded-[32px] p-8',
+                confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
+                cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('replaceForm');
+                form.querySelector('input[name="action"]').value = 'reject';
+                form.submit();
+            }
+        });
     }
 </script>
 @endsection

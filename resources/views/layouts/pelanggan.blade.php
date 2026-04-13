@@ -59,6 +59,43 @@
                 Swal.fire({ icon: 'warning', title: 'Perhatian', html: '{!! implode("<br>", $errors->all()) !!}', background: '#fff', color: '#111' });
             @endif
         });
+
+        // Global Confirmation Handler for Forms/Buttons
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (form.hasAttribute('data-confirm')) {
+                e.preventDefault();
+                const message = form.getAttribute('data-confirm');
+                const title = form.getAttribute('data-title') || 'Konfirmasi';
+                const type = form.getAttribute('data-type') || 'question';
+                const confirmText = form.getAttribute('data-btn-text') || 'Ya, Lanjutkan';
+                const confirmColor = form.getAttribute('data-btn-color') || '#1a237e';
+
+                Swal.fire({
+                    title: title,
+                    text: message,
+                    icon: type,
+                    showCancelButton: true,
+                    confirmButtonColor: confirmColor,
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: confirmText,
+                    cancelButtonText: 'Batal',
+                    background: '#fff',
+                    customClass: {
+                        title: 'text-xl font-black text-[#1a237e]',
+                        htmlContainer: 'text-sm font-medium text-gray-500',
+                        popup: 'rounded-[32px] p-8',
+                        confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
+                        cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.removeAttribute('data-confirm');
+                        form.submit();
+                    }
+                });
+            }
+        });
     </script>
     @stack('scripts')
 </body>

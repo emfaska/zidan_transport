@@ -141,7 +141,12 @@
                                      @endif
                                  @else
                                      @if($booking->status === 'pending')
-                                     <form action="{{ route('pelanggan.booking.destroy', $booking->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')">
+                                     <form action="{{ route('pelanggan.booking.destroy', $booking->id) }}" method="POST"
+                                         data-confirm="Apakah Anda yakin ingin membatalkan pesanan ini? Pesanan yang dibatalkan tidak dapat dikembalikan."
+                                         data-title="Batalkan Pesanan?"
+                                         data-type="warning"
+                                         data-btn-text="Ya, Batalkan"
+                                         data-btn-color="#d33">
                                          @csrf @method('DELETE')
                                          <button type="submit" class="px-4 py-2.5 bg-slate-50 text-red-500 rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-100 hover:bg-red-50 transition-all">
                                              Batal
