@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function show($id)
+    {
+        $booking = Booking::where('driver_id', Auth::id())
+            ->with(['user', 'rute.layanan', 'armada'])
+            ->findOrFail($id);
+
+        return view('driver.order.show', compact('booking'));
+    }
+
     public function updateStatus(Request $request, $id)
     {
         $booking = Booking::where('driver_id', Auth::id())->findOrFail($id);

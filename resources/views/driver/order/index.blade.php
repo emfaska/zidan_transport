@@ -1,55 +1,87 @@
 @extends('layouts.driver')
 
-@section('title', 'Riwayat Pekerjaan - Zidan Transport')
+@section('title', 'Riwayat Tugas - Zidan Driver')
 
 @section('content')
-    <!-- Header -->
-    <div class="bg-[#1a237e] pt-12 pb-8 px-6 rounded-b-[32px] shadow-lg sticky top-0 z-50">
-        <div class="flex items-center justify-between mb-4">
-            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-xl text-white">
-                <i class="bi bi-chevron-left text-xl"></i>
+    <!-- Sticky Header -->
+    <div class="bg-[#1a237e] pt-12 pb-8 px-6 rounded-b-[40px] shadow-lg sticky top-0 z-50 overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+        <div class="relative z-10 flex items-center justify-between">
+            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white backdrop-blur-md">
+                <i class="bi bi-arrow-left text-xl"></i>
             </a>
-            <h1 class="text-lg font-black text-white uppercase tracking-widest">Riwayat Tugas</h1>
-            <div class="w-10"></div> <!-- Spacer -->
+            <h1 class="text-xs font-[900] text-white uppercase tracking-[0.3em]">Riwayat Tugas</h1>
+            <div class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white">
+                <i class="bi bi-funnel"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Snapshot -->
+    <div class="px-6 -mt-6 relative z-20 mb-8">
+        <div class="bg-white rounded-[32px] p-6 shadow-xl border border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-50 text-[#1a237e] rounded-2xl flex items-center justify-center shadow-inner">
+                    <i class="bi bi-check-all text-2xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-black text-[#1a237e] leading-none">{{ $bookings->total() }}</h4>
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-1">Total Trip Selesai</p>
+                </div>
+            </div>
+            <i class="bi bi-chevron-right text-gray-200"></i>
         </div>
     </div>
 
     <!-- History List -->
-    <main class="px-6 mt-8 space-y-4 pb-32 animate-up">
+    <main class="px-6 space-y-4 pb-32 animate-up">
         @forelse($bookings as $booking)
-            <div class="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex items-center gap-4 group active:scale-[0.98] transition">
-                <div class="w-12 h-12 bg-blue-50 text-[#1a237e] rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#1a237e] group-hover:text-white transition">
-                    <i class="bi bi-check-circle-fill text-xl"></i>
+            <a href="{{ route('driver.order.show', $booking->id) }}" class="block bg-white rounded-[32px] p-6 shadow-sm border border-gray-100 group active:scale-[0.98] transition-all relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition">
+                    <i class="bi bi-check-circle-fill text-6xl text-[#1a237e]"></i>
                 </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start mb-1">
-                        <div>
-                            <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-0.5">{{ $booking->rute->layanan->nama_layanan ?? 'Reguler' }}</span>
-                            <h4 class="text-sm font-black text-[#1a237e] truncate pr-2 uppercase">{{ $booking->rute->nama_rute ?? 'Rute Tidak Diketahui' }}</h4>
+                
+                <div class="flex justify-between items-start mb-4">
+                    <div class="space-y-1">
+                        <span class="px-3 py-1 bg-green-50 text-green-600 text-[8px] font-black rounded-full uppercase tracking-widest italic border border-green-100">SELESAI</span>
+                        <h4 class="text-base font-black text-[#1a237e] uppercase tracking-tighter mt-2">#{{ $booking->kode_booking }}</h4>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-300 uppercase italic">{{ \Carbon\Carbon::parse($booking->tanggal_berangkat)->translatedFormat('d M Y') }}</p>
+                </div>
+
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 border border-gray-100">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+                    <p class="text-xs font-bold text-gray-500 uppercase truncate pr-10">{{ $booking->titik_jemput }} — {{ $booking->titik_tujuan }}</p>
+                </div>
+
+                <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center">
+                            <i class="bi bi-person-fill text-[#1a237e] text-[10px]"></i>
                         </div>
-                        <span class="text-[9px] font-black text-gray-300 flex-shrink-0">{{ \Carbon\Carbon::parse($booking->tanggal_berangkat)->format('d/m/Y') }}</span>
+                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ $booking->user->name ?? 'User' }}</span>
                     </div>
-                    <div class="flex items-center gap-2 text-[10px] text-gray-500 font-bold">
-                        <i class="bi bi-person-fill text-[#fbc02d]"></i>
-                        <span>{{ $booking->user->name ?? 'Pelanggan' }}</span>
-                        <span class="mx-1">•</span>
-                        <span>{{ \Carbon\Carbon::parse($booking->waktu_jemput)->format('H:i') }} WIB</span>
+                    <div class="flex items-center gap-2 text-[#1a237e]">
+                        <span class="text-[10px] font-[900] uppercase tracking-widest">Detail</span>
+                        <i class="bi bi-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
                     </div>
                 </div>
-            </div>
+            </a>
         @empty
             <div class="text-center py-20">
-                <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-dashed border-gray-200">
-                    <i class="bi bi-invoices text-4xl text-gray-300"></i>
+                <div class="w-20 h-20 bg-gray-50 rounded-[28px] flex items-center justify-center mx-auto mb-6 border border-dashed border-gray-200 text-gray-200">
+                    <i class="bi bi-inbox text-4xl"></i>
                 </div>
-                <h3 class="text-sm font-bold text-gray-700 uppercase tracking-widest">Belum Ada Riwayat</h3>
-                <p class="text-[10px] text-gray-400 mt-1 uppercase font-bold">Tugas yang Anda selesaikan akan muncul di sini.</p>
+                <h3 class="text-sm font-black text-gray-400 uppercase tracking-widest">Belum Ada Riwayat</h3>
+                <p class="text-[10px] text-gray-200 mt-2 font-bold uppercase">Selesaikan tugas untuk melihat riwayat di sini</p>
             </div>
         @endforelse
 
         <!-- Pagination -->
-        <div class="pt-4">
-            {{ $bookings->links() }}
+        <div class="pt-6">
+            {{ $bookings->links('vendor.pagination.simple-tailwind') }}
         </div>
     </main>
 @endsection

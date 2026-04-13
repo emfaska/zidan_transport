@@ -20,6 +20,7 @@ class DashboardController extends Controller
         // Statistik ringkas
         $stats = [
             'total_completed' => Booking::where('driver_id', Auth::id())->where('status', 'completed')->count(),
+            'total_trips' => Booking::where('driver_id', Auth::id())->count(),
             'today_jobs' => Booking::where('driver_id', Auth::id())
                 ->whereDate('tanggal_berangkat', today())
                 ->count(),

@@ -617,6 +617,59 @@
     </div>
 
 
+    <!-- Floating Promo Area -->
+    @if($promo)
+    <div id="floating-promo" class="fixed bottom-8 right-8 z-[100] w-full max-w-[320px] transition-all duration-500">
+        <div class="bg-white rounded-[32px] p-6 shadow-2xl border border-blue-50 relative overflow-hidden group animate-fade-in-up">
+            <div class="absolute -top-10 -right-10 w-24 h-24 bg-[#fbc02d]/10 rounded-full blur-2xl"></div>
+            
+            <!-- Close Button -->
+            <button onclick="dismissPromo()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-gray-50 text-gray-400 rounded-full hover:bg-red-50 hover:text-red-500 transition-colors z-20">
+                <i class="bi bi-x-lg text-xs"></i>
+            </button>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-[#fbc02d] rounded-xl flex items-center justify-center text-[#1a237e] shadow-lg">
+                        <i class="bi bi-megaphone-fill"></i>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Promo Khusus</p>
+                        <h4 class="text-sm font-black text-[#1a237e] uppercase tracking-tighter">{{ $promo->judul }}</h4>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-gray-500 font-bold mb-4 leading-relaxed line-clamp-2">{{ $promo->deskripsi }}</p>
+
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 text-center">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Gunakan Kode</p>
+                    <p class="text-lg font-black text-[#1a237e] tracking-widest uppercase">{{ $promo->kode_promo }}</p>
+                </div>
+
+                <a href="{{ route('register') }}" class="block w-full text-center py-4 bg-[#1a237e] text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#0d1440] transition active:scale-95">
+                    Daftar & Klaim Promo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function dismissPromo() {
+            const promo = document.getElementById('floating-promo');
+            promo.classList.add('opacity-0', 'translate-y-10');
+            setTimeout(() => promo.remove(), 500);
+            sessionStorage.setItem('promo-dismissed', 'true');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('promo-dismissed')) {
+                const promo = document.getElementById('floating-promo');
+                if (promo) promo.remove();
+            }
+        });
+    </script>
+    @endif
+
     @include('partials.pelanggan.footer')
 
 </body>
