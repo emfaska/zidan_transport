@@ -84,11 +84,7 @@
                 </div>
             </div>
 
-            <div class="mt-10">
-                <a href="https://www.google.com/maps/dir/?api=1&destination={{ urlencode($booking->titik_jemput) }}&travelmode=driving" target="_blank" class="w-full flex items-center justify-center gap-3 py-5 bg-[#1a237e] text-white rounded-[24px] text-xs font-black uppercase tracking-widest shadow-xl shadow-blue-900/20 active:scale-95 transition">
-                    <i class="bi bi-geo-alt-fill text-lg"></i> Buka Google Maps
-                </a>
-            </div>
+
         </div>
 
         <!-- Action Buttons -->
