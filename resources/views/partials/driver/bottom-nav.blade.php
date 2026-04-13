@@ -15,10 +15,10 @@
         </a>
 
         <a href="{{ route('driver.wallet.index') }}" class="flex flex-col items-center gap-1 group {{ Request::is('driver/wallet*') ? 'text-[#1a237e]' : 'text-gray-400' }}">
-            <div class="p-2 rounded-xl {{ Request::is('driver/wallet*') ? 'bg-blue-50' : 'group-hover:bg-gray-50' }} transition-all">
-                <i class="bi {{ Request::is('driver/wallet*') ? 'bi-wallet2-fill' : 'bi-wallet2' }} text-xl"></i>
+            <div class="p-2.5 rounded-[14px] {{ Request::is('driver/wallet*') ? 'bg-[#1a237e] text-white shadow-lg shadow-blue-900/20' : 'group-hover:bg-gray-50' }} transition-all duration-300">
+                <i class="bi {{ Request::is('driver/wallet*') ? 'bi-wallet2' : 'bi-wallet2' }} text-xl"></i>
             </div>
-            <span class="text-[9px] font-black uppercase tracking-widest">Dompet</span>
+            <span class="text-[9px] font-[800] uppercase tracking-widest">Dompet</span>
         </a>
 
         <a href="{{ route('profile.edit') }}" class="flex flex-col items-center gap-1 group {{ Request::is('profile*') ? 'text-[#1a237e]' : 'text-gray-400' }}">

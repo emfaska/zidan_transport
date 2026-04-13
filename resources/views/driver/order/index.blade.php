@@ -7,13 +7,21 @@
     <div class="bg-[#1a237e] pt-12 pb-8 px-6 rounded-b-[40px] shadow-lg sticky top-0 z-50 overflow-hidden">
         <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
         <div class="relative z-10 flex items-center justify-between">
-            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white backdrop-blur-md">
+            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white backdrop-blur-md hover:bg-white/20 transition">
                 <i class="bi bi-arrow-left text-xl"></i>
             </a>
-            <h1 class="text-xs font-[900] text-white uppercase tracking-[0.3em]">Riwayat Tugas</h1>
-            <div class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white">
-                <i class="bi bi-funnel"></i>
-            </div>
+            <h1 class="text-xs font-[900] text-white uppercase tracking-[0.3em] absolute left-1/2 -translate-x-1/2">Riwayat Tugas</h1>
+            
+            <form action="{{ route('driver.history') }}" method="GET" id="filter-form">
+                <div class="relative">
+                    <input type="month" name="month" value="{{ request('month', date('Y-m')) }}" 
+                           onchange="this.form.submit()"
+                           class="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-20">
+                    <div class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl text-white backdrop-blur-md hover:bg-white/20 transition">
+                        <i class="bi bi-funnel{{ request('month') ? '-fill text-yellow-400' : '' }}"></i>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

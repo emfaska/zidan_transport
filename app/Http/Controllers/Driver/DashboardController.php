@@ -62,13 +62,22 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function history()
+    public function history(Request $request)
     {
-        $bookings = Booking::where('driver_id', Auth::id())
+        $query = Booking::where('driver_id', Auth::id())
             ->where('status', 'completed')
-            ->with(['user', 'rute'])
-            ->latest()
-            ->paginate(15);
+            ->with(['user', 'rute']);
+
+        // Filter Bulan (Format: YYYY-MM)
+        if ($request->filled('month')) {
+            [$year, $month] = explode('-', $request->month);
+            $query->whereYear('tanggal_berangkat', $year)
+                  ->whereMonth('tanggal_berangkat', $month);
+        }
+
+        $bookings = $query->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return view('driver.order.index', compact('bookings'));
     }
