@@ -181,6 +181,13 @@
                                 </form>
                             @endif
                         </div>
+
+                        <!-- Report Issue Button -->
+                        <div class="pt-4 mt-6 border-t border-red-100 flex justify-center">
+                            <button onclick="document.getElementById('reportModal').classList.remove('hidden')" class="text-red-500 hover:text-red-700 text-[10px] font-black tracking-widest flex items-center gap-1 transition">
+                                <i class="bi bi-exclamation-triangle-fill"></i> LAPORKAN MASALAH / KENDARAAN RUSAK
+                            </button>
+                        </div>
                     </div>
                 </div>
             @else
@@ -224,6 +231,88 @@
             </a>
         </div>
     </div>
+
+    @if($activeBooking)
+    <!-- Report Modal -->
+    <div id="reportModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onclick="document.getElementById('reportModal').classList.add('hidden')"></div>
+        <div class="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl relative z-10 animate-fade-in-up">
+            <div class="p-6 bg-red-50 text-red-900 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-red-600 shadow-sm">
+                        <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-lg leading-tight tracking-tight">Laporan Kedaruratan</h3>
+                        <p class="text-[10px] font-bold uppercase tracking-widest opacity-80">Laporkan kendala armada</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('reportModal').classList.add('hidden')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/50 hover:bg-white text-red-900 transition">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            
+            <form action="{{ route('driver.laporan.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
+                @csrf
+                <input type="hidden" name="booking_id" value="{{ $activeBooking->id }}">
+                
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 pb-1 border-b border-gray-100">Tipe Masalah</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipe_laporan" value="kerusakan" class="peer sr-only" required>
+                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
+                                Kerusakan
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipe_laporan" value="kecelakaan" class="peer sr-only">
+                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
+                                Kecelakaan
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipe_laporan" value="kebersihan" class="peer sr-only">
+                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
+                                Kebersihan
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tipe_laporan" value="lainnya" class="peer sr-only">
+                            <div class="px-4 py-3 rounded-xl border-2 border-gray-100 text-gray-500 font-bold text-xs peer-checked:border-red-500 peer-checked:text-red-700 peer-checked:bg-red-50 transition-all text-center">
+                                Lainnya
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Deskripsi Detail</label>
+                    <textarea name="deskripsi" rows="3" required placeholder="Jelaskan secara singkat masalah yang dialami..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-medium text-[#1a237e] focus:ring-2 focus:ring-red-200 focus:border-red-500 outline-none transition-all placeholder:text-gray-400"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Foto Bukti (Opsional)</label>
+                    <input type="file" name="foto_bukti" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 cursor-pointer">
+                </div>
+
+                <div class="mt-4 p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" name="request_penggantian" value="1" class="mt-1 w-5 h-5 rounded text-yellow-600 focus:ring-yellow-500 border-gray-300">
+                        <div>
+                            <span class="block text-sm font-bold text-yellow-800">Minta Ganti Armada</span>
+                            <span class="block text-[10px] font-semibold text-yellow-600 mt-0.5">Centang bila kendaraan tidak memungkinkan untuk melanjutkan perjalanan.</span>
+                        </div>
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-widest text-xs py-4 rounded-xl shadow-lg shadow-red-200 mt-2 transition-all">
+                    Kirim Laporan Ke Admin
+                </button>
+            </form>
+        </div>
+    </div>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

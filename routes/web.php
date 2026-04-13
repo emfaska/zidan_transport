@@ -120,6 +120,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/reports/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportCsv'])->name('admin.report.export');
         Route::get('/admin/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report.index');
 
+        // Laporan Kedaruratan & Kendaraan
+        Route::get('/admin/laporan-armada', [\App\Http\Controllers\Admin\LaporanArmadaController::class, 'index'])->name('admin.laporan.index');
+        Route::patch('/admin/laporan-armada/{id}', [\App\Http\Controllers\Admin\LaporanArmadaController::class, 'updateStatus'])->name('admin.laporan.update');
+
         // Admin Profile Management
         Route::get('/admin/management', [\App\Http\Controllers\Admin\AdminManagementController::class, 'index'])->name('admin.management.index');
         Route::get('/admin/management/create', [\App\Http\Controllers\Admin\AdminManagementController::class, 'create'])->name('admin.management.create');
@@ -137,6 +141,9 @@ Route::middleware('auth')->group(function () {
         
         // Location Tracking
         Route::post('/driver/location/update', [\App\Http\Controllers\Driver\LocationController::class, 'update'])->name('driver.location.update');
+
+        // Laporan & Kedaruratan
+        Route::post('/driver/laporan', [\App\Http\Controllers\Driver\LaporanController::class, 'store'])->name('driver.laporan.store');
     });
 
     // Wilayah KHUSUS PELANGGAN
