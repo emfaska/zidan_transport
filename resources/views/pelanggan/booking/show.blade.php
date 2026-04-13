@@ -323,6 +323,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- Emergency SOS Button (Customer) -->
+        @if($booking->status === 'on_trip' || $booking->status === 'confirmed')
+        <div class="fixed bottom-10 right-10 z-[100]">
+            @php
+                $adminWa = \App\Models\Setting::get('contact_whatsapp', '6282142951682');
+                $sosMessage = "DARURAT! Saya Pelanggan " . Auth::user()->name . ", butuh bantuan segera untuk Perjalanan #" . $booking->kode_booking . ". Mohon bantuan Admin!";
+                $waUrl = "https://wa.me/" . $adminWa . "?text=" . urlencode($sosMessage);
+            @endphp
+            <a href="{{ $waUrl }}" target="_blank" 
+               class="w-16 h-16 bg-red-600 text-white rounded-full shadow-2xl shadow-red-600/50 flex items-center justify-center animate-pulse group active:scale-95 transition-all border-4 border-white">
+                <i class="bi bi-exclamation-octagon-fill text-2xl group-hover:scale-110 transition-transform"></i>
+                <span class="absolute right-full mr-4 px-4 py-2 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">SOS DARURAT</span>
+            </a>
+        </div>
+        @endif
         
         @if($booking->refundRequest)
             <div id="refund-action" class="p-8 md:p-12 bg-gray-50 border-t border-gray-100 relative">

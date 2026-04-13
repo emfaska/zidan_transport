@@ -112,5 +112,21 @@
                 </div>
             @endif
         </div>
+
+        <!-- Emergency SOS Button (Driver) -->
+        @if($booking->status === 'on_trip' || $booking->status === 'confirmed')
+        <div class="fixed bottom-24 right-6 z-[100]">
+            @php
+                $adminWa = \App\Models\Setting::get('contact_whatsapp', '6282142951682');
+                $sosMessage = "DARURAT! Saya Driver " . Auth::user()->name . ", butuh bantuan segera untuk Order #" . $booking->kode_booking . ". Mohon respon cepat!";
+                $waUrl = "https://wa.me/" . $adminWa . "?text=" . urlencode($sosMessage);
+            @endphp
+            <a href="{{ $waUrl }}" target="_blank" 
+               class="w-16 h-16 bg-red-600 text-white rounded-full shadow-2xl shadow-red-600/50 flex items-center justify-center animate-pulse group active:scale-90 transition-all border-4 border-white">
+                <i class="bi bi-exclamation-octagon-fill text-2xl group-hover:scale-110 transition-transform"></i>
+                <span class="absolute right-full mr-4 px-4 py-2 bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">SOS DARURAT</span>
+            </a>
+        </div>
+        @endif
     </main>
 @endsection
