@@ -99,7 +99,7 @@ class WalletController extends Controller
             ]);
         });
 
-        return redirect()->route('driver.wallet')
+        return redirect()->route('driver.wallet.index')
             ->with('success', 'Permintaan pencairan berhasil diajukan! Admin akan memproses segera.');
     }
 }

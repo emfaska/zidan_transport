@@ -13,7 +13,7 @@
         <span class="text-[9px] font-black uppercase tracking-widest">Riwayat</span>
     </a>
 
-    <a href="{{ route('driver.wallet') }}" class="flex flex-col items-center gap-1 group {{ Request::is('driver/wallet*') ? 'text-[#1a237e]' : 'text-gray-400' }}">
+    <a href="{{ route('driver.wallet.index') }}" class="flex flex-col items-center gap-1 group {{ Request::is('driver/wallet*') ? 'text-[#1a237e]' : 'text-gray-400' }}">
         <div class="p-2 rounded-xl {{ Request::is('driver/wallet*') ? 'bg-blue-50' : 'group-hover:bg-gray-50' }} transition-all">
             <i class="bi {{ Request::is('driver/wallet*') ? 'bi-wallet2-fill' : 'bi-wallet2' }} text-xl"></i>
         </div>

@@ -9,7 +9,7 @@
         <div class="absolute top-20 -left-10 w-32 h-32 bg-[#fbc02d]/10 rounded-full blur-2xl pointer-events-none"></div>
 
         <div class="relative z-10 flex justify-between items-center mb-10">
-            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-2xl hover:bg-white/20 transition backdrop-blur-md">
+            <a href="{{ route('driver.dashboard') }}" class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-xl hover:bg-white/20 transition backdrop-blur-md">
                 <i class="bi bi-chevron-left text-white text-xl"></i>
             </a>
             <h1 class="text-xs font-[900] text-white uppercase tracking-[0.3em]">Dompet Pendapatan</h1>

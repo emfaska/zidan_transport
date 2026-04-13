@@ -156,7 +156,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/driver/history', [\App\Http\Controllers\Driver\DashboardController::class, 'history'])->name('driver.history');
         Route::get('/driver/order/{id}', [\App\Http\Controllers\Driver\OrderController::class, 'show'])->name('driver.order.show');
         Route::post('/driver/order/{id}/status', [\App\Http\Controllers\Driver\OrderController::class, 'updateStatus'])->name('driver.order.update-status');
-        Route::get('/driver/wallet', [\App\Http\Controllers\Driver\WalletController::class, 'index'])->name('driver.wallet');
+        Route::get('/driver/wallet', [\App\Http\Controllers\Driver\WalletController::class, 'index'])->name('driver.wallet.index');
         Route::post('/driver/wallet/withdraw', [\App\Http\Controllers\Driver\WalletController::class, 'requestWithdraw'])->name('driver.wallet.withdraw');
         
         // Location Tracking

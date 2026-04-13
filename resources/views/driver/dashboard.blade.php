@@ -148,8 +148,8 @@
                 </div>
                 <h3 class="text-4xl font-black tracking-tighter mb-8 italic">Rp {{ number_format(Auth::user()->wallet->balance ?? 0, 0, ',', '.') }}</h3>
                 <div class="flex gap-3">
-                    <a href="{{ route('driver.wallet') }}" class="flex-1 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center transition">Riwayat</a>
-                    <a href="{{ route('driver.wallet') }}" class="flex-1 py-4 bg-[#fbc02d] text-[#1a237e] rounded-2xl text-[9px] font-black uppercase tracking-widest text-center shadow-lg transition active:scale-95">Tarik Dana</a>
+                    <a href="{{ route('driver.wallet.index') }}" class="flex-1 py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center transition">Riwayat</a>
+                    <a href="{{ route('driver.wallet.index') }}" class="flex-1 py-4 bg-[#fbc02d] text-[#1a237e] rounded-2xl text-[9px] font-black uppercase tracking-widest text-center shadow-lg transition active:scale-95">Tarik Dana</a>
                 </div>
             </div>
         </div>
