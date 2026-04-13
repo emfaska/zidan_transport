@@ -5,13 +5,30 @@
 
 @section('content')
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div>
-            <h3 class="font-black text-[#1a237e] text-lg">Daftar Rute Perjalanan</h3>
-            <p class="text-xs text-gray-400">Total rute tersedia: {{ $rutes->count() }} rute</p>
+    <div class="p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-6">
+        <div class="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
+            <div>
+                <h3 class="font-black text-[#1a237e] text-lg whitespace-nowrap">Daftar Rute Perjalanan</h3>
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Total: {{ $rutes->count() }} rute</p>
+            </div>
+
+            <!-- Search Bar -->
+            <form action="{{ route('admin.rute.index') }}" method="GET" class="w-full md:w-80 relative group">
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#1a237e] transition-colors"></i>
+                <input type="text" name="search" value="{{ request('search') }}" 
+                    placeholder="Cari rute, kota asal, atau tujuan..." 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-[#1a237e] transition-all"
+                >
+                @if(request('search'))
+                    <a href="{{ route('admin.rute.index') }}" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </a>
+                @endif
+            </form>
         </div>
-        <a href="{{ route('admin.rute.create') }}" class="w-full sm:w-auto px-6 py-3 bg-[#1a237e] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-blue-800 transition shadow-lg shadow-blue-900/20">
-            <i class="bi bi-plus-lg"></i>
+
+        <a href="{{ route('admin.rute.create') }}" class="w-full lg:w-auto px-6 py-4 bg-[#1a237e] text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-blue-800 transition shadow-xl shadow-blue-900/20 active:scale-95">
+            <i class="bi bi-plus-lg text-sm"></i>
             Tambah Rute Baru
         </a>
     </div>

@@ -12,9 +12,16 @@ class ArmadaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $armadas = Armada::latest()->get();
+        $search = $request->input('search');
+        
+        $armadas = Armada::when($search, function ($query, $search) {
+            return $query->where('nama', 'like', "%{$search}%")
+                         ->orWhere('plat_nomor', 'like', "%{$search}%")
+                         ->orWhere('jenis', 'like', "%{$search}%");
+        })->latest()->get();
+        
         return view('admin.armada.index', compact('armadas'));
     }
 

@@ -13,9 +13,19 @@ class RuteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rutes = Rute::with(['layanan', 'armada'])->latest()->get();
+        $search = $request->input('search');
+
+        $rutes = Rute::with(['layanan', 'armada'])
+            ->when($search, function ($query, $search) {
+                return $query->where('nama_rute', 'like', "%{$search}%")
+                             ->orWhere('lokasi_awal', 'like', "%{$search}%")
+                             ->orWhere('tujuan', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->get();
+
         return view('admin.rute.index', compact('rutes'));
     }
 
