@@ -33,7 +33,6 @@ Route::get('/armada', function(Illuminate\Http\Request $request) {
     if ($request->filled('search')) {
         $query->where(function($q) use ($request) {
             $q->where('nama', 'like', '%' . $request->search . '%')
-              ->orWhere('merk', 'like', '%' . $request->search . '%')
               ->orWhere('jenis', 'like', '%' . $request->search . '%');
         });
     }
