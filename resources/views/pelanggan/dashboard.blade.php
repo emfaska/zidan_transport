@@ -211,7 +211,7 @@
             const formData = new FormData(form);
             
             try {
-                const response = await fetch("{{ route('pelanggan.express.search') }}", {
+                const response = await fetch("{{ route('pelanggan.rute.search') }}", {
                     method: 'POST',
                     body: formData,
                     headers: {
