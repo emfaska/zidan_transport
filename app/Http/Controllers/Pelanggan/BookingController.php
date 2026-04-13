@@ -175,7 +175,7 @@ class BookingController extends Controller
                 'customer_details' => [
                     'first_name' => Auth::user()->name,
                     'email' => Auth::user()->email,
-                    'phone' => Auth::user()->phone ?? '',
+                    'phone' => Auth::user()->no_hp ?? '',
                 ],
                 'item_details' => [
                     [
