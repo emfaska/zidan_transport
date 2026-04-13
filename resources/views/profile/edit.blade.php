@@ -1,6 +1,6 @@
 @extends('layouts.pelanggan')
 
-@section('title', 'Pengaturan Profil - Zidan Transport')
+@section('title', 'Profil Saya - Zidan Transport')
 
 @push('styles')
 <style>
@@ -13,7 +13,7 @@
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 border border-blue-200 rounded-full text-[#1a237e] text-[10px] font-black uppercase tracking-widest mb-4">
-                <i class="bi bi-person-gear"></i> Pengaturan Akun
+                <i class="bi bi-person-gear"></i> Kelola Profil
             </div>
             <h1 class="text-4xl md:text-5xl font-black text-[#1a237e] tracking-tighter uppercase">Profil Pelanggan</h1>
             <p class="text-gray-500 mt-2 font-medium">Kelola informasi pribadi, foto profil, dan keamanan akun Anda.</p>

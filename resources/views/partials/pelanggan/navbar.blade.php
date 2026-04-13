@@ -71,10 +71,7 @@
                             <i class="bi bi-clock-history text-[#1a237e]"></i>
                             <span class="text-sm">Riwayat Pesanan</span>
                         </a>
-                        <a href="{{ route('profile.edit') }}#settings" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
-                            <i class="bi bi-gear text-[#1a237e]"></i>
-                            <span class="text-sm">Pengaturan</span>
-                        </a>
+
                         <div class="border-t border-gray-100 mt-1 pt-1">
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -150,9 +147,7 @@
                 <a href="{{ route('pelanggan.booking.index') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
                     <i class="bi bi-clock-history mr-2"></i> Riwayat Pesanan
                 </a>
-                <a href="{{ route('profile.edit') }}#settings" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-gear mr-2"></i> Pengaturan
-                </a>
+
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="w-full text-left px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 font-bold">
