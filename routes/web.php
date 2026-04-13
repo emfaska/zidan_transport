@@ -28,7 +28,7 @@ Route::get('/', function () {
 
 // Halaman Master Data (Publik - Bisa Akses Tanpa Login)
 Route::get('/armada', function() { 
-    $armadas = \App\Models\Armada::where('status', 'tersedia')->get();
+    $armadas = \App\Models\Armada::where('status', 'tersedia')->paginate(6);
     $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
     return view('pelanggan.armada', compact('armadas', 'promo')); 
 })->name('pelanggan.armada');
