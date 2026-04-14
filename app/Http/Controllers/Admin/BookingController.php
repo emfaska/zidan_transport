@@ -19,10 +19,25 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with(['user', 'rute', 'driver', 'armada', 'extensions'])->latest()->get();
-        return view('admin.booking.index', compact('bookings'));
+        $query = Booking::with(['user', 'rute', 'driver', 'armada', 'extensions'])->latest();
+
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal_berangkat', $request->tanggal);
+        }
+        if ($request->filled('armada_id')) {
+            $query->where('armada_id', $request->armada_id);
+        }
+        if ($request->filled('driver_id')) {
+            $query->where('driver_id', $request->driver_id);
+        }
+
+        $bookings = $query->get();
+        $armadas = \App\Models\Armada::all();
+        $drivers = User::where('role', 'pengemudi')->get();
+
+        return view('admin.booking.index', compact('bookings', 'armadas', 'drivers'));
     }
 
     /**

@@ -20,6 +20,37 @@
         </div>
     </div>
 
+    <!-- Filter Section -->
+    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+        <form action="{{ route('admin.booking.index') }}" method="GET" class="flex flex-wrap items-center gap-3">
+            <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="px-4 py-2 rounded-xl border border-gray-200 text-xs font-bold text-gray-700 outline-none focus:border-[#fbc02d] transition-colors bg-white">
+            
+            <select name="armada_id" class="px-4 py-2 rounded-xl border border-gray-200 text-xs font-bold text-gray-700 outline-none focus:border-[#fbc02d] transition-colors bg-white w-full sm:w-auto">
+                <option value="">Semua Armada</option>
+                @foreach($armadas as $armada)
+                    <option value="{{ $armada->id }}" {{ request('armada_id') == $armada->id ? 'selected' : '' }}>{{ $armada->nama }} ({{ $armada->plat_nomor }})</option>
+                @endforeach
+            </select>
+
+            <select name="driver_id" class="px-4 py-2 rounded-xl border border-gray-200 text-xs font-bold text-gray-700 outline-none focus:border-[#fbc02d] transition-colors bg-white w-full sm:w-auto">
+                <option value="">Semua Driver</option>
+                @foreach($drivers as $driver)
+                    <option value="{{ $driver->id }}" {{ request('driver_id') == $driver->id ? 'selected' : '' }}>{{ $driver->name }}</option>
+                @endforeach
+            </select>
+
+            <button type="submit" class="px-4 py-2 bg-[#1a237e] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#0d1440] transition-all shadow-md">
+                <i class="bi bi-filter"></i> Filter
+            </button>
+            
+            @if(request()->hasAny(['tanggal', 'armada_id', 'driver_id']))
+                <a href="{{ route('admin.booking.index') }}" title="Reset Filter" class="px-3 py-2 bg-red-50 text-red-500 border border-red-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                    <i class="bi bi-arrow-counterclockwise text-sm"></i>
+                </a>
+            @endif
+        </form>
+    </div>
+
     <div class="overflow-x-auto">
         <table class="w-full text-left">
             <thead>
@@ -60,7 +91,7 @@
                             <span class="text-[10px] text-gray-400 font-black uppercase tracking-tighter">
                                 <i class="bi bi-calendar-event mr-1 text-blue-400"></i>{{ \Carbon\Carbon::parse($booking->tanggal_berangkat)->format('d M Y') }} 
                                 <span class="mx-1">•</span> 
-                                <i class="bi bi-clock mr-1 text-blue-400"></i>{{ substr($booking->waktu_jemput, 0, 5) }}
+                                <i class="bi bi-clock mr-1 text-blue-400"></i>{{ \Carbon\Carbon::parse($booking->waktu_jemput)->format('H:i') }} WIB
                             </span>
                         </div>
                     </td>
