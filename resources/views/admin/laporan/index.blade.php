@@ -4,7 +4,7 @@
 <div class="space-y-6">
     <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-black text-[#1a237e] uppercase tracking-tight">Kedaruratan & Laporan</h1>
+            <h1 class="text-2xl font-black text-[#1a237e] uppercase tracking-tight">Manajemen Kendala</h1>
             <p class="text-sm text-gray-500 font-medium">Manajemen laporan kerusakan dan masalah armada dari pengemudi.</p>
         </div>
     </div>

@@ -99,7 +99,7 @@
 
                     <a href="{{ route('admin.laporan.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/laporan*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-exclamation-triangle-fill text-lg"></i>
-                        <span class="text-sm">Lap. Kedaruratan</span>
+                        <span class="text-sm">Manajemen Kendala</span>
                         @php $pendingLap = \App\Models\LaporanArmada::where('status','pending')->count(); @endphp
                         @if($pendingLap > 0)
                             <span class="ml-auto text-[10px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-full">{{ $pendingLap }}</span>
