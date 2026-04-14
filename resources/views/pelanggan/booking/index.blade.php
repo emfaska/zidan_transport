@@ -70,7 +70,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6">
                         <!-- Detail Perjalanan -->
                         <div>
-                            <p class="text-[8px] text-slate-400 font-black uppercase tracking-widest mb-2">Rute & Tipe</p>
+                            <p class="text-[8px] text-slate-400 font-black uppercase tracking-widest mb-2">Paket Rute & Tipe</p>
                             <div class="space-y-1">
                                 <p class="text-xs font-bold text-slate-800 uppercase leading-tight">{{ $booking->rute->nama_rute }}</p>
                                 <div class="flex items-center gap-2">

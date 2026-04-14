@@ -116,7 +116,7 @@
                     <a href="{{ route('landing') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Beranda</a>
                     <a href="{{ route('pelanggan.armada') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Armada</a>
                     <a href="{{ route('pelanggan.layanan') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Layanan</a>
-                    <a href="{{ route('pelanggan.rute') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Rute</a>
+                    <a href="{{ route('pelanggan.rute') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Paket Rute</a>
                     <a href="{{ route('pelanggan.kontak') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Lokasi & Kontak</a>
                 </div>
 
@@ -157,7 +157,7 @@
                     <i class="bi bi-layers mr-2"></i> Layanan
                 </a>
                 <a href="{{ route('pelanggan.rute') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold transition">
-                    <i class="bi bi-map mr-2"></i> Rute Perjalanan
+                    <i class="bi bi-box2-heart mr-2"></i> Paket Rute
                 </a>
                 <a href="{{ route('pelanggan.kontak') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold transition">
                     <i class="bi bi-geo-alt mr-2"></i> Lokasi & Kontak

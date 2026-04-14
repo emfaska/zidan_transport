@@ -25,7 +25,7 @@
             <thead>
                 <tr class="bg-gray-50 text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-100">
                     <th class="px-6 py-4">Kode & Customer</th>
-                    <th class="px-6 py-4">Rute & Jadwal</th>
+                    <th class="px-6 py-4">Paket Rute & Jadwal</th>
                     <th class="px-6 py-4">Total Harga</th>
                     <th class="px-6 py-4">Status</th>
                     <th class="px-6 py-4">Driver</th>

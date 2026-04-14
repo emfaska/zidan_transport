@@ -1,6 +1,6 @@
 @extends('layouts.pelanggan')
 
-@section('title', 'Rute Perjalanan - Zidan Transport')
+@section('title', 'Paket Rute - Zidan Transport')
 
 @section('content')
     <!-- Breadcrumb -->
@@ -8,10 +8,10 @@
         <div class="flex items-center gap-2 text-sm text-gray-500 mb-4">
             <a href="{{ Auth::check() ? route('home') : route('landing') }}" class="hover:text-[#1a237e]">Beranda</a>
             <i class="bi bi-chevron-right text-xs"></i>
-            <span class="text-[#1a237e] font-semibold">Rute Perjalanan</span>
+            <span class="text-[#1a237e] font-semibold">Paket Rute</span>
         </div>
-        <h1 class="text-4xl md:text-5xl font-black text-[#1a237e] mb-2 uppercase tracking-tighter">Rute Populer</h1>
-        <p class="text-gray-500 font-medium tracking-tight">Cek tarif transparan ke berbagai tujuan favorit Anda.</p>
+        <h1 class="text-4xl md:text-5xl font-black text-[#1a237e] mb-2 uppercase tracking-tighter">Paket Rute</h1>
+        <p class="text-gray-500 font-medium tracking-tight">Pilih paket rute terbaik — sudah termasuk armada, driver, dan harga transparan.</p>
     </div>
 
     <!-- Search Tool (Server-Side) -->
@@ -22,7 +22,7 @@
         </form>
         <div class="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
             <i class="bi bi-info-circle"></i>
-            Menampilkan {{ $rutes->count() }} dari {{ $rutes->total() }} Rute
+            Menampilkan {{ $rutes->count() }} dari {{ $rutes->total() }} Paket Rute
         </div>
     </div>
 
@@ -63,8 +63,8 @@
             @empty
              <div class="col-span-full text-center py-20 bg-white rounded-[40px] border border-dashed border-gray-200">
                 <i class="bi bi-send-x text-6xl text-gray-200 mb-6 block"></i>
-                <h3 class="text-xl font-black text-[#1a237e] uppercase tracking-widest">Rute Tidak Ditemukan</h3>
-                <p class="text-gray-400 mt-2 font-medium">Silakan hubungi admin untuk rute kustom Anda.</p>
+                <h3 class="text-xl font-black text-[#1a237e] uppercase tracking-widest">Paket Rute Tidak Ditemukan</h3>
+                <p class="text-gray-400 mt-2 font-medium">Silakan hubungi admin untuk paket rute kustom Anda.</p>
             </div>
             @endforelse
         </div>

@@ -30,7 +30,7 @@
                 </a>
                 <a href="{{ route('pelanggan.rute') }}" 
                    class="{{ Request::routeIs('pelanggan.rute') ? 'text-[#1a237e] border-b-2 border-[#1a237e] pb-1 font-bold' : 'text-gray-700 hover:text-[#1a237e] font-semibold' }} transition">
-                    Rute
+                    Paket Rute
                 </a>
                 <a href="{{ route('pelanggan.kontak') }}" 
                    class="{{ Request::routeIs('pelanggan.kontak') ? 'text-[#1a237e] border-b-2 border-[#1a237e] pb-1 font-bold' : 'text-gray-700 hover:text-[#1a237e] font-semibold' }} transition">
@@ -121,7 +121,7 @@
             </a>
             <a href="{{ route('pelanggan.rute') }}" 
                class="block px-4 py-3 rounded-xl {{ Request::routeIs('pelanggan.rute') ? 'bg-[#1a237e] text-white font-bold' : 'text-gray-700 hover:bg-gray-50 font-semibold' }}">
-                <i class="bi bi-map mr-2"></i> Rute Perjalanan
+                <i class="bi bi-box2-heart mr-2"></i> Paket Rute
             </a>
             <a href="{{ route('pelanggan.kontak') }}" 
                class="block px-4 py-3 rounded-xl {{ Request::routeIs('pelanggan.kontak') ? 'bg-[#1a237e] text-white font-bold' : 'text-gray-700 hover:bg-gray-50 font-semibold' }}">

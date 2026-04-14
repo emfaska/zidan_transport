@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Rute')
-@section('header_title', 'Perbarui Rute & Harga')
+@section('title', 'Edit Paket Rute')
+@section('header_title', 'Perbarui Paket Rute & Harga')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
     <div class="mb-6 flex justify-between items-center">
         <a href="{{ route('admin.rute.index') }}" class="text-[#1a237e] font-bold text-sm flex items-center gap-2 hover:text-blue-700 transition">
             <i class="bi bi-arrow-left"></i>
-            Kembali ke Daftar Rute
+            Kembali ke Daftar Paket Rute
         </a>
         <div>
             @if($rute->is_active)
@@ -25,7 +25,7 @@
             @method('PUT')
             
             <div class="p-8 border-b border-gray-100 bg-gray-50/50">
-                <h3 class="font-black text-[#1a237e] text-lg mb-1 italic">Update Rute #{{ $rute->id }}</h3>
+                <h3 class="font-black text-[#1a237e] text-lg mb-1 italic">Update Paket Rute #{{ $rute->id }}</h3>
                 <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">{{ $rute->nama_rute }}</p>
             </div>
 
@@ -56,7 +56,7 @@
 
                 <!-- Nama Rute -->
                 <div class="col-span-2">
-                    <label for="nama_rute" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Nama Rute <span class="text-red-500">*</span></label>
+                    <label for="nama_rute" class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Nama Paket Rute <span class="text-red-500">*</span></label>
                     <input type="text" name="nama_rute" id="nama_rute" value="{{ old('nama_rute', $rute->nama_rute) }}" required 
                         class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-semibold">
                     @error('nama_rute') <p class="text-red-500 text-[10px] mt-1 font-bold italic">{{ $message }}</p> @enderror
@@ -136,7 +136,7 @@
             <div class="p-8 bg-gray-50 border-t border-gray-100 flex justify-end gap-3">
                 <a href="{{ route('admin.rute.index') }}" class="px-6 py-3 border border-gray-200 text-gray-400 rounded-xl font-bold text-sm hover:bg-white hover:text-gray-600 transition flex items-center">Batal</a>
                 <button type="submit" class="px-8 py-3 bg-[#1a237e] text-white rounded-xl font-black text-sm hover:bg-blue-800 transition shadow-lg shadow-blue-900/20 uppercase tracking-widest">
-                    Update Data Rute
+                    Update Paket Rute
                 </button>
             </div>
         </form>

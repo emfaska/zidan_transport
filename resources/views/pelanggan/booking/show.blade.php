@@ -85,7 +85,7 @@
                 <div class="space-y-8">
                     <div>
                         <h4 class="text-[11px] font-black text-[#1a237e]/40 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                            <i class="bi bi-geo-alt-fill"></i> Rute Perjalanan
+                            <i class="bi bi-geo-alt-fill"></i> Paket Rute
                         </h4>
                         <div class="relative pl-8 border-l-2 border-dashed border-blue-100 space-y-8">
                             <div class="relative">

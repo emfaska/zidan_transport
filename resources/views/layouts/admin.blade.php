@@ -49,7 +49,7 @@
                     </a>
                     <a href="{{ route('admin.rute.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/rute*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-map text-lg"></i>
-                        <span class="text-sm">Rute Perjalanan</span>
+                        <span class="text-sm">Paket Rute</span>
                     </a>
                     <a href="{{ route('admin.pelanggan.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/pelanggan*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
                         <i class="bi bi-people text-lg"></i>

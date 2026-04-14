@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Rute')
-@section('header_title', 'Kelola Rute & Harga')
+@section('title', 'Data Paket Rute')
+@section('header_title', 'Kelola Paket Rute & Harga')
 
 @section('content')
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
     <div class="p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-6">
         <div class="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
             <div>
-                <h3 class="font-black text-[#1a237e] text-lg whitespace-nowrap">Daftar Rute Perjalanan</h3>
+                <h3 class="font-black text-[#1a237e] text-lg whitespace-nowrap">Daftar Paket Rute</h3>
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Total: {{ $rutes->count() }} rute</p>
             </div>
 
@@ -29,7 +29,7 @@
 
         <a href="{{ route('admin.rute.create') }}" class="w-full lg:w-auto px-6 py-4 bg-[#1a237e] text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-blue-800 transition shadow-xl shadow-blue-900/20 active:scale-95">
             <i class="bi bi-plus-lg text-sm"></i>
-            Tambah Rute Baru
+            Tambah Paket Rute Baru
         </a>
     </div>
 

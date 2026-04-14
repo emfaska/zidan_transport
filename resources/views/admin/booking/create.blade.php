@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-span-1">
-                    <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Tujuan / Rute <span class="text-red-500">*</span></label>
+                    <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-2">Tujuan / Paket Rute <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <i class="bi bi-geo-alt-fill absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                         <select id="tujuan_select" disabled class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold appearance-none cursor-pointer disabled:bg-gray-100 disabled:text-gray-400">
@@ -70,7 +70,7 @@
 
                 <!-- Armada Selection Grid -->
                 <div id="armada_section" class="col-span-2 hidden animate-fade-in-up">
-                    <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-3">Pilih Armada & Harga <span class="text-red-500">*</span></label>
+                    <label class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-3">Pilih Paket Rute & Armada <span class="text-red-500">*</span></label>
                     <div id="armada_grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Cards injected via JS -->
                     </div>

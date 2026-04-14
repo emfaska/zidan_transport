@@ -60,7 +60,7 @@
                 <!-- 1. Rute & Waktu -->
                 <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                     <h3 class="text-[10px] font-black text-[#1a237e] uppercase tracking-[0.2em] mb-4 flex items-center gap-3">
-                        <span class="w-6 h-1 bg-[#fbc02d] rounded-full"></span> 01. Rute & Waktu
+                        <span class="w-6 h-1 bg-[#fbc02d] rounded-full"></span> 01. Pilih Paket Rute & Waktu
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-1">
@@ -285,7 +285,7 @@
                             <p id="modal-waktu" class="text-xs font-bold text-slate-700">-</p>
                         </div>
                         <div>
-                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Rute</p>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Paket Rute</p>
                             <p id="modal-rute" class="text-xs font-bold text-slate-700 uppercase">-</p>
                         </div>
                     </div>
