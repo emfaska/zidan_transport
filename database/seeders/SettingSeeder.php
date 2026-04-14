@@ -71,6 +71,29 @@ class SettingSeeder extends Seeder
                 'type' => 'number',
                 'group' => 'finance'
             ],
+
+            // SEO
+            [
+                'key' => 'meta_description',
+                'value' => 'Zidan Transport - Layanan Sewa Mobil dan Travel Terpercaya di Kediri dengan Armada Modern dan Driver Profesional.',
+                'display_name' => 'Deskripsi SEO',
+                'type' => 'textarea',
+                'group' => 'seo'
+            ],
+            [
+                'key' => 'meta_keywords',
+                'value' => 'travel kediri, sewa mobil kediri, zidan transport, rental mobil kediri, travel surabaya kediri, travel malang kediri',
+                'display_name' => 'Kata Kunci SEO',
+                'type' => 'textarea',
+                'group' => 'seo'
+            ],
+            [
+                'key' => 'og_image',
+                'value' => 'images/logo.png',
+                'display_name' => 'Gambar Berbagi Sosial (OG Image)',
+                'type' => 'image',
+                'group' => 'seo'
+            ],
         ];
 
         foreach ($settings as $setting) {

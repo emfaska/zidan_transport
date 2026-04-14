@@ -6,7 +6,29 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>@yield('title', 'Zidan Transport')</title>
+    <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('meta_description'))">
+    <meta name="keywords" content="@yield('meta_keywords', \App\Models\Setting::get('meta_keywords'))">
+    <meta name="author" content="Zidan Transport">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical Link -->
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Zidan Transport - Solusi Perjalanan Terpercaya')">
+    <meta property="og:description" content="@yield('meta_description', \App\Models\Setting::get('meta_description'))">
+    <meta property="og:image" content="{{ asset(\App\Models\Setting::get('og_image', 'images/logo.png')) }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', 'Zidan Transport - Solusi Perjalanan Terpercaya')">
+    <meta property="twitter:description" content="@yield('meta_description', \App\Models\Setting::get('meta_description'))">
+    <meta property="twitter:image" content="{{ asset(\App\Models\Setting::get('og_image', 'images/logo.png')) }}">
+
+    <title>@yield('title', 'Zidan Transport - Solusi Perjalanan Terpercaya')</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">

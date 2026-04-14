@@ -6,7 +6,76 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
-    <title>Zidan Transport - Solusi Perjalanan Terpercaya</title>
+    <title>Zidan Transport - Solusi Perjalanan Terpercaya di Kediri</title>
+    <!-- Fonts -->
+    <meta name="description" content="Zidan Transport - Layanan Sewa Mobil dan Travel Terpercaya di Kediri dengan Armada Modern dan Driver Profesional.">
+    <meta name="keywords" content="travel kediri, sewa mobil kediri, zidan transport, rental mobil kediri, travel surabaya kediri, travel malang kediri">
+    <meta name="author" content="Zidan Transport">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:title" content="Zidan Transport - Layanan Sewa Mobil & Travel Terpercaya di Kediri">
+    <meta property="og:description" content="Zidan Transport - Layanan Sewa Mobil dan Travel Terpercaya di Kediri dengan Armada Modern dan Driver Profesional.">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url('/') }}">
+    <meta property="twitter:title" content="Zidan Transport - Layanan Sewa Mobil & Travel Terpercaya di Kediri">
+    <meta property="twitter:description" content="Zidan Transport - Layanan Sewa Mobil dan Travel Terpercaya di Kediri dengan Armada Modern dan Driver Profesional.">
+    <meta property="twitter:image" content="{{ asset('images/logo.png') }}">
+
+    <!-- Canonical Link -->
+    <link rel="canonical" href="{{ url('/') }}">
+
+    <title>Zidan Transport - Solusi Perjalanan Terpercaya di Kediri</title>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "Zidan Transport",
+      "image": "{{ asset('images/logo.png') }}",
+      "@id": "{{ url('/') }}",
+      "url": "{{ url('/') }}",
+      "telephone": "{{ \App\Models\Setting::get('contact_whatsapp', '6282142951682') }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ \App\Models\Setting::get('contact_address', 'Kediri, Jawa Timur') }}",
+        "addressLocality": "Kediri",
+        "addressRegion": "Jawa Timur",
+        "postalCode": "64171",
+        "addressCountry": "ID"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -7.8480,
+        "longitude": 112.0178
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "sameAs": [
+        "https://www.facebook.com/zidantransport",
+        "https://www.instagram.com/zidantransport"
+      ]
+    }
+    </script>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
