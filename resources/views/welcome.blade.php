@@ -7,12 +7,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/apple-touch-icon.png') }}">
     <title>Zidan Transport - Solusi Perjalanan Terpercaya di Kediri</title>
-    <!-- Fonts -->
     <meta name="description" content="Zidan Transport - Layanan Sewa Mobil dan Travel Terpercaya di Kediri dengan Armada Modern dan Driver Profesional.">
     <meta name="keywords" content="travel kediri, sewa mobil kediri, zidan transport, rental mobil kediri, travel surabaya kediri, travel malang kediri">
     <meta name="author" content="Zidan Transport">
     <meta name="robots" content="index, follow">
-    
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url('/') }}">
@@ -30,8 +28,6 @@
     <!-- Canonical Link -->
     <link rel="canonical" href="{{ url('/') }}">
 
-    <title>Zidan Transport - Solusi Perjalanan Terpercaya di Kediri</title>
-    
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
@@ -57,15 +53,7 @@
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
         "opens": "00:00",
         "closes": "23:59"
       },
@@ -90,10 +78,12 @@
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; }
+        @verbatim
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @endverbatim
         .animate-fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
         }
