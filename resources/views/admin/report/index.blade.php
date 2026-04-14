@@ -208,79 +208,89 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    
-    // Create Gradient
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(26, 35, 126, 0.2)');
-    gradient.addColorStop(1, 'rgba(26, 35, 126, 0.0)');
+    document.addEventListener('turbo:load', () => {
+        const canvas = document.getElementById('revenueChart');
+        if (!canvas) return;
 
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-            datasets: [{
-                label: 'Pendapatan (Rp)',
-                data: {!! json_encode($chartData) !!},
-                borderColor: '#1a237e',
-                borderWidth: 4,
-                pointBackgroundColor: '#ffffff',
-                pointBorderColor: '#1a237e',
-                pointBorderWidth: 2,
-                pointRadius: 6,
-                pointHoverRadius: 8,
-                fill: true,
-                backgroundColor: gradient,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1a237e',
-                    titleFont: { size: 12, weight: 'bold', family: 'Montserrat' },
-                    bodyFont: { size: 14, weight: 'bold', family: 'Montserrat' },
-                    padding: 12,
-                    cornerRadius: 12,
-                    displayColors: false,
-                    callbacks: {
-                        label: function(context) {
-                            let label = context.dataset.label || '';
-                            if (label) label += ': ';
-                            if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
+        // Destroy previous instance to prevent "Canvas is already in use" error from Chart.js with Turbo
+        if (window.revenueChartInstance) {
+            window.revenueChartInstance.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+        
+        // Create Gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(26, 35, 126, 0.2)');
+        gradient.addColorStop(1, 'rgba(26, 35, 126, 0.0)');
+
+        window.revenueChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+                datasets: [{
+                    label: 'Pendapatan (Rp)',
+                    data: {!! json_encode($chartData) !!},
+                    borderColor: '#1a237e',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#1a237e',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    fill: true,
+                    backgroundColor: gradient,
+                    tension: 0.4
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
-                    ticks: {
-                        font: { size: 10, weight: 'bold', family: 'Montserrat' },
-                        color: '#94a3b8',
-                        callback: function(value) {
-                            if (value >= 1000000) return 'Rp ' + (value / 1000000) + 'M';
-                            if (value >= 1000) return 'Rp ' + (value / 1000) + 'K';
-                            return 'Rp ' + value;
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a237e',
+                        titleFont: { size: 12, weight: 'bold', family: 'Montserrat' },
+                        bodyFont: { size: 14, weight: 'bold', family: 'Montserrat' },
+                        padding: 12,
+                        cornerRadius: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) label += ': ';
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
                         }
                     }
                 },
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        font: { size: 10, weight: 'bold', family: 'Montserrat' },
-                        color: '#94a3b8'
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false },
+                        ticks: {
+                            font: { size: 10, weight: 'bold', family: 'Montserrat' },
+                            color: '#94a3b8',
+                            callback: function(value) {
+                                if (value >= 1000000) return 'Rp ' + (value / 1000000) + 'M';
+                                if (value >= 1000) return 'Rp ' + (value / 1000) + 'K';
+                                return 'Rp ' + value;
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { size: 10, weight: 'bold', family: 'Montserrat' },
+                            color: '#94a3b8'
+                        }
                     }
                 }
             }
-        }
+        });
     });
 </script>
 @endpush
