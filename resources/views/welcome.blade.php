@@ -28,31 +28,32 @@
     <!-- Canonical Link -->
     <link rel="canonical" href="{{ url('/') }}">
 
+
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "TravelAgency",
+      "@@context": "https://schema.org",
+      "@@type": "TravelAgency",
+      "@@id": "{{ url('/') }}",
       "name": "Zidan Transport",
-      "image": "{{ asset('images/logo.png') }}",
-      "@id": "{{ url('/') }}",
       "url": "{{ url('/') }}",
       "telephone": "{{ \App\Models\Setting::get('contact_whatsapp', '6282142951682') }}",
+      "image": "{{ asset('images/logo.png') }}",
       "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{{ \App\Models\Setting::get('contact_address', 'Kediri, Jawa Timur') }}",
+        "@@type": "PostalAddress",
+        "streetAddress": "{{ \App\Models\Setting::get('contact_address', 'Ngadiluwih, Kediri, Jawa Timur') }}",
         "addressLocality": "Kediri",
         "addressRegion": "Jawa Timur",
         "postalCode": "64171",
         "addressCountry": "ID"
       },
       "geo": {
-        "@type": "GeoCoordinates",
+        "@@type": "GeoCoordinates",
         "latitude": -7.8480,
         "longitude": 112.0178
       },
       "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
+        "@@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
         "opens": "00:00",
         "closes": "23:59"
@@ -63,6 +64,7 @@
       ]
     }
     </script>
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
