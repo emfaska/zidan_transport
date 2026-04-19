@@ -139,10 +139,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/reports/export', [\App\Http\Controllers\Admin\ReportController::class, 'exportCsv'])->name('admin.report.export');
         Route::get('/admin/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.report.index');
 
-        // Laporan & Ganti Armada (New)
-        Route::get('/admin/laporan-armada', [\App\Http\Controllers\Admin\VehicleIssueController::class, 'index'])->name('admin.laporan.index');
-        Route::patch('/admin/laporan-armada/{id}/report', [\App\Http\Controllers\Admin\VehicleIssueController::class, 'handleReport'])->name('admin.laporan.report.handle');
-        Route::patch('/admin/laporan-armada/{id}/replacement', [\App\Http\Controllers\Admin\VehicleIssueController::class, 'handleReplacement'])->name('admin.laporan.replacement.handle');
 
         // Admin Profile Management
         Route::get('/admin/management', [\App\Http\Controllers\Admin\AdminManagementController::class, 'index'])->name('admin.management.index');
@@ -156,6 +152,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/driver/status/update', [\App\Http\Controllers\Driver\DashboardController::class, 'updateStatus'])->name('driver.status.update');
         Route::get('/driver/history', [\App\Http\Controllers\Driver\DashboardController::class, 'history'])->name('driver.history');
         Route::get('/driver/order/{id}', [\App\Http\Controllers\Driver\OrderController::class, 'show'])->name('driver.order.show');
+        Route::get('/driver/tasks/active', [\App\Http\Controllers\Driver\DashboardController::class, 'activeTasks'])->name('driver.tasks.active');
         Route::post('/driver/order/{id}/status', [\App\Http\Controllers\Driver\OrderController::class, 'updateStatus'])->name('driver.order.update-status');
         Route::get('/driver/wallet', [\App\Http\Controllers\Driver\WalletController::class, 'index'])->name('driver.wallet.index');
         Route::post('/driver/wallet/withdraw', [\App\Http\Controllers\Driver\WalletController::class, 'requestWithdraw'])->name('driver.wallet.withdraw');
@@ -163,10 +160,7 @@ Route::middleware('auth')->group(function () {
         // Location Tracking
         Route::post('/driver/location/update', [\App\Http\Controllers\Driver\LocationController::class, 'update'])->name('driver.location.update');
 
-        // Laporan & Kedaruratan
-        Route::get('/driver/order/{id}/report/{type}', [\App\Http\Controllers\Driver\OrderController::class, 'report'])->name('driver.order.report');
-        Route::post('/driver/order/{id}/report', [\App\Http\Controllers\Driver\OrderController::class, 'submitReport'])->name('driver.order.report.submit');
-        Route::post('/driver/laporan', [\App\Http\Controllers\Driver\LaporanController::class, 'store'])->name('driver.laporan.store');
+
     });
 
     // Wilayah KHUSUS PELANGGAN

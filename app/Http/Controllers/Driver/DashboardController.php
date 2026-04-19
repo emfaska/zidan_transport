@@ -11,11 +11,15 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Ambil orderan aktif (Confirmed, On The Way)
-        $activeBooking = Booking::where('driver_id', Auth::id())
+        $activeBookings = Booking::where('driver_id', Auth::id())
             ->whereIn('status', ['confirmed', 'on_trip'])
             ->with(['user', 'rute'])
-            ->first();
+            ->orderBy('tanggal_berangkat', 'asc')
+            ->orderBy('waktu_jemput', 'asc')
+            ->get();
+
+        $activeBooking = $activeBookings->first();
+        $upcomingTaskCount = $activeBookings->count();
 
         // Statistik ringkas
         $stats = [
@@ -26,7 +30,7 @@ class DashboardController extends Controller
                 ->count(),
         ];
 
-        return view('driver.dashboard', compact('activeBooking', 'stats'));
+        return view('driver.dashboard', compact('activeBooking', 'stats', 'upcomingTaskCount'));
     }
 
     public function updateStatus(Request $request)
@@ -80,5 +84,17 @@ class DashboardController extends Controller
             ->withQueryString();
 
         return view('driver.order.index', compact('bookings'));
+    }
+
+    public function activeTasks(Request $request)
+    {
+        $bookings = Booking::where('driver_id', Auth::id())
+            ->whereIn('status', ['confirmed', 'on_trip'])
+            ->with(['user', 'rute'])
+            ->orderBy('tanggal_berangkat', 'asc')
+            ->orderBy('waktu_jemput', 'asc')
+            ->paginate(15);
+            
+        return view('driver.order.active', compact('bookings'));
     }
 }

@@ -127,6 +127,7 @@
                     </a>
                 </div>
             </div>
+            
             @else
             <div class="bg-white rounded-[32px] p-8 border-2 border-dashed border-gray-100 text-center">
                 <i class="bi bi-plus-circle text-3xl text-gray-200 mb-2 block"></i>
@@ -134,6 +135,31 @@
                 <p class="text-[8px] text-gray-200 mt-1 uppercase font-bold tracking-tighter italic">Nantikan orderan baru di sini</p>
             </div>
             @endif
+            
+            <div class="mt-4">
+                <a href="{{ route('driver.tasks.active') }}" class="w-full flex items-center justify-between px-6 py-4 bg-white rounded-2xl border border-blue-50 hover:bg-blue-50/50 transition shadow-sm relative overflow-hidden group">
+                    <div class="absolute right-0 top-0 opacity-5 group-hover:opacity-10 transition">
+                        <i class="bi bi-calendar-check text-5xl"></i>
+                    </div>
+                    <div class="flex items-center gap-3 relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1a237e] flex items-center justify-center relative shadow-inner decoration-clone">
+                            <i class="bi bi-card-list text-lg"></i>
+                            @if(isset($upcomingTaskCount) && $upcomingTaskCount > 0)
+                                <span class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full border-2 border-white flex items-center justify-center text-[7px] font-black text-white shadow-sm">{{ $upcomingTaskCount }}</span>
+                            @endif
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest">Jadwal Tugas</p>
+                            @if(isset($upcomingTaskCount) && $upcomingTaskCount > 0)
+                                <p class="text-[9px] font-bold text-gray-400">Total {{ $upcomingTaskCount }} jadwal menanti</p>
+                            @else
+                                <p class="text-[9px] font-bold text-gray-400">Cek jadwal selengkapnya</p>
+                            @endif
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right text-gray-400 relative z-10 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
         </div>
 
     </div>
