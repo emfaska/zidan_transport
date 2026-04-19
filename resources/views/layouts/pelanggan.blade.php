@@ -118,6 +118,12 @@
                 });
             }
         });
+
+        document.addEventListener('turbo:before-cache', function() {
+            if (typeof Swal !== 'undefined') {
+                Swal.close();
+            }
+        });
     </script>
     @stack('scripts')
 </body>

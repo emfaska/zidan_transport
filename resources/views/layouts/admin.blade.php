@@ -379,6 +379,13 @@
                 });
             }
         });
+
+        // Clean up SweetAlert before Turbo caches the page to prevent "ghost" popups on back navigation
+        document.addEventListener('turbo:before-cache', function() {
+            if (typeof Swal !== 'undefined') {
+                Swal.close();
+            }
+        });
     </script>
     @stack('scripts')
 </body>
