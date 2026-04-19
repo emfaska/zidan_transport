@@ -208,7 +208,7 @@
         <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-50 rounded-full blur-[100px] opacity-70 -z-10"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-8 min-h-[550px]">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-8 min-h-[550px] pb-10 lg:pb-16 mt-4 lg:mt-0">
                 
                 <!-- Left Content: Text & CTA -->
                 <div class="w-full lg:w-1/2 space-y-6 py-10 lg:py-16">
@@ -242,9 +242,9 @@
                 
                 <!-- Right Visual: Swiper Slider -->
                 <div class="w-full lg:w-1/2 relative lg:h-[550px] flex items-center justify-center animate-fade-in-up delay-300">
-                    <div class="relative w-full max-w-[500px] lg:max-w-none">
+                    <div class="relative w-full max-w-[500px] lg:max-w-[85%] mt-4 lg:mt-0">
                         <!-- Swiper Container -->
-                        <div class="swiper heroSwiper rounded-[60px] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] border-[12px] border-white/10 backdrop-blur-sm aspect-square lg:aspect-video lg:h-[400px]">
+                        <div class="swiper heroSwiper w-full rounded-[40px] lg:rounded-[60px] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] border-[8px] lg:border-[12px] border-white/10 backdrop-blur-sm aspect-square md:aspect-[4/3] lg:aspect-video">
                             <div class="swiper-wrapper">
                                 <!-- Slide 1 -->
                                 <div class="swiper-slide bg-white flex items-center justify-center p-0">
@@ -267,7 +267,7 @@
                         <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#fbc02d] rounded-full opacity-20 blur-3xl"></div>
 
                         <!-- Trust Card (Floating) -->
-                        <div class="absolute -bottom-5 -right-5 lg:-bottom-10 lg:-right-12 z-20 animate-fade-in-up delay-500">
+                        <div class="absolute -bottom-8 -right-4 lg:-bottom-12 lg:-right-10 z-20 animate-fade-in-up delay-500">
                             <div class="flex items-center gap-4 p-4 lg:p-5 bg-white/95 backdrop-blur-md rounded-[20px] lg:rounded-[30px] border border-gray-100 shadow-2xl shadow-blue-900/20 max-w-[280px] lg:max-w-md animate-float">
                                 <div class="w-12 h-12 lg:w-16 lg:h-16 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] shadow-lg shrink-0">
                                     <i class="bi bi-shield-fill-check text-2xl lg:text-3xl"></i>
