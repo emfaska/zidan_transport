@@ -86,8 +86,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
         @endverbatim
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
         .animate-fade-in-up {
             animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
         }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
@@ -216,17 +224,7 @@
                         Solusi <span class="text-[#fbc02d] block">Transportasi</span> Premium.
                     </h1>
                     
-                    <!-- Trust Card (Relocated & Redesigned) -->
-                    <div class="flex items-center gap-5 p-5 bg-white rounded-[30px] border border-gray-100 shadow-xl shadow-blue-900/5 animate-fade-in-up delay-200 max-w-md">
-                        <div class="w-16 h-16 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] shadow-lg shrink-0">
-                            <i class="bi bi-shield-fill-check text-3xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-black text-[#1a237e] text-sm uppercase tracking-widest">Keamanan Terjamin</h4>
-                            <p class="text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-tighter italic mt-1">Layanan asuransi & perbaikan unit rutin setiap bulan.</p>
-                        </div>
-                    </div>
-                    
+
                     <p class="text-base text-gray-500 font-medium max-w-xl leading-relaxed animate-fade-in-up delay-300">
                         Nikmati perjalanan aman dan nyaman dengan armada modern serta pengemudi profesional. Kami hadir untuk memastikan setiap destinasi Anda tercapai dengan sempurna.
                     </p>
@@ -267,6 +265,19 @@
 
                         <!-- Side Accent -->
                         <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#fbc02d] rounded-full opacity-20 blur-3xl"></div>
+
+                        <!-- Trust Card (Floating) -->
+                        <div class="absolute -bottom-5 -right-5 lg:-bottom-10 lg:-right-12 z-20 animate-fade-in-up delay-500">
+                            <div class="flex items-center gap-4 p-4 lg:p-5 bg-white/95 backdrop-blur-md rounded-[20px] lg:rounded-[30px] border border-gray-100 shadow-2xl shadow-blue-900/20 max-w-[280px] lg:max-w-md animate-float">
+                                <div class="w-12 h-12 lg:w-16 lg:h-16 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] shadow-lg shrink-0">
+                                    <i class="bi bi-shield-fill-check text-2xl lg:text-3xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-[#1a237e] text-[11px] lg:text-sm uppercase tracking-widest">Keamanan Terjamin</h4>
+                                    <p class="text-[8px] lg:text-[10px] text-gray-500 font-bold leading-relaxed uppercase tracking-tighter italic mt-1">Layanan asuransi & perbaikan unit rutin setiap bulan.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
