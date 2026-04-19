@@ -1,6 +1,6 @@
 @extends('layouts.pelanggan')
 
-@section('title', 'Riwayat Pesanan - Zidan Transport')
+@section('title', (isset($tab) && $tab === 'history' ? 'Riwayat Selesai' : 'Pesanan Berjalan') . ' - Zidan Transport')
 
 @push('styles')
 <style>
@@ -22,8 +22,20 @@
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-[#1a237e] text-[10px] font-black uppercase tracking-widest mb-4">
                 <i class="bi bi-collection-play-fill text-blue-500"></i> Aktivitas Perjalanan
             </div>
-            <h1 class="text-3xl md:text-5xl font-mont font-[900] text-[#1a237e] uppercase tracking-tighter leading-none mb-2">Riwayat <span class="text-[#fbc02d]">Pesanan</span></h1>
-            <p class="text-slate-500 text-sm font-medium">Lacak status dan kelola detail semua perjalanan Anda.</p>
+            <h1 class="text-3xl md:text-5xl font-mont font-[900] text-[#1a237e] uppercase tracking-tighter leading-none mb-2">
+                @if(isset($tab) && $tab === 'history')
+                    Riwayat <span class="text-[#fbc02d]">Selesai</span>
+                @else
+                    Pesanan <span class="text-[#fbc02d]">Berjalan</span>
+                @endif
+            </h1>
+            <p class="text-slate-500 text-sm font-medium">
+                @if(isset($tab) && $tab === 'history')
+                    Daftar histori perjalanan Anda yang telah selesai atau dibatalkan.
+                @else
+                    Lacak status dan kelola detail semua perjalanan aktif Anda.
+                @endif
+            </p>
         </div>
         <a href="{{ route('pelanggan.booking.create') }}" class="inline-flex items-center px-8 py-4 bg-[#1a237e] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-900/10 hover:-translate-y-1 transition-all gap-3">
             <i class="bi bi-plus-lg"></i> Pesanan Baru
@@ -171,11 +183,25 @@
             <div class="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-200 mb-4">
                 <i class="bi bi-inbox text-4xl"></i>
             </div>
-            <h3 class="text-xl font-mont font-black text-[#1a237e] uppercase tracking-widest">Belum Ada Pesanan</h3>
-            <p class="text-slate-400 mt-2 text-xs font-medium">Mari rencanakan perjalanan pertama Anda sekarang.</p>
+            <h3 class="text-xl font-mont font-black text-[#1a237e] uppercase tracking-widest">
+                @if(isset($tab) && $tab === 'history')
+                    Belum Ada Riwayat
+                @else
+                    Belum Ada Pesanan
+                @endif
+            </h3>
+            <p class="text-slate-400 mt-2 text-xs font-medium">
+                @if(isset($tab) && $tab === 'history')
+                    Anda belum memiliki riwayat perjalanan yang sudah selesai.
+                @else
+                    Mari rencanakan perjalanan pertama Anda sekarang.
+                @endif
+            </p>
+            @if(!isset($tab) || $tab === 'active')
             <a href="{{ route('pelanggan.booking.create') }}" class="mt-8 px-8 py-4 bg-[#fbc02d] text-[#1a237e] font-black rounded-2xl shadow-xl shadow-yellow-500/10 uppercase tracking-widest text-[9px] hover:bg-yellow-500 transition-all">
                 Pesan Sekarang
             </a>
+            @endif
         </div>
         @endforelse
     </div>

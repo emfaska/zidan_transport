@@ -11,14 +11,23 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::where('user_id', Auth::id())
+        $tab = $request->query('tab', 'active');
+
+        $query = Booking::where('user_id', Auth::id())
             ->with(['rute', 'extensions'])
-            ->latest()
-            ->paginate(10);
+            ->latest();
+
+        if ($tab === 'history') {
+            $query->whereIn('status', ['completed', 'cancelled']);
+        } else {
+            $query->whereNotIn('status', ['completed', 'cancelled']);
+        }
+
+        $bookings = $query->paginate(10)->appends(['tab' => $tab]);
             
-        return view('pelanggan.booking.index', compact('bookings'));
+        return view('pelanggan.booking.index', compact('bookings', 'tab'));
     }
 
     public function create(Request $request)

@@ -67,9 +67,13 @@
                             <i class="bi bi-person text-[#1a237e]"></i>
                             <span class="text-sm">Profil Saya</span>
                         </a>
-                        <a href="{{ route('pelanggan.booking.index') }}" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
+                        <a href="{{ route('pelanggan.booking.index', ['tab' => 'active']) }}" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
+                            <i class="bi bi-car-front text-[#1a237e]"></i>
+                            <span class="text-sm">Pesanan Berjalan</span>
+                        </a>
+                        <a href="{{ route('pelanggan.booking.index', ['tab' => 'history']) }}" class="flex items-center gap-3 px-4 py-3.5 hover:bg-blue-50 hover:text-[#1a237e] transition text-gray-700 font-semibold">
                             <i class="bi bi-clock-history text-[#1a237e]"></i>
-                            <span class="text-sm">Riwayat Pesanan</span>
+                            <span class="text-sm">Riwayat Selesai</span>
                         </a>
 
                         <div class="border-t border-gray-100 mt-1 pt-1">
@@ -144,8 +148,11 @@
                 <a href="{{ route('profile.edit') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
                     <i class="bi bi-person mr-2"></i> Profil Saya
                 </a>
-                <a href="{{ route('pelanggan.booking.index') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
-                    <i class="bi bi-clock-history mr-2"></i> Riwayat Pesanan
+                <a href="{{ route('pelanggan.booking.index', ['tab' => 'active']) }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
+                    <i class="bi bi-car-front mr-2"></i> Pesanan Berjalan
+                </a>
+                <a href="{{ route('pelanggan.booking.index', ['tab' => 'history']) }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold">
+                    <i class="bi bi-clock-history mr-2"></i> Riwayat Selesai
                 </a>
 
                 <form action="{{ route('logout') }}" method="POST">
