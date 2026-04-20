@@ -47,7 +47,11 @@ class RefundController extends Controller
 
         // Tentukan jumlah refund. Jika full DP, bisa kembalikan penuh atau dipotong biaya admin.
         // Di sini kita kembalikan sesuai jumlah yang sudah dibayar.
-        $refundAmount = $booking->jumlah_bayar;
+        if ($booking->tipe_pembayaran === 'dp') {
+            $refundAmount = 0;
+        } else {
+            $refundAmount = $booking->jumlah_bayar;
+        }
 
         $refund = RefundRequest::create([
             'booking_id' => $booking->id,

@@ -355,6 +355,21 @@
                         <p class="text-xl font-black text-[#1a237e]">Rp {{ number_format($booking->refundRequest->amount, 0, ',', '.') }}</p>
                     </div>
                 </div>
+
+                @if($booking->refundRequest->status === 'processed')
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h4 class="text-xs font-black text-[#1a237e] uppercase mb-4">Konfirmasi Penerimaan Dana</h4>
+                    <p class="text-xs text-gray-600 mb-4">Admin telah memproses refund Anda. Silakan unggah bukti penerimaan dana untuk menyelesaikan proses ini.</p>
+                    <form action="{{ route('pelanggan.booking.refund.confirm', $booking->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        @csrf
+                        <div>
+                            <label class="block text-[10px] font-black text-gray-400 uppercase mb-2">Bukti Penerimaan (Bukti Transfer/Mutasi)</label>
+                            <input type="file" name="bukti_penerimaan" accept="image/*" required class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-[#1a237e] text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:-translate-y-1 transition-all shadow-lg">Konfirmasi Dana Diterima</button>
+                    </form>
+                </div>
+                @endif
             </div>
         @endif
     </div>

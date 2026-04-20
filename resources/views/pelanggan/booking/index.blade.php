@@ -169,9 +169,15 @@
                              @endif
 
                              @if($booking->status === 'cancelled' && $booking->refundRequest)
+                                 @if($booking->refundRequest->status === 'processed')
+                                 <a href="{{ route('pelanggan.booking.show', $booking->id) }}#refund-action" class="px-4 py-2.5 bg-yellow-50 text-yellow-600 rounded-xl text-[8px] font-black uppercase tracking-widest border border-yellow-200 hover:bg-yellow-500 hover:text-white transition-all shadow-sm">
+                                     Konfirmasi Refund
+                                 </a>
+                                 @else
                                  <span class="px-4 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-[8px] font-black uppercase tracking-widest border border-slate-200">
                                      Refund {{ ucfirst($booking->refundRequest->status) }}
                                  </span>
+                                 @endif
                              @endif
                          </div>
                     </div>

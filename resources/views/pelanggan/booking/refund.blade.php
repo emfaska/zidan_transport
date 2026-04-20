@@ -25,7 +25,13 @@
                 <div class="bg-blue-50 border border-blue-100 p-6 rounded-3xl mb-8">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-[10px] font-black text-blue-400 uppercase tracking-widest">Dana yang bisa dikembalikan (Max)</span>
-                        <span class="text-lg font-black text-[#1a237e]">Rp {{ number_format($booking->jumlah_bayar, 0, ',', '.') }}</span>
+                        <span class="text-lg font-black text-[#1a237e]">
+                            @if($booking->tipe_pembayaran === 'dp')
+                                Rp 0 (DP Tidak Kembali)
+                            @else
+                                Rp {{ number_format($booking->jumlah_bayar, 0, ',', '.') }}
+                            @endif
+                        </span>
                     </div>
                     <p class="text-[10px] text-blue-600 font-medium">Dana akan dikembalikan ke rekening Anda maksimal 3x24 jam kerja setelah disetujui admin, bergantung pada kebijakan layanan.</p>
                 </div>
