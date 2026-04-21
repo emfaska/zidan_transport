@@ -110,19 +110,9 @@
                         @endif
                     </a>
                     
-                    <a href="{{ route('admin.setting.index') }}" class="group flex items-center space-x-3 py-[0.4rem] px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/settings*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] shadow-lg scale-[1.02]' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
-                        <i class="bi bi-diagram-3-fill text-[1rem] {{ Request::is('admin/settings*') ? 'text-[#1a237e]' : 'text-blue-200/50 group-hover:text-blue-100' }}"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-wider">Pengaturan Pusat</span>
-                    </a>
-
                     <a href="{{ route('admin.report.index') }}" class="group flex items-center space-x-3 py-[0.4rem] px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/reports*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] shadow-lg scale-[1.02]' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
                         <i class="bi bi-bar-chart-fill text-[1rem] {{ Request::is('admin/reports*') ? 'text-[#1a237e]' : 'text-blue-200/50 group-hover:text-blue-100' }}"></i>
                         <span class="text-[10px] font-bold uppercase tracking-wider">Laporan Bisnis</span>
-                    </a>
-
-                    <a href="{{ route('admin.management.index') }}" class="group flex items-center space-x-3 py-[0.4rem] px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/management*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] shadow-lg scale-[1.02]' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
-                        <i class="bi bi-shield-lock-fill text-[1rem] {{ Request::is('admin/management*') ? 'text-[#1a237e]' : 'text-blue-200/50 group-hover:text-blue-100' }}"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-wider">Manajemen Admin</span>
                     </a>
                 @elseif(Auth::user()->role === 'pelanggan')
                     <!-- Menu Pelanggan -->
@@ -180,12 +170,54 @@
                         <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Status Login</p>
                         <p class="text-[13px] font-black text-[#1a237e] tracking-tight">{{ Auth::user()->name }}</p>
                     </div>
-                    <div class="relative">
-                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shadow-sm border border-gray-200">
-                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&bold=true' }}" 
-                                 class="w-full h-full object-cover">
+                    
+                    <!-- Avatar & Dropdown Container -->
+                    <div class="relative group">
+                        <!-- Avatar -->
+                        <div class="relative cursor-pointer">
+                            <div class="w-11 h-11 rounded-full bg-gray-200 overflow-hidden shadow-sm border-2 border-white ring-1 ring-gray-100 relative z-20 transition-transform duration-300 group-hover:scale-105">
+                                <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&bold=true' }}" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute bottom-0.5 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full z-30"></div>
                         </div>
-                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+
+                        <!-- Invisible Bridge for pure css hover -->
+                        <div class="absolute right-0 top-10 h-4 w-full z-10"></div>
+
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 top-[3.2rem] pt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 z-50">
+                            <div class="bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 overflow-hidden py-2 relative">
+                                <div class="px-4 py-3 border-b border-gray-50/50 mb-1">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Akun Aktif</p>
+                                    <p class="text-xs font-black text-[#1a237e] truncate mt-0.5">{{ Auth::user()->name }}</p>
+                                </div>
+                                <a href="{{ route('admin.setting.index') }}" class="flex items-center space-x-3 px-5 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-[#1a237e] transition-colors group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-gray-100 group-hover/item:bg-blue-50 flex items-center justify-center transition-colors">
+                                        <i class="bi bi-diagram-3-fill text-gray-400 group-hover/item:text-[#1a237e]"></i>
+                                    </div>
+                                    <span>Pengaturan Pusat</span>
+                                </a>
+                                <a href="{{ route('admin.management.index') }}" class="flex items-center space-x-3 px-5 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-[#1a237e] transition-colors group/item">
+                                    <div class="w-7 h-7 rounded-lg bg-gray-100 group-hover/item:bg-blue-50 flex items-center justify-center transition-colors">
+                                        <i class="bi bi-shield-lock-fill text-gray-400 group-hover/item:text-[#1a237e]"></i>
+                                    </div>
+                                    <span>Manajemen Admin</span>
+                                </a>
+                                
+                                <div class="border-t border-gray-100 my-1.5 mx-4"></div>
+                                
+                                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="flex w-full items-center space-x-3 px-5 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors group/item">
+                                        <div class="w-7 h-7 rounded-lg bg-red-50/50 group-hover/item:bg-red-100 flex items-center justify-center transition-colors">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                        </div>
+                                        <span>Keluar Sistem</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
