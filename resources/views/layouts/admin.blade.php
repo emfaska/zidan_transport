@@ -80,7 +80,7 @@
                     
                     <a href="{{ route('admin.booking.index') }}" class="group flex items-center space-x-3 py-[0.4rem] px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/booking*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] shadow-lg scale-[1.02]' : 'text-blue-100/70 hover:bg-white/10 hover:text-white' }}">
                         <i class="bi bi-journal-text text-[1rem] {{ Request::is('admin/booking*') ? 'text-[#1a237e]' : 'text-blue-200/50 group-hover:text-blue-100' }}"></i>
-                        <span class="text-[10px] font-bold uppercase tracking-wider">Manajemen Booking</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider">Manajemen Pesanan</span>
                         @php $pendingExt = \App\Models\BookingExtension::where('status','pending')->count(); @endphp
                         @if($pendingExt > 0)
                             <span class="ml-auto text-[9px] font-black bg-[#1a237e] text-[#fbc02d] px-1.5 py-0.5 rounded-sm ring-1 ring-[#fbc02d]/50">{{ $pendingExt }}</span>
