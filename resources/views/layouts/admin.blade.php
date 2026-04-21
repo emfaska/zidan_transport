@@ -13,187 +13,208 @@
     <!-- Hotwire Turbo -->
     <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.min.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 font-sans text-gray-800 antialiased overflow-hidden">
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 20px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background-color: #d1d5db; }
+    </style>
 
-    <div class="flex min-h-screen">
+    <div class="flex h-screen w-full">
         <!-- Sidebar -->
-        <div class="w-64 bg-gradient-to-b from-[#1a237e] via-[#1a237e] to-[#0d1440] text-white shadow-2xl flex-shrink-0 z-40">
-            <div class="px-6 py-10 border-b border-white/10 text-center">
-                <div class="flex flex-col items-center space-y-4">
-                    <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-xl ring-4 ring-white/5 transition-transform hover:rotate-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="Zidan Transport Logo" class="h-12 w-auto">
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-2xl font-black text-white leading-none uppercase tracking-tighter">Zidan</h1>
-                        <h1 class="text-sm font-bold text-[#fbc02d] uppercase tracking-[0.3em] leading-none mt-1">Transport</h1>
-                        <p class="text-[8px] uppercase tracking-[0.2em] text-blue-300/60 font-black mt-3">
-                            Carteran & Antar Jemput
-                        </p>
+        <aside class="w-[260px] bg-[#f8f9fa] border-r border-gray-200 flex flex-col flex-shrink-0 z-40 transition-all duration-300">
+            <!-- Logo area -->
+            <div class="h-20 flex items-center justify-center border-b border-gray-200/60 px-6 shrink-0">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo.png') }}" class="h-9 w-auto filter grayscale opacity-90 drop-shadow-sm">
+                    <div class="flex flex-col">
+                        <h1 class="text-[1.1rem] font-black text-gray-900 leading-none uppercase tracking-tight">Zidan</h1>
+                        <span class="text-[0.6rem] font-bold text-gray-500 uppercase tracking-widest mt-0.5">Transport</span>
                     </div>
                 </div>
             </div>
             
-            <nav class="mt-8 px-4 space-y-2 pb-20">
-                <a href="{{ route('admin.dashboard') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/dashboard') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                    <i class="bi bi-speedometer2 text-lg"></i>
-                    <span class="text-sm">Dashboard</span>
+            <!-- Menu Items -->
+            <nav class="flex-1 overflow-y-auto py-6 space-y-0.5 scrollbar-hide">
+                <a href="{{ route('admin.dashboard') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/dashboard') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                    <i class="bi bi-grid-fill text-[1.1rem] {{ Request::is('admin/dashboard') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Dashboard</span>
                 </a>
                 @if(Auth::user()->role === 'admin')
-                    <a href="{{ route('admin.armada.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/armada*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-truck text-lg"></i>
-                        <span class="text-sm">Data Armada</span>
+                    <a href="{{ route('admin.armada.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/armada*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-car-front-fill text-[1.1rem] {{ Request::is('admin/armada*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Data Armada</span>
                     </a>
-                    <a href="{{ route('admin.layanan.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/layanan*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-layers text-lg"></i>
-                        <span class="text-sm">Jenis Layanan</span>
+                    
+                    <a href="{{ route('admin.layanan.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/layanan*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-layers-fill text-[1.1rem] {{ Request::is('admin/layanan*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Jenis Layanan</span>
                     </a>
-                    <a href="{{ route('admin.rute.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/rute*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-map text-lg"></i>
-                        <span class="text-sm">Paket Rute</span>
+                    
+                    <a href="{{ route('admin.rute.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/rute*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-bezier2 text-[1.1rem] {{ Request::is('admin/rute*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Paket Rute</span>
                     </a>
-                    <a href="{{ route('admin.pelanggan.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/pelanggan*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-people text-lg"></i>
-                        <span class="text-sm">Data Pelanggan</span>
+                    
+                    <a href="{{ route('admin.pelanggan.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/pelanggan*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-people-fill text-[1.1rem] {{ Request::is('admin/pelanggan*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Data Pelanggan</span>
                     </a>
-                    <a href="{{ route('admin.pengemudi.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/pengemudi*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-person-badge text-lg"></i>
-                        <span class="text-sm">Data Pengemudi</span>
+                    
+                    <a href="{{ route('admin.pengemudi.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/pengemudi*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-person-badge-fill text-[1.1rem] {{ Request::is('admin/pengemudi*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Data Pengemudi</span>
                     </a>
-                    <a href="{{ route('admin.booking.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/booking*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-card-checklist text-lg"></i>
-                        <span class="text-sm">Manajemen Booking</span>
+                    
+                    <a href="{{ route('admin.booking.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/booking*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-journal-text text-[1.1rem] {{ Request::is('admin/booking*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Manajemen Booking</span>
                         @php $pendingExt = \App\Models\BookingExtension::where('status','pending')->count(); @endphp
                         @if($pendingExt > 0)
-                            <span class="ml-auto text-[10px] font-black bg-yellow-500 text-[#1a237e] px-1.5 py-0.5 rounded-full ring-2 ring-white/20">{{ $pendingExt }}</span>
+                            <span class="ml-auto text-[9px] font-black bg-gray-200 text-gray-800 px-1.5 py-0.5 rounded-sm">{{ $pendingExt }}</span>
                         @endif
                     </a>
-                    <a href="{{ route('admin.refund.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/refunds*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-arrow-counterclockwise text-lg"></i>
-                        <span class="text-sm">Manajemen Refund</span>
+                    
+                    <a href="{{ route('admin.refund.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/refunds*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-cash-stack text-[1.1rem] {{ Request::is('admin/refunds*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Manajemen Refund</span>
                         @php $pendingRefund = \App\Models\RefundRequest::where('status','pending')->count(); @endphp
                         @if($pendingRefund > 0)
-                            <span class="ml-auto text-[10px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-full">{{ $pendingRefund }}</span>
+                            <span class="ml-auto text-[9px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-sm">{{ $pendingRefund }}</span>
                         @endif
                     </a>
-                    <a href="{{ route('admin.promo.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/promo*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-tag text-lg"></i>
-                        <span class="text-sm">Kelola Promo</span>
+                    
+                    <a href="{{ route('admin.promo.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/promo*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-tags-fill text-[1.1rem] {{ Request::is('admin/promo*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Kelola Promo</span>
                     </a>
-                    <a href="{{ route('admin.wallet.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/wallet*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-wallet2 text-lg"></i>
-                        <span class="text-sm">Dompet Driver</span>
+                    
+                    <a href="{{ route('admin.wallet.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/wallet*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-wallet-fill text-[1.1rem] {{ Request::is('admin/wallet*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Dompet Driver</span>
                         @php $pendingWd = \App\Models\WithdrawalRequest::where('status','pending')->count(); @endphp
                         @if($pendingWd > 0)
-                            <span class="ml-auto text-[10px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-full">{{ $pendingWd }}</span>
+                            <span class="ml-auto text-[9px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-sm">{{ $pendingWd }}</span>
                         @endif
                     </a>
-                    <a href="{{ route('admin.setting.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/settings*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-gear text-lg"></i>
-                        <span class="text-sm">Pengaturan Pusat</span>
+                    
+                    <a href="{{ route('admin.setting.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/settings*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-diagram-3-fill text-[1.1rem] {{ Request::is('admin/settings*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Pengaturan Pusat</span>
                     </a>
 
-                    <a href="{{ route('admin.report.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/reports*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-bar-chart-line text-lg"></i>
-                        <span class="text-sm">Laporan Bisnis</span>
+                    <a href="{{ route('admin.report.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/reports*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-bar-chart-fill text-[1.1rem] {{ Request::is('admin/reports*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Laporan Bisnis</span>
                     </a>
 
-
-                    <a href="{{ route('admin.management.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('admin/management*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-shield-lock text-lg"></i>
-                        <span class="text-sm">Manajemen Admin</span>
+                    <a href="{{ route('admin.management.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('admin/management*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-shield-lock-fill text-[1.1rem] {{ Request::is('admin/management*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Manajemen Admin</span>
                     </a>
                 @elseif(Auth::user()->role === 'pelanggan')
                     <!-- Menu Pelanggan -->
-                    <a href="{{ route('pelanggan.booking.create') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('booking/create') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-plus-circle text-lg"></i>
-                        <span class="text-sm">Pesan Sekarang</span>
+                    <a href="{{ route('pelanggan.booking.create') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('booking/create') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-plus-circle-fill text-[1.1rem] {{ Request::is('booking/create') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Pesan Sekarang</span>
                     </a>
 
-                    <a href="{{ route('pelanggan.booking.index') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('booking') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-clock-history text-lg"></i>
-                        <span class="text-sm">Riwayat Pesanan</span>
+                    <a href="{{ route('pelanggan.booking.index') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('booking') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-clock-history text-[1.1rem] {{ Request::is('booking') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Riwayat Pesanan</span>
                     </a>
 
-                    <a href="{{ route('pelanggan.armada') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('armada*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-truck text-lg"></i>
-                        <span class="text-sm">Daftar Armada</span>
+                    <a href="{{ route('pelanggan.armada') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('armada*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-truck-front-fill text-[1.1rem] {{ Request::is('armada*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Daftar Armada</span>
                     </a>
 
-                    <a href="{{ route('pelanggan.kontak') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('kontak*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                        <i class="bi bi-headset text-lg"></i>
-                        <span class="text-sm">Hubungi CS</span>
+                    <a href="{{ route('pelanggan.kontak') }}" class="group flex items-center space-x-4 py-3.5 px-6 transition-colors {{ Request::is('kontak*') ? 'bg-[#0a0a0a] text-white shadow-md' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900' }}">
+                        <i class="bi bi-headset text-[1.1rem] {{ Request::is('kontak*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Hubungi CS</span>
                     </a>
                 @endif
-                <a href="{{ route('profile.edit') }}" class="group flex items-center space-x-3 py-3 px-4 rounded-xl transition-all duration-300 {{ Request::is('profile*') ? 'bg-gradient-to-r from-[#fbc02d] to-[#f9a825] text-[#1a237e] font-bold shadow-xl scale-[1.02]' : 'hover:bg-white/10 text-gray-400 hover:text-white' }}">
-                    <i class="bi bi-person-gear text-lg"></i>
-                    <span class="text-sm">Pengaturan Profil</span>
-                </a>
-                <div class="pt-10">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="flex items-center space-x-3 w-full py-3 px-4 rounded-xl text-red-100 bg-red-500/10 hover:bg-red-500/20 transition-all duration-300 font-bold text-xs uppercase tracking-widest border border-red-500/20">
-                            <i class="bi bi-box-arrow-right text-lg"></i>
-                            <span>Keluar Sistem</span>
-                        </button>
-                    </form>
-                </div>
             </nav>
-        </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col min-w-0 bg-[#f8faff]">
-            <header class="bg-white/80 backdrop-blur-md shadow-sm py-4 px-8 flex justify-between items-center border-b border-gray-100 sticky top-0 z-30">
+            <!-- Bottom Section -->
+            <div class="border-t border-gray-200/60 p-4 space-y-1 bg-[#f8f9fa] shrink-0 mt-auto">
+                <a href="{{ route('profile.edit') }}" class="group flex items-center space-x-4 py-3 px-2 transition-colors {{ Request::is('profile*') ? 'bg-[#0a0a0a] text-white shadow-md rounded-lg' : 'text-[#6c757d] hover:bg-gray-200/60 hover:text-gray-900 rounded-lg' }}">
+                    <i class="bi bi-person-gear text-[1.2rem] pl-2 {{ Request::is('profile*') ? 'text-white' : 'text-[#a1a1aa] group-hover:text-gray-600' }}"></i>
+                    <span class="text-[11px] font-bold uppercase tracking-wider">Pengaturan Profil</span>
+                </a>
+                
+                <form action="{{ route('logout') }}" method="POST" class="m-0 group">
+                    @csrf
+                    <button type="submit" class="flex items-center space-x-4 w-full py-3 px-2 rounded-lg transition-colors text-[#d32f2f] hover:bg-red-50/80 group-hover:text-red-700">
+                        <i class="bi bi-box-arrow-right text-[1.2rem] pl-2"></i>
+                        <span class="text-[11px] font-bold uppercase tracking-wider">Keluar Sistem</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0 bg-[#f4f6f9] overflow-hidden">
+            <header class="bg-white shadow-[0_4px_24px_rgba(0,0,0,0.02)] h-20 px-8 flex justify-between items-center border-b border-gray-200/60 shrink-0 z-30">
                 <div class="flex items-center gap-4">
-                    <div class="w-1 h-8 bg-[#1a237e] rounded-full"></div>
+                    <div class="w-1.5 h-6 bg-[#0a0a0a] rounded-[1px]"></div>
                     <div>
-                        <h2 class="text-lg font-black text-[#1a237e] tracking-tight">@yield('header_title', 'Dashboard')</h2>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Panel Administrator</p>
+                        <h2 class="text-lg font-black text-gray-900 tracking-tight leading-none">@yield('header_title', 'Dashboard')</h2>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Panel Administrator</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-6">
                     <div class="text-right hidden sm:block">
-                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Status Login</p>
-                        <p class="text-sm font-black text-[#1a237e] tracking-tighter">{{ Auth::user()->name }}</p>
+                        <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1">Status Login</p>
+                        <p class="text-[13px] font-black text-gray-900 tracking-tight">{{ Auth::user()->name }}</p>
                     </div>
                     <div class="relative">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#1a237e] to-blue-600 overflow-hidden shadow-lg border-2 border-white ring-4 ring-blue-50">
-                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=1a237e&color=fff&bold=true' }}" 
+                        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden shadow-sm border border-gray-200">
+                            <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=000&color=fff&bold=true' }}" 
                                  class="w-full h-full object-cover">
                         </div>
-                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                     </div>
                 </div>
             </header>
 
-            <main class="p-6 md:p-10">
+            <main class="flex-1 overflow-y-auto w-full p-6 lg:p-10 scrollbar-thin">
                 @if(session('success'))
-                    <div class="mb-8 p-4 bg-green-500/10 border border-green-500/20 text-green-700 rounded-2xl shadow-sm flex items-center gap-4 animate-bounce-short">
-                        <div class="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center text-white">
+                    <div class="mb-8 p-4 bg-green-50 border-1 border-green-200 text-green-700 rounded-xl shadow-sm flex items-center gap-4 ring-1 ring-green-500/20">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
                             <i class="bi bi-check2-circle text-xl"></i>
                         </div>
                         <div>
-                            <p class="font-black text-xs uppercase tracking-widest leading-none mb-1">Berhasil</p>
+                            <p class="font-black text-[10px] uppercase tracking-widest leading-none mb-1 text-green-600">Berhasil</p>
                             <p class="font-bold text-sm">{{ session('success') }}</p>
                         </div>
                     </div>
                 @endif
 
                 @if(session('wa_success'))
-                    <div class="mb-8 p-4 bg-blue-500/10 border border-blue-500/20 text-blue-700 rounded-2xl shadow-sm flex items-center gap-4 animate-pulse-short">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white">
+                    <div class="mb-8 p-4 bg-blue-50 border-1 border-blue-200 text-blue-700 rounded-xl shadow-sm flex items-center gap-4 ring-1 ring-blue-500/20">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
                             <i class="bi bi-whatsapp text-xl"></i>
                         </div>
                         <div>
-                            <p class="font-black text-xs uppercase tracking-widest leading-none mb-1">WhatsApp Terkirim</p>
+                            <p class="font-black text-[10px] uppercase tracking-widest leading-none mb-1 text-blue-600">WhatsApp Terkirim</p>
                             <p class="font-bold text-sm">{{ session('wa_success') }}</p>
                         </div>
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-r-xl shadow-sm flex items-center gap-3">
-                        <i class="bi bi-exclamation-triangle-fill text-xl"></i>
-                        <p class="font-bold text-sm">{{ session('error') }}</p>
+                    <div class="mb-6 p-4 bg-red-50 border-1 border-red-200 text-red-700 rounded-xl shadow-sm flex items-center gap-4 ring-1 ring-red-500/20">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                            <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-black text-[10px] uppercase tracking-widest leading-none mb-1 text-red-600">Terjadi Kesalahan</p>
+                            <p class="font-bold text-sm">{{ session('error') }}</p>
+                        </div>
                     </div>
                 @endif
 
