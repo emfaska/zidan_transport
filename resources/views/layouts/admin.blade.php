@@ -32,16 +32,13 @@
         <!-- Sidebar -->
         <aside class="w-[260px] bg-gradient-to-b from-[#1a237e] via-[#1a237e] to-[#0d1440] flex flex-col flex-shrink-0 z-40 transition-all duration-300 shadow-[4px_0_24px_rgba(0,0,0,0.15)]">
             <!-- Logo area -->
-            <div class="h-16 flex items-center justify-center border-b border-white/10 px-6 shrink-0 relative overflow-hidden">
+            <div class="py-5 flex items-center justify-center border-b border-white/10 px-6 shrink-0 relative overflow-hidden">
                 <div class="absolute inset-0 bg-white/5 opacity-50 blur-xl rounded-full scale-150 transform -translate-y-1/2"></div>
-                <div class="flex items-center gap-3 relative z-10">
-                    <div class="bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-lg ring-2 ring-white/10">
-                        <img src="{{ asset('images/logo.png') }}" class="h-6 w-auto">
+                <div class="flex flex-col items-center gap-2 relative z-10">
+                    <div class="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg ring-2 ring-white/10">
+                        <img src="{{ asset('images/logo.png') }}" class="h-7 w-auto">
                     </div>
-                    <div class="flex flex-col">
-                        <h1 class="text-[1rem] font-black text-white leading-none uppercase tracking-tight">Zidan</h1>
-                        <span class="text-[0.55rem] font-black text-[#fbc02d] uppercase tracking-[0.2em] mt-0.5">Transport</span>
-                    </div>
+                    <h1 class="text-[0.7rem] font-black text-white leading-none uppercase tracking-[0.15em] mt-1 text-center">Administrator</h1>
                 </div>
             </div>
             
