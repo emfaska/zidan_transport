@@ -91,40 +91,50 @@
                                             </div>
                                         </div>
 
-                                        @if($refund->status === 'pending')
-                                            <!-- Approve Form -->
-                                            <div class="border-t border-gray-100 pt-6 mt-6">
-                                                <h4 class="text-xs font-black uppercase tracking-widest text-green-600 mb-4"><i class="bi bi-check-circle-fill mr-2"></i> Proses Dana Dikirim</h4>
-                                                <form action="{{ route('admin.refund.approve', $refund->id) }}" method="POST" class="mb-4"
-                                                    data-confirm="Tandai bahwa dana sebesar Rp {{ number_format($refund->amount, 0, ',', '.') }} telah berhasil ditransfer ke pelanggan?"
-                                                    data-title="Konfirmasi Transfer"
-                                                    data-type="question"
-                                                    data-btn-text="Ya, Sudah Transfer"
-                                                    data-btn-color="#22c55e">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <input type="text" name="admin_note" placeholder="Catatan Admin (Opsional)" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-green-500 mb-4">
-                                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-3 rounded-xl uppercase tracking-widest shadow-md flex items-center justify-center gap-2 transition hover:-translate-y-1">
-                                                        <i class="bi bi-cash-stack"></i> Tandai Sudah Ditransfer
-                                                    </button>
-                                                </form>
+                                                @if($refund->status === 'pending')
+                                                    <!-- Approve & Reject Actions -->
+                                                    <div class="border-t border-gray-100 pt-6 mt-6 space-y-6">
+                                                        <!-- Approve Form -->
+                                                        <div>
+                                                            <h4 class="text-xs font-black uppercase tracking-widest text-green-600 mb-4 flex items-center gap-2">
+                                                                <i class="bi bi-check-circle-fill"></i> Proses Dana Dikirim
+                                                            </h4>
+                                                            <form action="{{ route('admin.refund.approve', $refund->id) }}" method="POST" class="flex flex-col gap-3"
+                                                                data-confirm="Tandai bahwa dana sebesar Rp {{ number_format($refund->amount, 0, ',', '.') }} telah berhasil ditransfer ke pelanggan?"
+                                                                data-title="Konfirmasi Transfer"
+                                                                data-type="question"
+                                                                data-btn-text="Ya, Sudah Transfer"
+                                                                data-btn-color="#22c55e">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <input type="text" name="admin_note" placeholder="Catatan Admin (Opsional)" class="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-green-500 shadow-sm transition-all">
+                                                                <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-black py-3 rounded-xl uppercase tracking-widest shadow-md flex items-center justify-center gap-2 transition-all hover:-translate-y-0.5 active:scale-95">
+                                                                    <i class="bi bi-cash-stack"></i> Tandai Sudah Ditransfer
+                                                                </button>
+                                                            </form>
+                                                        </div>
 
-                                                <!-- Reject Form -->
-                                                <form action="{{ route('admin.refund.reject', $refund->id) }}" method="POST" class="pt-4 border-t border-gray-100"
-                                                    data-confirm="Yakin ingin menolak permintaan refund ini?"
-                                                    data-title="Tolak Refund"
-                                                    data-type="warning"
-                                                    data-btn-text="Ya, Tolak"
-                                                    data-btn-color="#d33">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <input type="text" name="admin_note" required placeholder="Alasan Penolakan (Wajib)" class="w-full bg-red-50 text-red-700 border border-red-200 rounded-xl p-3 text-sm focus:outline-none focus:border-red-500 mb-4">
-                                                    <button type="submit" class="w-full bg-red-100 hover:bg-red-200 text-red-600 font-bold py-3 rounded-xl uppercase tracking-widest text-[10px] shadow-sm transition inline-flex items-center justify-center gap-2">
-                                                        <i class="bi bi-x-circle"></i> Tolak Permintaan
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        @elseif($refund->status === 'processed')
+                                                        <!-- Reject Form -->
+                                                        <div class="pt-6 border-t border-gray-50">
+                                                            <h4 class="text-xs font-black uppercase tracking-widest text-red-500 mb-4 flex items-center gap-2">
+                                                                <i class="bi bi-x-circle-fill"></i> Batalkan / Tolak Refund
+                                                            </h4>
+                                                            <form action="{{ route('admin.refund.reject', $refund->id) }}" method="POST" class="flex flex-col gap-3"
+                                                                data-confirm="Yakin ingin menolak permintaan refund ini?"
+                                                                data-title="Tolak Refund"
+                                                                data-type="warning"
+                                                                data-btn-text="Ya, Tolak"
+                                                                data-btn-color="#d33">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <input type="text" name="admin_note" required placeholder="Alasan Penolakan (Wajib)" class="w-full bg-red-50 text-red-700 border border-red-200 rounded-xl p-3 text-sm focus:outline-none focus:border-red-500 shadow-sm transition-all">
+                                                                <button type="submit" class="w-full bg-red-100 hover:bg-red-200 text-red-600 font-bold py-3 rounded-xl uppercase tracking-widest text-[10px] shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
+                                                                    <i class="bi bi-x-circle"></i> Tolak Permintaan Refund
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                @elseif($refund->status === 'processed')
                                             <div class="bg-blue-50 border border-blue-100 text-blue-700 p-4 rounded-xl text-center">
                                                 <i class="bi bi-hourglass-split text-2xl mb-2 block"></i>
                                                 <p class="font-bold text-sm">Menunggu Konfirmasi Pelanggan</p>
