@@ -66,16 +66,28 @@ class BookingController extends Controller
         ]);
 
         $rute = Rute::findOrFail($request->rute_id);
+        $armadaId = $request->armada_id ?? $rute->armada_id;
         
-        // Cek ketersediaan armada pada tanggal tersebut
-        if ($request->armada_id) {
-            $isBooked = Booking::where('armada_id', $request->armada_id)
+        // 1. Cek apakah Paket (Rute) sudah dipesan di tanggal dan jam yang sama
+        $isPackageBooked = Booking::where('rute_id', $request->rute_id)
+            ->where('tanggal_berangkat', $request->tanggal_berangkat)
+            ->where('waktu_jemput', $request->waktu_jemput)
+            ->where('status', '!=', 'cancelled')
+            ->exists();
+
+        if ($isPackageBooked) {
+            return back()->withInput()->with('error', 'Maaf, paket ini sudah dipesan oleh pelanggan lain pada tanggal dan jam tersebut. Silakan tunggu hingga prosedur selesai atau pilih jadwal lain.');
+        }
+
+        // 2. Cek ketersediaan armada pada tanggal tersebut
+        if ($armadaId) {
+            $isArmadaBooked = Booking::where('armada_id', $armadaId)
                 ->where('tanggal_berangkat', $request->tanggal_berangkat)
                 ->where('status', '!=', 'cancelled')
                 ->exists();
 
-            if ($isBooked) {
-                return back()->withInput()->with('error', 'Maaf, armada ini sudah dipesan oleh pelanggan lain untuk tanggal tersebut. Silakan pilih armada lain atau tanggal berbeda.');
+            if ($isArmadaBooked) {
+                return back()->withInput()->with('error', 'Maaf, armada untuk paket ini sudah beroperasi di tanggal tersebut. Silakan pilih tanggal berbeda.');
             }
         }
         
@@ -108,7 +120,7 @@ class BookingController extends Controller
             'rute_id' => $request->rute_id,
             'promo_id' => $promo ? $promo->id : null,
             'tipe_perjalanan' => $request->tipe_perjalanan,
-            'armada_id' => $request->armada_id,
+            'armada_id' => $armadaId,
             'tanggal_berangkat' => $request->tanggal_berangkat,
             'waktu_jemput' => $request->waktu_jemput,
             'titik_jemput' => $request->titik_jemput,

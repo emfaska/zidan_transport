@@ -85,15 +85,26 @@ class BookingController extends Controller
 
         $rute = \App\Models\Rute::find($request->rute_id);
         
-        // Cek ketersediaan armada
+        // 1. Cek apakah Paket (Rute) sudah dipesan di tanggal dan jam yang sama
+        $isPackageBooked = Booking::where('rute_id', $request->rute_id)
+            ->where('tanggal_berangkat', $request->tanggal_berangkat)
+            ->where('waktu_jemput', $request->waktu_jemput)
+            ->where('status', '!=', 'cancelled')
+            ->exists();
+
+        if ($isPackageBooked) {
+            return back()->withInput()->with('error', 'Maaf, paket ini sudah dipesan pada tanggal dan jam tersebut. Silakan tunggu prosedur selesai atau ubah waktu.');
+        }
+
+        // 2. Cek ketersediaan armada
         $armadaId = $request->armada_id ?? $rute->armada_id;
         if ($armadaId) {
-            $isBooked = Booking::where('armada_id', $armadaId)
+            $isArmadaBooked = Booking::where('armada_id', $armadaId)
                 ->where('tanggal_berangkat', $request->tanggal_berangkat)
                 ->where('status', '!=', 'cancelled')
                 ->exists();
 
-            if ($isBooked) {
+            if ($isArmadaBooked) {
                 return back()->withInput()->with('error', 'Maaf, armada ini sudah memiliki jadwal booking lain pada tanggal tersebut.');
             }
         }
