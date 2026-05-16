@@ -34,25 +34,7 @@
         </div>
     </div>
 
-    <!-- Quick Stats Strip (Restored) -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm text-center">
-            <p class="text-3xl font-black text-[#1a237e]">5,000+</p>
-            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Trip Selesai</p>
-        </div>
-        <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm text-center">
-            <p class="text-3xl font-black text-[#1a237e]">50+</p>
-            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Unit Armada</p>
-        </div>
-        <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm text-center">
-            <p class="text-3xl font-black text-[#1a237e]">4.9/5</p>
-            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Rating User</p>
-        </div>
-        <div class="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm text-center">
-            <p class="text-3xl font-black text-[#1a237e]">24/7</p>
-            <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Siap Melayani</p>
-        </div>
-    </div>
+
 
     <!-- Search Tool (Always Useful) -->
     <div class="bg-white rounded-[40px] p-8 md:p-12 shadow-sm border border-gray-100 mb-12">
