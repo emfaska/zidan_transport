@@ -12,6 +12,21 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .animate-up { animation: fadeInUp 0.4s ease forwards; }
+    
+    /* Custom Scrollbar for Modal */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+    }
 </style>
 @endpush
 
@@ -219,10 +234,10 @@
     @endif
 
     <!-- Review Modal -->
-    <div id="reviewModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
-        <div class="bg-white rounded-[32px] w-full max-w-lg relative z-10 shadow-2xl animate-up overflow-hidden">
-            <div class="p-6 md:p-8">
+    <div id="reviewModal" class="hidden fixed inset-0 z-[100] overflow-y-auto flex justify-center items-start md:items-center p-4 sm:p-8">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
+        <div class="bg-white rounded-[32px] w-full max-w-lg relative z-10 shadow-2xl animate-up my-auto">
+            <div class="p-6 md:p-10 max-h-[95vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 bg-yellow-50 text-yellow-500 rounded-2xl flex items-center justify-center shadow-sm">
