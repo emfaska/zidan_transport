@@ -177,6 +177,7 @@ Route::middleware('auth')->group(function () {
         // Booking System
         Route::get('/booking', [\App\Http\Controllers\Pelanggan\BookingController::class, 'index'])->name('pelanggan.booking.index');
         Route::get('/booking/create', [\App\Http\Controllers\Pelanggan\BookingController::class, 'create'])->name('pelanggan.booking.create');
+        Route::get('/booking/check-availability', [\App\Http\Controllers\Pelanggan\BookingController::class, 'checkAvailability'])->name('pelanggan.booking.check-availability');
         Route::post('/booking', [\App\Http\Controllers\Pelanggan\BookingController::class, 'store'])->name('pelanggan.booking.store');
         Route::get('/booking/{id}', [\App\Http\Controllers\Pelanggan\BookingController::class, 'show'])->name('pelanggan.booking.show');
         Route::get('/booking/{id}/payment', [\App\Http\Controllers\Pelanggan\BookingController::class, 'payment'])->name('pelanggan.booking.payment');

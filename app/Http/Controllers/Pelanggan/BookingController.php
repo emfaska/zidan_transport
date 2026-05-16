@@ -50,6 +50,38 @@ class BookingController extends Controller
         return view('pelanggan.booking.create', compact('layanans', 'rutes', 'selectedArmada', 'promo'));
     }
 
+    public function checkAvailability(Request $request)
+    {
+        $tanggal = $request->query('tanggal');
+        $waktu = $request->query('waktu');
+        
+        if (!$tanggal) {
+            return response()->json(['booked_armada_ids' => [], 'booked_rute_ids' => []]);
+        }
+
+        // Cari armada yang sudah dibooking pada tanggal tersebut (sepanjang hari)
+        $bookedArmadaIds = Booking::where('tanggal_berangkat', $tanggal)
+            ->where('status', '!=', 'cancelled')
+            ->whereNotNull('armada_id')
+            ->pluck('armada_id')
+            ->toArray();
+
+        // Cari rute yang sudah dibooking pada tanggal & waktu yang SAMA persis
+        $bookedRuteIds = [];
+        if ($waktu) {
+            $bookedRuteIds = Booking::where('tanggal_berangkat', $tanggal)
+                ->where('waktu_jemput', $waktu)
+                ->where('status', '!=', 'cancelled')
+                ->pluck('rute_id')
+                ->toArray();
+        }
+
+        return response()->json([
+            'booked_armada_ids' => $bookedArmadaIds,
+            'booked_rute_ids' => $bookedRuteIds
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
