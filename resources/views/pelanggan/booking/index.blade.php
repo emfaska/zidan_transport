@@ -12,21 +12,6 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .animate-up { animation: fadeInUp 0.4s ease forwards; }
-    
-    /* Custom Scrollbar for Modal */
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 5px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #cbd5e1;
-    }
 </style>
 @endpush
 
@@ -234,61 +219,68 @@
     @endif
 
     <!-- Review Modal -->
-    <div id="reviewModal" class="hidden fixed inset-0 z-[100] overflow-y-auto flex justify-center items-start md:items-center p-4 sm:p-8">
+    <div id="reviewModal" class="hidden fixed inset-0 z-[100] flex justify-center items-center p-4">
         <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
-        <div class="bg-white rounded-[32px] w-full max-w-lg relative z-10 shadow-2xl animate-up my-auto">
-            <div class="p-6 md:p-10 max-h-[95vh] overflow-y-auto custom-scrollbar">
-                <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center gap-3">
+        <div class="bg-white rounded-[40px] w-full max-w-2xl relative z-10 shadow-2xl animate-up overflow-hidden">
+            <div class="p-6 md:p-10">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-yellow-50 text-yellow-500 rounded-2xl flex items-center justify-center shadow-sm">
                             <i class="bi bi-star-fill text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-mont font-[900] text-[#1a237e]">Beri Ulasan</h3>
-                            <p class="text-xs text-slate-500 font-medium">Nilai pengalaman perjalanan Anda</p>
+                            <h3 class="text-2xl font-mont font-[900] text-[#1a237e] uppercase tracking-tight">Beri Ulasan Perjalanan</h3>
+                            <p class="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-none mt-1">Kepuasan Anda adalah prioritas kami</p>
                         </div>
                     </div>
-                    <button type="button" onclick="closeReviewModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-500 transition">
+                    <button type="button" onclick="closeReviewModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
                 
-                <form id="reviewForm" action="" method="POST" class="space-y-6 flex flex-col">
+                <form id="reviewForm" action="" method="POST" class="space-y-6">
                     @csrf
                     
-                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex items-center gap-4">
-                        <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center shrink-0">
-                            <i class="bi bi-geo-alt-fill text-lg"></i>
+                    <!-- Trip Info Card -->
+                    <div class="bg-slate-50 rounded-[25px] p-5 border border-slate-100 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-[#1a237e] text-white rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-900/20">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </div>
+                            <div>
+                                <p id="modalRute" class="text-xs font-black text-[#1a237e] uppercase leading-tight"></p>
+                                <p id="modalDriver" class="text-[9px] uppercase font-bold tracking-widest text-slate-400 mt-0.5"></p>
+                            </div>
                         </div>
-                        <div>
-                            <p id="modalRute" class="text-sm font-bold text-slate-800 uppercase leading-tight"></p>
-                            <p id="modalDriver" class="text-[10px] uppercase font-black tracking-widest text-[#1a237e]"></p>
+                        <div class="hidden sm:block text-right">
+                            <span class="text-[9px] font-black px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200 uppercase tracking-widest">Trip Selesai</span>
                         </div>
                     </div>
 
-                    <div class="space-y-8 py-2">
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Layanan & Kenyamanan</label>
-                            <div class="flex items-center justify-center gap-2" id="starContainerLayanan">
+                    <!-- Ratings Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-5 bg-white border border-slate-100 rounded-[30px] shadow-sm">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Layanan</label>
+                            <div class="flex items-center justify-center gap-1.5" id="starContainerLayanan">
                                 @for($i=1; $i<=5; $i++)
-                                <label class="cursor-pointer group flex-1 max-w-[55px]">
+                                <label class="cursor-pointer group flex-1 max-w-[45px]">
                                     <input type="radio" name="rating_layanan" value="{{ $i }}" class="hidden peer rating-layanan-radio" required onchange="updateStars('Layanan', this.value)">
-                                    <div class="py-3 flex justify-center border-2 border-slate-100 rounded-xl text-slate-300 transition-all star-box hover:scale-110 active:scale-95">
-                                        <i class="bi bi-star-fill text-xl"></i>
+                                    <div class="py-2.5 flex justify-center border-2 border-slate-50 rounded-xl text-slate-200 transition-all star-box hover:scale-110 active:scale-95 group-hover:border-yellow-200">
+                                        <i class="bi bi-star-fill text-lg"></i>
                                     </div>
                                 </label>
                                 @endfor
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Etika & Performa Driver</label>
-                            <div class="flex items-center justify-center gap-2" id="starContainerDriver">
+                        <div class="p-5 bg-white border border-slate-100 rounded-[30px] shadow-sm">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Pengemudi</label>
+                            <div class="flex items-center justify-center gap-1.5" id="starContainerDriver">
                                 @for($i=1; $i<=5; $i++)
-                                <label class="cursor-pointer group flex-1 max-w-[55px]">
+                                <label class="cursor-pointer group flex-1 max-w-[45px]">
                                     <input type="radio" name="rating_driver" value="{{ $i }}" class="hidden peer rating-driver-radio" required onchange="updateStars('Driver', this.value)">
-                                    <div class="py-3 flex justify-center border-2 border-slate-100 rounded-xl text-slate-300 transition-all star-box hover:scale-110 active:scale-95">
-                                        <i class="bi bi-star-fill text-xl"></i>
+                                    <div class="py-2.5 flex justify-center border-2 border-slate-50 rounded-xl text-slate-200 transition-all star-box hover:scale-110 active:scale-95 group-hover:border-yellow-200">
+                                        <i class="bi bi-star-fill text-lg"></i>
                                     </div>
                                 </label>
                                 @endfor
@@ -297,20 +289,19 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Ulasan (Opsional)</label>
-                        <textarea id="modalComment" name="comment" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] transition-all text-sm font-medium text-slate-700 outline-none placeholder:text-slate-400" placeholder="Ceritakan pengalaman Anda..."></textarea>
+                        <textarea id="modalComment" name="comment" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-[25px] p-5 focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] transition-all text-sm font-medium text-slate-700 outline-none placeholder:text-slate-300 shadow-inner" placeholder="Tulis catatan pengalaman Anda di sini... (Opsional)"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-[#1a237e] text-white rounded-2xl py-4 font-black uppercase tracking-widest text-xs hover:bg-[#0d1440] shadow-xl shadow-blue-900/20 transition-all active:scale-[0.98]">
-                        Kirim Ulasan Anda
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <button type="submit" class="w-full sm:flex-1 bg-[#1a237e] text-white rounded-2xl py-4 font-black uppercase tracking-widest text-[10px] hover:bg-[#0d1440] shadow-xl shadow-blue-900/20 transition-all active:scale-[0.98]">
+                            Simpan Ulasan Anda
+                        </button>
+                        
+                        <div class="w-full sm:w-auto h-[1px] sm:h-12 sm:w-[1px] bg-slate-100"></div>
 
-                    <div class="pt-4 border-t border-dashed border-slate-200">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase text-center mb-3 tracking-widest italic">Atau ulas kami di Google Maps</p>
-                        <a href="https://maps.app.goo.gl/i8JhGo13ndZoYMvB7" target="_blank" class="w-full flex items-center justify-center gap-3 py-3 border-2 border-slate-100 rounded-2xl text-xs font-black text-[#1a237e] hover:bg-slate-50 transition-all">
+                        <a href="https://maps.app.goo.gl/i8JhGo13ndZoYMvB7" target="_blank" class="w-full sm:flex-1 flex items-center justify-center gap-3 py-4 border-2 border-[#1a237e] rounded-2xl text-[10px] font-black text-[#1a237e] hover:bg-slate-50 transition-all uppercase tracking-widest">
                             <i class="bi bi-google text-blue-600"></i>
-                            Google Maps Review
-                            <i class="bi bi-box-arrow-up-right text-[10px]"></i>
+                            Rating di Google Maps
                         </a>
                     </div>
                 </form>
@@ -353,10 +344,10 @@
                 const box = radio.nextElementSibling;
                 if(index < val) {
                     box.classList.add('border-[#fbc02d]', 'bg-yellow-50', 'text-[#fbc02d]', 'scale-110');
-                    box.classList.remove('border-slate-100', 'text-slate-300');
+                    box.classList.remove('border-slate-50', 'text-slate-200');
                 } else {
                     box.classList.remove('border-[#fbc02d]', 'bg-yellow-50', 'text-[#fbc02d]', 'scale-110');
-                    box.classList.add('border-slate-100', 'text-slate-300');
+                    box.classList.add('border-slate-50', 'text-slate-200');
                 }
             });
         };
