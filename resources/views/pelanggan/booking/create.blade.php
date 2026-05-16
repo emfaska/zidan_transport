@@ -383,58 +383,27 @@
             refreshGrid();
         });
 
-        let bookedRuteIds = [];
-        let bookedArmadaIds = [];
-        const dateInput = document.querySelector('input[name="tanggal_berangkat"]');
-        const timeInput = document.querySelector('input[name="waktu_jemput"]');
-
-        async function fetchAvailability() {
-            const date = dateInput.value;
-            const time = timeInput.value;
-            if (!date) return;
-            
-            try {
-                const res = await fetch(`/booking/check-availability?tanggal=${date}&waktu=${time}`);
-                const data = await res.json();
-                bookedRuteIds = data.booked_rute_ids || [];
-                bookedArmadaIds = data.booked_armada_ids || [];
-                
-                if (formInputs.layanan.value && formInputs.tujuan.value) {
-                    refreshGrid();
-                }
-            } catch (e) {
-                console.error("Gagal mengecek ketersediaan", e);
-            }
-        }
-
-        dateInput.addEventListener('change', fetchAvailability);
-        timeInput.addEventListener('change', fetchAvailability);
-
         function refreshGrid() {
             const baseRutes = allRutes.filter(r => r.layanan_id == formInputs.layanan.value && r.nama_rute == formInputs.tujuan.value);
             formInputs.armadaGrid.innerHTML = '';
             resetPartialState();
 
             if(!baseRutes.length) {
-                formInputs.armadaGrid.innerHTML = '<div class="col-span-full p-10 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[32px] text-slate-400 font-bold text-xs uppercase">Pilih layanan dan tujuan terlebih dahulu.</div>';
+                formInputs.armadaGrid.innerHTML = '<div class="col-span-full p-10 text-center bg-slate-50 border border-dashed border-slate-200 rounded-[32px] text-slate-400 font-bold text-xs uppercase">Maaf, armada tidak tersedia.</div>';
                 formInputs.armadaSection.classList.remove('hidden');
                 return;
             }
 
             formInputs.armadaSection.classList.remove('hidden');
             baseRutes.forEach((r, i) => {
-                const isBooked = bookedRuteIds.includes(r.id) || (r.armada_id && bookedArmadaIds.includes(r.armada_id));
                 const hasPP = r.harga_paket_pp && parseFloat(r.harga_paket_pp) > 0;
-                
                 const card = document.createElement('div');
-                // Apply visual disabled state if booked
-                card.className = \`bg-white p-5 rounded-[32px] border-2 border-slate-100 transition-all relative overflow-hidden \${isBooked ? 'opacity-60 cursor-not-allowed grayscale-[50%]' : 'cursor-pointer hover:border-blue-600/30 group animate-up'}\`;
+                card.className = "bg-white p-5 rounded-[32px] cursor-pointer border-2 border-slate-100 hover:border-blue-600/30 transition-all group animate-up relative overflow-hidden";
                 card.dataset.ruteId = r.id;
-                if (!isBooked) card.style.animationDelay = (i * 0.05) + 's';
+                card.style.animationDelay = (i * 0.05) + 's';
                 
-                card.innerHTML = \`
-                    \${isBooked ? '<div class="absolute top-4 right-4 bg-red-100 text-red-600 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest z-10 border border-red-200">Tidak Tersedia</div>' : ''}
-                    <div class="space-y-5 \${isBooked ? 'pointer-events-none' : ''}">
+                card.innerHTML = `
+                    <div class="space-y-5">
                         <div class="flex items-center gap-4">
                             <div class="w-14 h-14 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
                                 ${r.armada && r.armada.foto ? `<img src="/storage/${r.armada.foto}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-slate-200"><i class="bi bi-truck text-2xl"></i></div>`}
@@ -467,10 +436,6 @@
                 `;
 
                 card.addEventListener('click', (e) => {
-                    if (isBooked) {
-                        Swal.fire({ icon: 'error', title: 'Tidak Tersedia', text: 'Maaf, armada ini sudah dipesan pada tanggal tersebut.', background: '#fff', color: '#111', confirmButtonColor: '#1a237e' });
-                        return;
-                    }
                     if (e.target.closest('.type-btn')) return;
                     const activeType = card.querySelector('.type-btn.active')?.dataset.type || 'one_way';
                     selectPackage(r, card, activeType);
@@ -550,12 +515,6 @@
         function updateTollDisplay() { const isPP = state.selectedTipe === 'round_trip'; formInputs.tolPriceDisplay.innerText = `+${fmt(isPP ? state.tollPrice * 2 : state.tollPrice)}`; }
         function fmt(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
         formInputs.includeTol.addEventListener('change', updateFinalPrice);
-
-        // Jika browser menyimpan state (misal user melakukan refresh atau back), jalankan event change
-        if (formInputs.layanan.value) {
-            const event = new Event('change');
-            formInputs.layanan.dispatchEvent(event);
-        }
     });
 
     function showConfirmation() {
