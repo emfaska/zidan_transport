@@ -399,12 +399,7 @@
                 bookedRuteIds = data.booked_rute_ids || [];
                 bookedArmadaIds = data.booked_armada_ids || [];
                 
-                if (formInputs.layanan.value) {
-                    const event = new Event('change');
-                    formInputs.layanan.dispatchEvent(event);
-                }
-                
-                if (formInputs.tujuan.value) {
+                if (formInputs.layanan.value && formInputs.tujuan.value) {
                     refreshGrid();
                 }
             } catch (e) {
