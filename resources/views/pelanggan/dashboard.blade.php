@@ -144,7 +144,7 @@
                 @endif
 
                 <a href="{{ route('pelanggan.booking.create') }}" class="block w-full text-center py-4 bg-[#1a237e] text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#0d1440] transition active:scale-95">
-                    Klaim Sekarang
+                    Pesan Sekarang
                 </a>
             </div>
         </div>

@@ -396,7 +396,7 @@
 
                             <div class="flex-grow flex justify-center lg:justify-end">
                                 <a href="{{ route('pelanggan.booking.create') }}" class="px-10 py-5 bg-white text-[#1a237e] font-black rounded-3xl shadow-xl hover:bg-[#fbc02d] transition-all transform hover:-translate-y-1 uppercase tracking-widest text-xs flex items-center gap-3">
-                                    Klaim Sekarang
+                                    Pesan Sekarang
                                     <i class="bi bi-arrow-right-short text-xl"></i>
                                 </a>
                             </div>
@@ -733,7 +733,7 @@
                 @endif
 
                 <a href="{{ route('register') }}" class="block w-full text-center py-4 bg-[#1a237e] text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#0d1440] transition active:scale-95">
-                    Daftar & Klaim Promo
+                    Pesan Sekarang
                 </a>
             </div>
         </div>
