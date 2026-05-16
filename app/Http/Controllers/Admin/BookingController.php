@@ -201,15 +201,24 @@ class BookingController extends Controller
             }
         }
 
+        $potonganPromo = 0;
+        if ($booking->promo_id) {
+            $promo = \App\Models\Promo::find($booking->promo_id);
+            if ($promo && $promo->is_active) {
+                $potonganPromo = ($request->total_harga * $promo->potongan_persen) / 100;
+            }
+        }
+        $totalAkhir = $request->total_harga - $potonganPromo;
+
         $booking->update([
             'status' => $request->status,
             'driver_id' => $request->driver_id,
             'armada_id' => $request->armada_id,
             'total_harga' => $request->total_harga,
-            'total_akhir' => $request->total_harga, // Admin sets the FINAL price
+            'total_akhir' => $totalAkhir,
             'status_pembayaran' => $request->status_pembayaran,
             'catatan_admin' => $request->catatan_admin,
-            'potongan_promo' => 0, // Reset promo if manual price is set by admin to avoid double discount
+            'potongan_promo' => $potonganPromo,
         ]);
 
         // Kirim Notifikasi WA ke Driver jika baru saja di-assign atau diubah

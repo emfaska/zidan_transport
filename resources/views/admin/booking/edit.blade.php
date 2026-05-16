@@ -33,8 +33,18 @@
                         <p class="text-[10px] text-blue-400 font-bold italic">{{ $booking->rute->armada->nama }}</p>
                     </div>
                     <div class="pt-4 border-t border-gray-50">
-                        <p class="text-[9px] font-black text-gray-300 uppercase">Total Bayar</p>
-                        <p class="text-xl font-black text-[#1a237e]">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</p>
+                        <p class="text-[9px] font-black text-gray-300 uppercase">Harga Dasar (Sebelum Diskon)</p>
+                        <p class="text-sm font-bold text-gray-600 line-through">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</p>
+                        
+                        @if($booking->potongan_promo > 0)
+                        <div class="my-2 p-2 bg-green-50 rounded-lg border border-green-100 flex justify-between items-center">
+                            <span class="text-[9px] font-black text-green-600 uppercase">Promo Berlaku</span>
+                            <span class="text-xs font-black text-green-600">-Rp {{ number_format($booking->potongan_promo, 0, ',', '.') }}</span>
+                        </div>
+                        @endif
+
+                        <p class="text-[10px] font-black text-[#1a237e] uppercase mt-2">Total Bayar (Final)</p>
+                        <p class="text-2xl font-black text-[#1a237e]">Rp {{ number_format($booking->total_akhir ?? $booking->total_harga, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
