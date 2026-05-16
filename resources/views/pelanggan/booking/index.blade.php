@@ -107,7 +107,7 @@
                         <div>
                             <p class="text-[8px] text-slate-400 font-black uppercase tracking-widest mb-2">Total Biaya</p>
                             <div class="flex flex-col">
-                                <span class="text-lg font-mont font-black text-[#1a237e]">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</span>
+                                <span class="text-lg font-mont font-black text-[#1a237e]">Rp {{ number_format($booking->total_akhir ?? $booking->total_harga, 0, ',', '.') }}</span>
                                 <span class="text-[8px] font-bold text-green-600 uppercase flex items-center gap-1.5">
                                     <i class="bi bi-check-circle-fill"></i> Harga All-In
                                 </span>

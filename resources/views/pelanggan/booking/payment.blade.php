@@ -37,14 +37,14 @@
                             <input type="radio" name="tipe_pembayaran" value="dp" class="peer hidden" {{ $paymentType === 'dp' ? 'checked' : '' }}>
                             <div class="p-5 border-2 border-gray-100 rounded-[28px] bg-gray-50 text-center peer-checked:border-[#1a237e] peer-checked:bg-blue-50 transition-all group-hover:bg-white group-hover:shadow-lg">
                                 <p class="text-xs font-black text-[#1a237e] uppercase tracking-widest">Down Payment (30%)</p>
-                                <p class="text-[9px] text-[#fbc02d] font-bold mt-1 uppercase tracking-tight">Rp {{ number_format($booking->total_harga * 0.3, 0, ',', '.') }}</p>
+                                <p class="text-[9px] text-[#fbc02d] font-bold mt-1 uppercase tracking-tight">Rp {{ number_format($totalHarga * 0.3, 0, ',', '.') }}</p>
                             </div>
                         </label>
                         <label class="cursor-pointer group">
                             <input type="radio" name="tipe_pembayaran" value="lunas" class="peer hidden" {{ $paymentType === 'lunas' ? 'checked' : '' }}>
                             <div class="p-5 border-2 border-gray-100 rounded-[28px] bg-gray-50 text-center peer-checked:border-[#1a237e] peer-checked:bg-blue-50 transition-all group-hover:bg-white group-hover:shadow-lg">
                                 <p class="text-xs font-black text-[#1a237e] uppercase tracking-widest">Bayar Lunas (Full)</p>
-                                <p class="text-[9px] text-green-600 font-bold mt-1 uppercase tracking-tight">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</p>
+                                <p class="text-[9px] text-green-600 font-bold mt-1 uppercase tracking-tight">Rp {{ number_format($totalHarga, 0, ',', '.') }}</p>
                             </div>
                         </label>
                     </div>
@@ -112,9 +112,17 @@
                         <span class="text-[9px] font-black text-gray-400 uppercase">Tanggal</span>
                         <span class="text-xs font-black text-[#1a237e]">{{ $booking->tanggal_berangkat->format('d M Y') }}</span>
                     </div>
+                    @if($booking->potongan_promo > 0)
+                    <div class="flex justify-between items-center bg-green-50 p-2 rounded-lg mt-2 border border-green-100">
+                        <span class="text-[9px] font-black text-green-600 uppercase flex items-center gap-1">
+                            <i class="bi bi-tags-fill"></i> Diskon Promo
+                        </span>
+                        <span class="text-xs font-black text-green-600">-Rp {{ number_format($booking->potongan_promo, 0, ',', '.') }}</span>
+                    </div>
+                    @endif
                     <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-100">
                         <span class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest">Total</span>
-                        <span class="text-lg font-black text-[#fbc02d]">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</span>
+                        <span class="text-lg font-black text-[#fbc02d]">Rp {{ number_format($totalHarga, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>

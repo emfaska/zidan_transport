@@ -276,168 +276,98 @@
             // Re-bind listeners if necessary or initialize one-time components
         });
 
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('mask-currency')) {
-                let cursorPosition = e.target.selectionStart;
-                let originalLength = e.target.value.length;
-                
-                let value = e.target.value.replace(/\D/g, '');
-                if (value === '') {
-                    e.target.value = '';
-                    return;
-                }
-                
-                e.target.value = formatRupiah(value);
-                
-                // Maintain cursor position
-                let newLength = e.target.value.length;
-                e.target.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
-            }
-        });
-
-        // Ensure clean numbers are sent to the server
-        document.addEventListener('submit', function(e) {
-            const maskedInputs = e.target.querySelectorAll('.mask-currency');
-            maskedInputs.forEach(input => {
-                // We don't want to change the visual value right before submit if possible
-                // but Laravel validation will fail if it's sent as "1.000.000"
-                // So we'll append a hidden field with cleaned value or just clean the input
-                // Cleaning the input is safest for simple forms
-                input.value = cleanNumber(input.value);
-            });
-        });
-
-        // Global Password Visibility Toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.closest('.password-toggle')) {
-                const button = e.target.closest('.password-toggle');
-                const container = button.closest('.relative');
-                const input = container.querySelector('input');
-                const icon = button.querySelector('i');
-
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                }
-            }
-        });
-
-        // SweetAlert2 for Delete Confirmation
-        function confirmDelete(id, title = 'Apakah Anda yakin?', text = "Data yang dihapus tidak dapat dikembalikan!") {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal',
-                background: '#fff',
-                customClass: {
-                    title: 'text-xl font-black text-[#1a237e]',
-                    htmlContainer: 'text-sm font-medium text-gray-500',
-                    popup: 'rounded-[32px] p-8',
-                    confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
-                    cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = document.getElementById('delete-form-' + id);
-                    if (form) {
-                        form.submit();
-                    } else {
-                        console.error('Delete form not found: delete-form-' + id);
-                    }
-                }
-            })
-        }
-
-        // SweetAlert2 for General Confirmation (e.g., Approve)
-        function confirmAction(id, actionUrl, title = 'Konfirmasi Tindakan', text = 'Apakah Anda yakin ingin melanjutkan?', icon = 'question', confirmText = 'Ya, Lanjutkan') {
-             Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                showCancelButton: true,
-                confirmButtonColor: '#1a237e',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: confirmText,
-                cancelButtonText: 'Batal',
-                background: '#fff',
-                customClass: {
-                    title: 'text-xl font-black text-[#1a237e]',
-                    htmlContainer: 'text-sm font-medium text-gray-500',
-                    popup: 'rounded-[32px] p-8',
-                    confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
-                    cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = actionUrl;
+        if (!window.adminEventHandlersInitialized) {
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('mask-currency')) {
+                    let cursorPosition = e.target.selectionStart;
+                    let originalLength = e.target.value.length;
                     
-                    let csrfToken = document.createElement('input');
-                    csrfToken.type = 'hidden';
-                    csrfToken.name = '_token';
-                    csrfToken.value = '{{ csrf_token() }}';
-                    form.appendChild(csrfToken);
-
-                    let methodField = document.createElement('input');
-                    methodField.type = 'hidden';
-                    methodField.name = '_method';
-                    methodField.value = 'PATCH'; 
-                    form.appendChild(methodField);
-
-                    document.body.appendChild(form);
-                    form.submit();
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value === '') {
+                        e.target.value = '';
+                        return;
+                    }
+                    
+                    e.target.value = formatRupiah(value);
+                    
+                    // Maintain cursor position
+                    let newLength = e.target.value.length;
+                    e.target.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
                 }
-            })
-        }
+            });
 
-        // Global Confirmation Handler for Forms/Buttons
-        document.addEventListener('submit', function(e) {
-            const form = e.target;
-            if (form.hasAttribute('data-confirm')) {
-                e.preventDefault();
-                const message = form.getAttribute('data-confirm');
-                const title = form.getAttribute('data-title') || 'Konfirmasi';
-                const type = form.getAttribute('data-type') || 'question';
-                const confirmText = form.getAttribute('data-btn-text') || 'Ya, Lanjutkan';
-                const confirmColor = form.getAttribute('data-btn-color') || '#1a237e';
-
-                Swal.fire({
-                    title: title,
-                    text: message,
-                    icon: type,
-                    showCancelButton: true,
-                    confirmButtonColor: confirmColor,
-                    cancelButtonColor: '#64748b',
-                    confirmButtonText: confirmText,
-                    cancelButtonText: 'Batal',
-                    background: '#fff',
-                    customClass: {
-                        title: 'text-xl font-black text-[#1a237e]',
-                        htmlContainer: 'text-sm font-medium text-gray-500',
-                        popup: 'rounded-[32px] p-8',
-                        confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
-                        cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Temporarily disable the data-confirm to allow actual submission
-                        form.removeAttribute('data-confirm');
-                        form.submit();
-                    }
+            // Ensure clean numbers are sent to the server
+            document.addEventListener('submit', function(e) {
+                const maskedInputs = e.target.querySelectorAll('.mask-currency');
+                maskedInputs.forEach(input => {
+                    // We don't want to change the visual value right before submit if possible
+                    // but Laravel validation will fail if it's sent as "1.000.000"
+                    // So we'll append a hidden field with cleaned value or just clean the input
+                    // Cleaning the input is safest for simple forms
+                    input.value = cleanNumber(input.value);
                 });
-            }
-        });
+            });
+
+            // Global Password Visibility Toggle
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.password-toggle')) {
+                    const button = e.target.closest('.password-toggle');
+                    const container = button.closest('.relative');
+                    const input = container.querySelector('input');
+                    const icon = button.querySelector('i');
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                }
+            });
+
+            // Global Confirmation Handler for Forms/Buttons
+            document.addEventListener('submit', function(e) {
+                const form = e.target;
+                if (form.hasAttribute('data-confirm')) {
+                    e.preventDefault();
+                    const message = form.getAttribute('data-confirm');
+                    const title = form.getAttribute('data-title') || 'Konfirmasi';
+                    const type = form.getAttribute('data-type') || 'question';
+                    const confirmText = form.getAttribute('data-btn-text') || 'Ya, Lanjutkan';
+                    const confirmColor = form.getAttribute('data-btn-color') || '#1a237e';
+
+                    Swal.fire({
+                        title: title,
+                        text: message,
+                        icon: type,
+                        showCancelButton: true,
+                        confirmButtonColor: confirmColor,
+                        cancelButtonColor: '#64748b',
+                        confirmButtonText: confirmText,
+                        cancelButtonText: 'Batal',
+                        background: '#fff',
+                        customClass: {
+                            title: 'text-xl font-black text-[#1a237e]',
+                            htmlContainer: 'text-sm font-medium text-gray-500',
+                            popup: 'rounded-[32px] p-8',
+                            confirmButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest',
+                            cancelButton: 'rounded-xl font-bold px-8 py-3 text-xs uppercase tracking-widest'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Temporarily disable the data-confirm to allow actual submission
+                            form.removeAttribute('data-confirm');
+                            form.submit();
+                        }
+                    });
+                }
+            });
+
+            window.adminEventHandlersInitialized = true;
+        }
 
         // Clean up SweetAlert before Turbo caches the page to prevent "ghost" popups on back navigation
         document.addEventListener('turbo:before-cache', function() {

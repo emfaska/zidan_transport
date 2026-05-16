@@ -45,7 +45,7 @@ class BookingController extends Controller
             $selectedArmada = \App\Models\Armada::find($request->armada_id);
         }
 
-        $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
+        $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
         
         return view('pelanggan.booking.create', compact('layanans', 'rutes', 'selectedArmada', 'promo'));
     }
@@ -108,7 +108,7 @@ class BookingController extends Controller
         }
 
         // Apply Promo if active
-        $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
+        $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
         $potonganPromo = 0;
         if ($promo) {
             $potonganPromo = ($totalHarga * $promo->potongan_persen) / 100;

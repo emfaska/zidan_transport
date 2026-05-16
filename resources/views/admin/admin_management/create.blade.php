@@ -60,14 +60,24 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Password</label>
-                        <input type="password" name="password" required
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a237e] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm">
+                        <div class="relative">
+                            <input type="password" name="password" required
+                                class="w-full pl-4 pr-12 py-3 rounded-xl border border-gray-200 focus:border-[#1a237e] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm">
+                            <button type="button" class="password-toggle absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1a237e] transition">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         @error('password') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-2">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" required
-                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a237e] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm">
+                        <div class="relative">
+                            <input type="password" name="password_confirmation" required
+                                class="w-full pl-4 pr-12 py-3 rounded-xl border border-gray-200 focus:border-[#1a237e] focus:ring-2 focus:ring-blue-100 outline-none transition text-sm">
+                            <button type="button" class="password-toggle absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1a237e] transition">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-700 mb-2">Foto Profil (Opsional)</label>

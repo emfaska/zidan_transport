@@ -114,9 +114,17 @@ class BookingController extends Controller
             $totalHarga += $rute->harga_tol ?? 0;
         }
 
+        $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
+        $potonganPromo = 0;
+        if ($promo && !$request->filled('total_harga')) {
+            $potonganPromo = ($totalHarga * $promo->potongan_persen) / 100;
+        }
+        $totalAkhir = $totalHarga - $potonganPromo;
+
         $booking = Booking::create([
             'user_id' => $request->user_id,
             'rute_id' => $request->rute_id,
+            'promo_id' => ($promo && !$request->filled('total_harga')) ? $promo->id : null,
             'armada_id' => $request->armada_id ?? $rute->armada_id,
             'tanggal_berangkat' => $request->tanggal_berangkat,
             'waktu_jemput' => $request->waktu_jemput,
@@ -127,6 +135,8 @@ class BookingController extends Controller
             'harga_paket' => $rute->harga_paket,
             'harga_tol' => $rute->harga_tol,
             'total_harga' => $totalHarga,
+            'potongan_promo' => $potonganPromo,
+            'total_akhir' => $totalAkhir,
             'status' => 'confirmed', 
             'driver_id' => $request->driver_id,
         ]);
