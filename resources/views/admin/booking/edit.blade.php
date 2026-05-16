@@ -115,8 +115,9 @@
                                     <select name="driver_id" id="driver_id" class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#fbc02d] focus:border-[#fbc02d] outline-none transition text-sm font-bold appearance-none cursor-pointer">
                                         <option value="">-- Pilih Driver --</option>
                                         @foreach($drivers as $driver)
-                                            <option value="{{ $driver->id }}" {{ $booking->driver_id == $driver->id ? 'selected' : '' }}>
-                                                {{ $driver->name }} ({{ $driver->status_driver ?? 'off' }})
+                                            @php $isBusy = in_array($driver->id, $busyDriverIds); @endphp
+                                            <option value="{{ $driver->id }}" {{ $booking->driver_id == $driver->id ? 'selected' : '' }} {{ $isBusy ? 'disabled' : '' }}>
+                                                {{ $driver->name }} {{ $isBusy ? '(SUDAH TUGAS)' : '(' . ($driver->status_driver ?? 'aktif') . ')' }}
                                             </option>
                                         @endforeach
                                     </select>

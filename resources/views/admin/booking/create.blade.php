@@ -237,25 +237,41 @@
             });
         });
 
-        function selectArmada(id, cardElement) {
-            // Update Hidden Input
-            ruteIdInput.value = id;
-
-            // Visual Selection Logic
-            const allCards = armadaGrid.querySelectorAll('div[onclick]');
-            allCards.forEach(c => {
-                c.classList.remove('border-[#1a237e]', 'bg-blue-50', 'ring-2', 'ring-blue-200');
-                c.classList.add('border-gray-100', 'bg-white');
-                c.querySelector('.selection-ring').classList.remove('border-[#1a237e]');
-                c.querySelector('.selection-ring div').classList.add('hidden');
-            });
-
-            // Highlight Selected
-            cardElement.classList.remove('border-gray-100', 'bg-white');
-            cardElement.classList.add('border-[#1a237e]', 'bg-blue-50', 'ring-2', 'ring-blue-200');
-            cardElement.querySelector('.selection-ring').classList.add('border-[#1a237e]');
-            cardElement.querySelector('.selection-ring div').classList.remove('hidden');
         }
+
+        // 3. Handle Real-time Driver Availability Check
+        const tglBerangkatInput = document.getElementsByName('tanggal_berangkat')[0];
+        const driverSelect = document.getElementsByName('driver_id')[0];
+
+        async function updateDriverAvailability() {
+            const date = tglBerangkatInput.value;
+            if(!date) return;
+
+            try {
+                const res = await fetch(`/booking/check-availability?tanggal=${date}`);
+                const data = await res.json();
+                const bookedDriverIds = data.booked_driver_ids || [];
+
+                Array.from(driverSelect.options).forEach(opt => {
+                    if(!opt.value) return; // Skip placeholder
+                    
+                    const isBusy = bookedDriverIds.includes(parseInt(opt.value));
+                    if(isBusy) {
+                        opt.disabled = true;
+                        if(!opt.innerText.includes('(SUDAH TUGAS)')) {
+                            opt.innerText = opt.innerText + ' (SUDAH TUGAS)';
+                        }
+                    } else {
+                        opt.disabled = false;
+                        opt.innerText = opt.innerText.replace(' (SUDAH TUGAS)', '');
+                    }
+                });
+            } catch (e) {
+                console.error("Gagal mengecek ketersediaan driver", e);
+            }
+        }
+
+        tglBerangkatInput.addEventListener('change', updateDriverAvailability);
     });
 </script>
 @endsection

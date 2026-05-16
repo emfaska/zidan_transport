@@ -76,9 +76,17 @@ class BookingController extends Controller
                 ->toArray();
         }
 
+        // Cari driver yang sudah bertugas pada tanggal tersebut (sepanjang hari)
+        $bookedDriverIds = Booking::where('tanggal_berangkat', $tanggal)
+            ->where('status', '!=', 'cancelled')
+            ->whereNotNull('driver_id')
+            ->pluck('driver_id')
+            ->toArray();
+
         return response()->json([
             'booked_armada_ids' => $bookedArmadaIds,
-            'booked_rute_ids' => $bookedRuteIds
+            'booked_rute_ids' => $bookedRuteIds,
+            'booked_driver_ids' => $bookedDriverIds
         ]);
     }
 

@@ -96,6 +96,18 @@ class BookingController extends Controller
             return back()->withInput()->with('error', 'Maaf, paket ini sudah dipesan pada tanggal dan jam tersebut. Silakan tunggu prosedur selesai atau ubah waktu.');
         }
 
+        // 3. Cek ketersediaan driver (jika diisi)
+        if ($request->driver_id) {
+            $isDriverBusy = Booking::where('driver_id', $request->driver_id)
+                ->where('tanggal_berangkat', $request->tanggal_berangkat)
+                ->where('status', '!=', 'cancelled')
+                ->exists();
+
+            if ($isDriverBusy) {
+                return back()->withInput()->with('error', 'Gagal: Pengemudi ini sudah memiliki jadwal tugas lain pada tanggal tersebut.');
+            }
+        }
+
         // 2. Cek ketersediaan armada
         $armadaId = $request->armada_id ?? $rute->armada_id;
         if ($armadaId) {
@@ -163,8 +175,17 @@ class BookingController extends Controller
     public function edit(Booking $booking)
     {
         $drivers = User::where('role', 'pengemudi')->get();
+        
+        // Cari driver yang sudah ada tugas di tanggal berangkat pesanan ini
+        $busyDriverIds = Booking::where('tanggal_berangkat', $booking->tanggal_berangkat)
+            ->where('status', '!=', 'cancelled')
+            ->where('id', '!=', $booking->id)
+            ->whereNotNull('driver_id')
+            ->pluck('driver_id')
+            ->toArray();
+
         $armadas = \App\Models\Armada::all();
-        return view('admin.booking.edit', compact('booking', 'drivers', 'armadas'));
+        return view('admin.booking.edit', compact('booking', 'drivers', 'armadas', 'busyDriverIds'));
     }
 
     /**
@@ -198,6 +219,19 @@ class BookingController extends Controller
 
             if ($isBooked) {
                 return back()->withInput()->with('error', 'Gagal update: Armada ini sudah memiliki jadwal booking AKTIF lain pada tanggal tersebut.');
+            }
+        }
+
+        // Cek ketersediaan driver jika status bukan cancelled dan ada driver_id yang dipilih
+        if ($request->status !== 'cancelled' && $request->driver_id) {
+            $isDriverBusy = Booking::where('driver_id', $request->driver_id)
+                ->where('tanggal_berangkat', $booking->tanggal_berangkat)
+                ->where('status', '!=', 'cancelled')
+                ->where('id', '!=', $booking->id)
+                ->exists();
+
+            if ($isDriverBusy) {
+                return back()->withInput()->with('error', 'Gagal update: Pengemudi ini sudah memiliki jadwal tugas lain pada tanggal tersebut.');
             }
         }
 
