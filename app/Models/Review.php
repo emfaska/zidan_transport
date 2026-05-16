@@ -10,7 +10,9 @@ class Review extends Model
         'booking_id',
         'user_id',
         'driver_id',
-        'rating',
+        'rating_layanan',
+        'rating_driver',
+        'rating', // Keep for backward compatibility if needed
         'comment',
     ];
 

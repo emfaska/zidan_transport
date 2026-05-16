@@ -251,17 +251,33 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-3 text-center">Rating Anda</label>
-                        <div class="flex items-center justify-center gap-2" id="starContainer">
-                            @for($i=1; $i<=5; $i++)
-                            <label class="cursor-pointer group flex-1 max-w-[60px]">
-                                <input type="radio" name="rating" value="{{ $i }}" class="hidden peer rating-radio" required onchange="updateStars(this.value)">
-                                <div class="py-3 flex justify-center border-2 border-slate-100 rounded-xl text-slate-300 transition-all star-box hover:scale-105 active:scale-95">
-                                    <i class="bi bi-star-fill text-2xl"></i>
-                                </div>
-                            </label>
-                            @endfor
+                    <div class="space-y-8 py-2">
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Layanan & Kenyamanan</label>
+                            <div class="flex items-center justify-center gap-2" id="starContainerLayanan">
+                                @for($i=1; $i<=5; $i++)
+                                <label class="cursor-pointer group flex-1 max-w-[55px]">
+                                    <input type="radio" name="rating_layanan" value="{{ $i }}" class="hidden peer rating-layanan-radio" required onchange="updateStars('Layanan', this.value)">
+                                    <div class="py-3 flex justify-center border-2 border-slate-100 rounded-xl text-slate-300 transition-all star-box hover:scale-110 active:scale-95">
+                                        <i class="bi bi-star-fill text-xl"></i>
+                                    </div>
+                                </label>
+                                @endfor
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Rating Etika & Performa Driver</label>
+                            <div class="flex items-center justify-center gap-2" id="starContainerDriver">
+                                @for($i=1; $i<=5; $i++)
+                                <label class="cursor-pointer group flex-1 max-w-[55px]">
+                                    <input type="radio" name="rating_driver" value="{{ $i }}" class="hidden peer rating-driver-radio" required onchange="updateStars('Driver', this.value)">
+                                    <div class="py-3 flex justify-center border-2 border-slate-100 rounded-xl text-slate-300 transition-all star-box hover:scale-110 active:scale-95">
+                                        <i class="bi bi-star-fill text-xl"></i>
+                                    </div>
+                                </label>
+                                @endfor
+                            </div>
                         </div>
                     </div>
 
@@ -299,9 +315,15 @@
             document.getElementById('modalRute').innerText = rute;
             document.getElementById('modalDriver').innerText = 'DENGAN ' + driver;
             document.getElementById('reviewForm').action = "/booking/" + bookingId + "/review";
-            updateStars(0);
-            const checked = document.querySelector('.rating-radio:checked');
-            if (checked) checked.checked = false;
+            
+            updateStars('Layanan', 0);
+            updateStars('Driver', 0);
+            
+            const checkedLayanan = document.querySelector('.rating-layanan-radio:checked');
+            if (checkedLayanan) checkedLayanan.checked = false;
+            const checkedDriver = document.querySelector('.rating-driver-radio:checked');
+            if (checkedDriver) checkedDriver.checked = false;
+            
             document.getElementById('modalComment').value = "";
         };
         
@@ -310,8 +332,8 @@
             if(modal) modal.classList.add('hidden');
         };
 
-        window.updateStars = function(val) {
-            const radios = document.querySelectorAll('.rating-radio');
+        window.updateStars = function(type, val) {
+            const radios = document.querySelectorAll('.rating-' + type.toLowerCase() + '-radio');
             radios.forEach((radio, index) => {
                 const box = radio.nextElementSibling;
                 if(index < val) {

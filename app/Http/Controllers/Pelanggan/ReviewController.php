@@ -13,8 +13,9 @@ class ReviewController extends Controller
     public function store(Request $request, $bookingId)
     {
         $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:500',
+            'rating_layanan' => 'required|integer|min:1|max:5',
+            'rating_driver'  => 'required|integer|min:1|max:5',
+            'comment'        => 'nullable|string|max:500',
         ]);
 
         $booking = Booking::where('id', $bookingId)
@@ -28,13 +29,15 @@ class ReviewController extends Controller
         }
 
         Review::create([
-            'booking_id' => $booking->id,
-            'user_id'    => Auth::id(),
-            'driver_id'  => $booking->driver_id,
-            'rating'     => $request->rating,
-            'comment'    => $request->comment,
+            'booking_id'     => $booking->id,
+            'user_id'        => Auth::id(),
+            'driver_id'      => $booking->driver_id,
+            'rating_layanan' => $request->rating_layanan,
+            'rating_driver'  => $request->rating_driver,
+            'rating'         => round(($request->rating_layanan + $request->rating_driver) / 2), // Legacy support
+            'comment'        => $request->comment,
         ]);
 
-        return back()->with('success', 'Terima kasih atas feedback Anda! Bintang Anda sangat berarti bagi driver kami.');
+        return back()->with('success', 'Terima kasih atas feedback Anda! Ulasan Anda sangat membantu kami meningkatkan layanan.');
     }
 }

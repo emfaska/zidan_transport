@@ -263,29 +263,60 @@
                             <h5 class="text-[10px] font-black text-[#1a237e] uppercase tracking-widest mb-6 flex items-center gap-2">
                                 <i class="bi bi-star-fill text-yellow-400"></i> Review Anda
                             </h5>
-                            <div class="flex items-center gap-1 mb-4">
-                                @for($i = 1; $i <= 5; $i++)
-                                    <i class="bi bi-star-fill {{ $i <= $booking->review->rating ? 'text-yellow-400' : 'text-gray-200' }} text-xl"></i>
-                                @endfor
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Rating Layanan</p>
+                                    <div class="flex items-center gap-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="bi bi-star-fill {{ $i <= ($booking->review->rating_layanan ?? $booking->review->rating) ? 'text-yellow-400' : 'text-gray-200' }} text-lg"></i>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Rating Driver</p>
+                                    <div class="flex items-center gap-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class="bi bi-star-fill {{ $i <= ($booking->review->rating_driver ?? $booking->review->rating) ? 'text-yellow-400' : 'text-gray-200' }} text-lg"></i>
+                                        @endfor
+                                    </div>
+                                </div>
                             </div>
-                            <p class="text-sm font-medium text-gray-600 leading-relaxed italic">"{{ $booking->review->comment }}"</p>
+
+                            <p class="text-sm font-medium text-gray-600 leading-relaxed italic border-t border-gray-100 pt-6">"{{ $booking->review->comment }}"</p>
                         </div>
                     @else
                         <!-- Form Review if not yet reviewed -->
                         <div class="bg-gradient-to-br from-[#1a237e] to-blue-900 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden group">
-                            <h3 class="text-2xl font-black uppercase tracking-tighter mb-2">Bagaimana Perjalanan Anda?</h3>
-                            <form action="{{ route('pelanggan.booking.review', $booking->id) }}" method="POST" class="space-y-6">
+                            <h3 class="text-2xl font-black uppercase tracking-tighter mb-8">Bagaimana Perjalanan Anda?</h3>
+                            <form action="{{ route('pelanggan.booking.review', $booking->id) }}" method="POST" class="space-y-8">
                                 @csrf
-                                <div class="flex items-center gap-2" id="star-rating">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <button type="button" data-value="{{ $i }}" class="star-btn text-3xl text-gray-400/50 hover:text-yellow-400 transition-colors">
-                                            <i class="bi bi-star-fill"></i>
-                                        </button>
-                                    @endfor
-                                    <input type="hidden" name="rating" id="rating-input" required>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div class="space-y-3">
+                                        <label class="text-[10px] font-black text-blue-200 uppercase tracking-widest">Rating Layanan</label>
+                                        <div class="flex items-center gap-2" id="star-rating-layanan">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <button type="button" data-type="layanan" data-value="{{ $i }}" class="star-btn star-btn-layanan text-3xl text-white/20 hover:text-yellow-400 transition-colors">
+                                                    <i class="bi bi-star-fill"></i>
+                                                </button>
+                                            @endfor
+                                            <input type="hidden" name="rating_layanan" id="rating-layanan-input" required>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <label class="text-[10px] font-black text-blue-200 uppercase tracking-widest">Rating Driver</label>
+                                        <div class="flex items-center gap-2" id="star-rating-driver">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <button type="button" data-type="driver" data-value="{{ $i }}" class="star-btn star-btn-driver text-3xl text-white/20 hover:text-yellow-400 transition-colors">
+                                                    <i class="bi bi-star-fill"></i>
+                                                </button>
+                                            @endfor
+                                            <input type="hidden" name="rating_driver" id="rating-driver-input" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <textarea name="comment" rows="3" class="w-full bg-white/10 border border-white/20 rounded-2xl py-4 px-6 text-white text-sm outline-none" placeholder="Ceritakan pengalaman Anda..."></textarea>
-                                <button type="submit" class="w-full bg-[#fbc02d] text-[#1a237e] font-black py-4 rounded-2xl uppercase tracking-widest text-xs">Kirim Review</button>
+                                <textarea name="comment" rows="3" class="w-full bg-white/10 border border-white/20 rounded-2xl py-4 px-6 text-white text-sm outline-none placeholder:text-white/30" placeholder="Ceritakan pengalaman Anda..."></textarea>
+                                <button type="submit" class="w-full bg-[#fbc02d] text-[#1a237e] font-black py-4 rounded-2xl uppercase tracking-widest text-xs hover:bg-yellow-500 transition-all shadow-lg">Kirim Review</button>
                             </form>
                         </div>
                     @endif
@@ -412,25 +443,30 @@
 <script>
     document.addEventListener('turbo:load', () => {
         // Star rating logic (if present)
-        const stars = document.querySelectorAll('.star-btn');
-        const ratingInput = document.getElementById('rating-input');
-        if (stars.length > 0 && ratingInput) {
-            stars.forEach(btn => {
-                btn.onclick = function() {
-                    const val = this.dataset.value;
-                    ratingInput.value = val;
-                    stars.forEach(s => {
-                        if (s.dataset.value <= val) {
-                            s.classList.remove('text-gray-400/50');
-                            s.classList.add('text-yellow-400');
-                        } else {
-                            s.classList.add('text-gray-400/50');
-                            s.classList.remove('text-yellow-400');
-                        }
-                    });
-                };
-            });
-        }
+        const setupStars = (type) => {
+            const stars = document.querySelectorAll(`.star-btn-${type}`);
+            const input = document.getElementById(`rating-${type}-input`);
+            if (stars.length > 0 && input) {
+                stars.forEach(btn => {
+                    btn.onclick = function() {
+                        const val = this.dataset.value;
+                        input.value = val;
+                        stars.forEach(s => {
+                            if (parseInt(s.dataset.value) <= parseInt(val)) {
+                                s.classList.remove('text-white/20');
+                                s.classList.add('text-yellow-400');
+                            } else {
+                                s.classList.add('text-white/20');
+                                s.classList.remove('text-yellow-400');
+                            }
+                        });
+                    };
+                });
+            }
+        };
+
+        setupStars('layanan');
+        setupStars('driver');
 
         // Map Tracking Logic
         const mapContainer = document.getElementById('trackingMap');
