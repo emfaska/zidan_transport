@@ -327,16 +327,16 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 items-center justify-items-center text-center">
                 <div class="space-y-1">
-                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">5,000+</p>
+                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">{{ $display_trips }}</p>
                     <p class="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">Perjalanan Selesai</p>
                 </div>
                 <div class="space-y-1">
-                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">50+</p>
+                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">{{ $display_armada }}</p>
                     <p class="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">Armada Modern</p>
                 </div>
                 <div class="space-y-1">
-                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">4.9/5</p>
-                    <p class="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">Rating Pelanggan</p>
+                    <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">{{ $display_rating }}</p>
+                    <p class="text-[10px] font-black text-blue-200 uppercase tracking-[0.2em]">Rating Layanan</p>
                 </div>
                 <div class="space-y-1">
                     <p class="text-2xl lg:text-3xl font-black text-[#fbc02d]">24/7</p>
