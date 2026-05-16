@@ -29,9 +29,9 @@ Route::get('/', function () {
     $total_armada = \App\Models\Armada::count();
     $avg_rating = \App\Models\Review::avg('rating_layanan') ?? 5.0;
     
-    // Formatting stats for aesthetic display
-    $display_trips = $total_trips > 1000 ? number_format($total_trips) . '+' : ($total_trips + 1500) . '+'; // Base 1500 for marketing if real is low
-    $display_armada = $total_armada > 20 ? $total_armada . '+' : ($total_armada + 30) . '+';
+    // Formatting stats for aesthetic display (Real data only as requested)
+    $display_trips = number_format($total_trips); 
+    $display_armada = $total_armada;
     $display_rating = number_format($avg_rating, 1) . '/5';
 
     return view('welcome', compact('armadas', 'layanans', 'promo', 'display_trips', 'display_armada', 'display_rating'));
