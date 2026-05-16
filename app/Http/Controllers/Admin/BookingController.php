@@ -114,7 +114,7 @@ class BookingController extends Controller
             $totalHarga += $rute->harga_tol ?? 0;
         }
 
-        $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
+        $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
         $potonganPromo = 0;
         if ($promo && !$request->filled('total_harga')) {
             $potonganPromo = ($totalHarga * $promo->potongan_persen) / 100;

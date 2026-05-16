@@ -713,10 +713,24 @@
                 
                 <p class="text-xs text-gray-500 font-bold mb-4 leading-relaxed line-clamp-2">{{ $promo->deskripsi }}</p>
 
-                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 text-center">
-                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Gunakan Kode</p>
-                    <p class="text-lg font-black text-[#1a237e] tracking-widest uppercase">{{ $promo->kode_promo }}</p>
+                @if($promo->kode_promo)
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 text-center relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-red-100 rounded-full blur-xl"></div>
+                    <p class="text-[12px] font-black text-red-600 uppercase tracking-widest mb-2 animate-pulse">
+                        <i class="bi bi-tags-fill"></i> Diskon Khusus {{ $promo->potongan_persen }}%
+                    </p>
+                    <div class="border-t border-dashed border-gray-200 my-2"></div>
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-2 mb-1">Gunakan Kode</p>
+                    <p class="text-xl font-black text-[#1a237e] tracking-widest uppercase">{{ $promo->kode_promo }}</p>
                 </div>
+                @else
+                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 mb-6 text-center relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 w-16 h-16 bg-red-100 rounded-full blur-xl"></div>
+                    <p class="text-[14px] font-black text-red-600 uppercase tracking-widest animate-pulse">
+                        <i class="bi bi-tags-fill"></i> Diskon Langsung {{ $promo->potongan_persen }}%
+                    </p>
+                </div>
+                @endif
 
                 <a href="{{ route('register') }}" class="block w-full text-center py-4 bg-[#1a237e] text-white font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-xl hover:bg-[#0d1440] transition active:scale-95">
                     Daftar & Klaim Promo

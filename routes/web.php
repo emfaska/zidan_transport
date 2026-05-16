@@ -22,7 +22,7 @@ Route::get('/', function () {
 
     $armadas = \App\Models\Armada::where('status', 'tersedia')->take(3)->get();
     $layanans = \App\Models\Layanan::where('is_active', true)->take(3)->get();
-    $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
+    $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
     return view('welcome', compact('armadas', 'layanans', 'promo'));
 })->name('landing');
 
@@ -38,7 +38,7 @@ Route::get('/armada', function(Illuminate\Http\Request $request) {
     }
 
     $armadas = $query->paginate(6)->withQueryString();
-    $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
+    $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
     return view('pelanggan.armada', compact('armadas', 'promo')); 
 })->name('pelanggan.armada');
 
@@ -169,7 +169,7 @@ Route::middleware('auth')->group(function () {
             // Ambil data armada (maksimal 3 untuk ditampilkan di dashboard)
             $armadas = \App\Models\Armada::where('status', 'tersedia')->latest()->take(3)->get();
             $layanans = \App\Models\Layanan::where('is_active', true)->take(3)->get();
-            $promo = \App\Models\Promo::where('is_active', true)->whereNotNull('kode_promo')->where('kode_promo', '!=', '')->latest()->first();
+            $promo = \App\Models\Promo::where('is_active', true)->latest()->first();
             $recent_bookings = \App\Models\Booking::where('user_id', \Illuminate\Support\Facades\Auth::id())->with('rute')->latest()->take(2)->get();
             return view('pelanggan.dashboard', compact('armadas', 'layanans', 'promo', 'recent_bookings')); 
         })->name('home');
