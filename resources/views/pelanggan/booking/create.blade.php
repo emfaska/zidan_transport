@@ -550,6 +550,12 @@
         function updateTollDisplay() { const isPP = state.selectedTipe === 'round_trip'; formInputs.tolPriceDisplay.innerText = `+${fmt(isPP ? state.tollPrice * 2 : state.tollPrice)}`; }
         function fmt(n) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n); }
         formInputs.includeTol.addEventListener('change', updateFinalPrice);
+
+        // Jika browser menyimpan state (misal user melakukan refresh atau back), jalankan event change
+        if (formInputs.layanan.value) {
+            const event = new Event('change');
+            formInputs.layanan.dispatchEvent(event);
+        }
     });
 
     function showConfirmation() {
