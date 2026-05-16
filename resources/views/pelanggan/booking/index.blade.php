@@ -273,6 +273,15 @@
                     <button type="submit" class="w-full bg-[#1a237e] text-white rounded-2xl py-4 font-black uppercase tracking-widest text-xs hover:bg-[#0d1440] shadow-xl shadow-blue-900/20 transition-all active:scale-[0.98]">
                         Kirim Ulasan Anda
                     </button>
+
+                    <div class="pt-4 border-t border-dashed border-slate-200">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase text-center mb-3 tracking-widest italic">Atau ulas kami di Google Maps</p>
+                        <a href="https://maps.app.goo.gl/i8JhGo13ndZoYMvB7" target="_blank" class="w-full flex items-center justify-center gap-3 py-3 border-2 border-slate-100 rounded-2xl text-xs font-black text-[#1a237e] hover:bg-slate-50 transition-all">
+                            <i class="bi bi-google text-blue-600"></i>
+                            Google Maps Review
+                            <i class="bi bi-box-arrow-up-right text-[10px]"></i>
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>

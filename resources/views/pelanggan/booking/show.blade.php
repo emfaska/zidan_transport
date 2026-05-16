@@ -289,6 +289,18 @@
                             </form>
                         </div>
                     @endif
+
+                    <!-- Google Maps Review Prompt -->
+                    <div class="mt-8 bg-white border-2 border-dashed border-slate-200 rounded-[35px] p-8 text-center flex flex-col items-center gap-4 group hover:border-[#1a237e] transition-all">
+                        <div class="w-16 h-16 bg-blue-50 text-[#1a237e] rounded-2xl flex items-center justify-center text-3xl shadow-sm group-hover:rotate-12 transition-transform">
+                            <i class="bi bi-google text-blue-600"></i>
+                        </div>
+                        <h4 class="text-lg font-mont font-black text-[#1a237e] uppercase tracking-tight">Bantu Kami Berkembang</h4>
+                        <p class="text-xs text-slate-500 font-medium max-w-sm mx-auto leading-relaxed">Jika Anda puas dengan layanan kami, mohon luangkan waktu sejenak untuk memberikan ulasan di Google Maps. Ulasan Anda sangat berarti bagi kami!</p>
+                        <a href="https://maps.app.goo.gl/i8JhGo13ndZoYMvB7" target="_blank" class="mt-2 px-10 py-4 bg-[#1a237e] text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl hover:bg-blue-900 hover:-translate-y-1 transition-all flex items-center gap-3">
+                            Tulis Ulasan di Google Maps <i class="bi bi-arrow-up-right"></i>
+                        </a>
+                    </div>
                 </div>
             @endif
 

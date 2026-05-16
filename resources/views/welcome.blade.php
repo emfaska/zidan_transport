@@ -125,6 +125,7 @@
                     <a href="{{ route('pelanggan.armada') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Armada</a>
                     <a href="{{ route('pelanggan.layanan') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Layanan</a>
                     <a href="{{ route('pelanggan.rute') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Paket Rute</a>
+                    <a href="#ulasan" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Ulasan</a>
                     <a href="{{ route('pelanggan.kontak') }}" class="text-gray-700 hover:text-[#1a237e] font-semibold transition">Lokasi & Kontak</a>
                 </div>
 
@@ -166,6 +167,9 @@
                 </a>
                 <a href="{{ route('pelanggan.rute') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold transition">
                     <i class="bi bi-box2-heart mr-2"></i> Paket Rute
+                </a>
+                <a href="#ulasan" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold transition">
+                    <i class="bi bi-star mr-2"></i> Ulasan
                 </a>
                 <a href="{{ route('pelanggan.kontak') }}" class="block px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 font-semibold transition">
                     <i class="bi bi-geo-alt mr-2"></i> Lokasi & Kontak
@@ -525,6 +529,122 @@
             </div>
         </div>
     </div>
+
+    <!-- Testimonials Section -->
+    <div id="ulasan" class="py-24 bg-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-gray-50 to-white"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-base text-[#1a237e] font-black tracking-widest uppercase">Ulasan Pelanggan</h2>
+                <p class="mt-2 text-3xl font-black text-gray-900 sm:text-4xl italic">Apa Kata Mereka Tentang Kami?</p>
+                <div class="mt-4 flex justify-center gap-1 text-[#fbc02d]">
+                    <i class="bi bi-star-fill text-2xl"></i>
+                    <i class="bi bi-star-fill text-2xl"></i>
+                    <i class="bi bi-star-fill text-2xl"></i>
+                    <i class="bi bi-star-fill text-2xl"></i>
+                    <i class="bi bi-star-fill text-2xl"></i>
+                </div>
+            </div>
+
+            <div class="swiper reviewSwiper mb-12">
+                <div class="swiper-wrapper">
+                    <!-- Testimonial 1 -->
+                    <div class="swiper-slide h-auto pb-12">
+                        <div class="bg-gray-50 p-10 rounded-[40px] border border-gray-100 relative h-full flex flex-col">
+                            <div class="absolute -top-6 left-10 w-12 h-12 bg-[#1a237e] rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-900/20">
+                                <i class="bi bi-quote"></i>
+                            </div>
+                            <p class="text-gray-600 font-medium text-lg leading-relaxed mb-8 italic flex-grow">
+                                "Sangat puas dengan layanan Zidan Transport. Driver ramah, tepat waktu, dan mobil Innova Zenix-nya sangat nyaman untuk perjalanan keluarga. Bintang 5!"
+                            </p>
+                            <div class="flex items-center gap-4 mt-auto">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-[#1a237e] font-black text-xl border-2 border-white shadow-sm">
+                                    BS
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-[#1a237e] uppercase tracking-tight">Budi Santoso</h4>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-none mt-1">Pengusaha, Kediri</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 2 -->
+                    <div class="swiper-slide h-auto pb-12">
+                        <div class="bg-gray-50 p-10 rounded-[40px] border border-gray-100 relative h-full flex flex-col">
+                            <div class="absolute -top-6 left-10 w-12 h-12 bg-[#fbc02d] rounded-2xl flex items-center justify-center text-[#1a237e] text-2xl shadow-lg shadow-yellow-500/20">
+                                <i class="bi bi-quote"></i>
+                            </div>
+                            <p class="text-gray-600 font-medium text-lg leading-relaxed mb-8 italic flex-grow">
+                                "Baru pertama kali coba travel Kediri - Malang lewat sini, ternyata pelayanannya jauh di atas ekspektasi. Mobil bersih banget dan wangi. Mantap!"
+                            </p>
+                            <div class="flex items-center gap-4 mt-auto">
+                                <div class="w-14 h-14 rounded-2xl bg-yellow-100 flex items-center justify-center text-[#1a237e] font-black text-xl border-2 border-white shadow-sm">
+                                    SA
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-[#1a237e] uppercase tracking-tight">Siti Aminah</h4>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-none mt-1">Karyawan Swasta</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial 3 -->
+                    <div class="swiper-slide h-auto pb-12">
+                        <div class="bg-gray-50 p-10 rounded-[40px] border border-gray-100 relative h-full flex flex-col">
+                            <div class="absolute -top-6 left-10 w-12 h-12 bg-[#1a237e] rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-900/20">
+                                <i class="bi bi-quote"></i>
+                            </div>
+                            <p class="text-gray-600 font-medium text-lg leading-relaxed mb-8 italic flex-grow">
+                                "Harga jujur, admin fast response via WA, dan drivernya sabar. Sangat membantu untuk urusan dinas luar kota yang mendadak."
+                            </p>
+                            <div class="flex items-center gap-4 mt-auto">
+                                <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-[#1a237e] font-black text-xl border-2 border-white shadow-sm">
+                                    RW
+                                </div>
+                                <div>
+                                    <h4 class="font-black text-[#1a237e] uppercase tracking-tight">Rully Wijaya</h4>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest leading-none mt-1">Freelancer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination !-bottom-2"></div>
+            </div>
+
+            <div class="flex justify-center">
+                <a href="https://maps.app.goo.gl/i8JhGo13ndZoYMvB7" target="_blank" class="group px-10 py-5 bg-white border-2 border-[#1a237e] text-[#1a237e] font-black rounded-[25px] shadow-xl hover:bg-[#1a237e] hover:text-white transition-all transform hover:-translate-y-1 flex items-center gap-4 uppercase tracking-[0.1em] text-xs">
+                    <i class="bi bi-google text-xl group-hover:scale-110 transition-transform"></i>
+                    Lihat Semua Ulasan di Google Maps
+                    <i class="bi bi-arrow-up-right text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Initialize Swiper for Reviews -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new Swiper('.reviewSwiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    640: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                }
+            });
+        });
+    </script>
     <div id="armada" class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">

@@ -64,6 +64,11 @@
                             <i class="bi bi-chevron-right text-[10px] text-[#fbc02d]"></i> Paket Rute
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('landing') }}#ulasan" class="text-gray-500 text-sm font-bold hover:text-[#1a237e] transition flex items-center gap-2">
+                            <i class="bi bi-chevron-right text-[10px] text-[#fbc02d]"></i> Ulasan Pelanggan
+                        </a>
+                    </li>
                 </ul>
             </div>
 
